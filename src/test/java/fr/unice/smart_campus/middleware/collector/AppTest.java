@@ -1,4 +1,4 @@
-package fr.unice.smart_campus.middleware;
+package fr.unice.smart_campus.middleware.collector;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

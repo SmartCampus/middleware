@@ -1,18 +1,16 @@
 package fr.unice.smart_campus.middleware.collector;
 
-import org.restlet.resource.Get;
-import org.restlet.resource.ServerResource;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 
-/**
- * The value resource.
- * Represents a sensor value
- */
-public class ValueResource extends ServerResource {
+@Path("value")
+public class ValueResource {
 
-	@Get
-	public String getString () {
-		String name = (String) getRequestAttributes().get("name");
-		return "Hello " + name;
+	@GET
+	@Produces("text/plain")
+	public String getMessage () {
+		return "Hello World!";
 	}
 }

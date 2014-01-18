@@ -1,4 +1,4 @@
-package fr.unice.smart_campus.middleware.collector;
+package fr.unice.smart_campus.middleware.collector.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

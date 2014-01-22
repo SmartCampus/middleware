@@ -11,6 +11,10 @@ import java.util.Date;
 import static javax.ws.rs.core.Response.Status;
 
 
+/**
+ * Value REST resource
+ * Used to post a value into the collector
+ */
 @Path("value")
 public class ValueResource {
 

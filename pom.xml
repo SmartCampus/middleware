@@ -2,14 +2,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<name>Middleware</name>
-	<groupId>fr.unice.smart_campus</groupId>
+	<groupId>fr.unice.smart_campus.middleware</groupId>
 	<artifactId>middleware</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>Collector</module>
+		<module>collector</module>
 	</modules>
 
 </project>

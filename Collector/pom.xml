@@ -4,14 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<name>Collector</name>
-	<groupId>fr.unice.smart_campus.middleware</groupId>
 	<artifactId>collector</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<parent>
+		<groupId>fr.unice.smart_campus.middleware</groupId>
 		<artifactId>middleware</artifactId>
-		<groupId>fr.unice.smart_campus</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -20,19 +18,14 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.glassfish.jersey</groupId>
-				<artifactId>jersey-bom</artifactId>
-				<version>2.5.1</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<dependencies>
+		<dependency>
+			<groupId>org.glassfish.jersey</groupId>
+			<artifactId>jersey-bom</artifactId>
+			<version>2.5.1</version>
+			<type>pom</type>
+			<scope>import</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet-core</artifactId>

@@ -1,11 +1,13 @@
 package fr.unice.smart_campus.middleware.collector.resources;
 
+import fr.unice.smart_campus.middleware.collector.DataAccess;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.codehaus.jettison.json.JSONTokener;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+
 import java.util.Date;
 
 import static javax.ws.rs.core.Response.Status;
@@ -37,6 +39,7 @@ public class ValueResource {
 			// TODO: TEMP: Display values
 			System.out.println(
 				"Received: name = " + name + ", value = " + value + ", time = " + time + " (" + date + ");");
+            DataAccess.getInstance().addValue(name, time, value);
 
 		} catch (JSONException exc) {
 			errorMessage = exc.getMessage();

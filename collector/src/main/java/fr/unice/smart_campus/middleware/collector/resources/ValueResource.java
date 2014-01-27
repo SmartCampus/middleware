@@ -26,6 +26,7 @@ public class ValueResource {
 	public Response postValue (String jsonString) {
 
 		String errorMessage = null;
+        boolean success =  false;
 
 		try {
 			JSONObject json = new JSONObject(new JSONTokener(jsonString));
@@ -39,8 +40,8 @@ public class ValueResource {
 			// TODO: TEMP: Display values
 			System.out.println(
 				"Received: name = " + name + ", value = " + value + ", time = " + time + " (" + date + ");");
-            DataAccess.getInstance().addValue(name, time, value);
-
+            success = DataAccess.getInstance().addValue(name, time, value);
+            if (success == false) errorMessage = "Value not posted";
 		} catch (JSONException exc) {
 			errorMessage = exc.getMessage();
 		} catch (NumberFormatException exc) {

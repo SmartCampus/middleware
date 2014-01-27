@@ -1,6 +1,7 @@
 package fr.unice.smart_campus.middleware.collector;
 
 import org.postgresql.ds.PGSimpleDataSource;
+import org.postgresql.util.PSQLException;
 
 import javax.naming.*;
 import java.sql.*;
@@ -64,10 +65,12 @@ public class DataAccess {
      * @param ident sensor identifier
      * @param time time of the data
      * @param value value of the data
+     * @return true if data insert is successful, false otherwise
      */
-    public void addValue(String ident, String time, String value) {
+    public boolean addValue(String ident, String time, String value) {
         PreparedStatement st = null;
         ResultSet rs = null;
+        Logger lgr = Logger.getLogger(DataAccess.class.getName());
 
         try {
             String stm = "INSERT INTO \"public\".\"MESSAGES\" (identifier, time, value) VALUES(?, ?, ?)";
@@ -75,14 +78,20 @@ public class DataAccess {
             st.setString(1, ident);
             st.setString(2, time);
             st.setString(3, value);
-            st.executeUpdate();
 
             if (st.executeUpdate() == 1) {
                 System.out.println("Valeur ajoutée dans la base de données.");
+                return true;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+        } catch (PSQLException ex) {
+            lgr.log(Level.SEVERE, ex.getMessage());
+            return false;
+        } catch (SQLException ex) {
+            lgr.log(Level.SEVERE, ex.getMessage());
+            return false;
         }
+        return false;
     }
 
     /**

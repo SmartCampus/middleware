@@ -28,7 +28,9 @@ def fetchBridgeData(name,db):
     '''
 
     '''
-    ps=db.prepare("Select ip,port from bridge where idbridge = $1")
+    ps=db.prepare("Select ip,port \
+                  from bridge \
+                  where idbridge = $1")
     return ps(name)[0]
 
 def fetchSensorConfig(boardId,db):

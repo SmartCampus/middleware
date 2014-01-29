@@ -32,7 +32,7 @@ CREATE TABLE Capteur (
 		idCapteur VARCHAR(16),
 		nom VARCHAR(32),
     description text,
-    frequency numeric,
+    frequency int4,
 		type VARCHAR(16) NOT NULL REFERENCES TypeCapteur,
 		PRIMARY KEY (idCapteur)
 );

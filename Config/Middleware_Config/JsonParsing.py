@@ -4,7 +4,8 @@ from collections import OrderedDict
 
 def JsonConfigEncoding(config):
     """
-
+    Method to transform a list of the configuration of a sensor
+    in Json Format
     """
     conf = OrderedDict()
     conf['id'] = config[0]
@@ -18,7 +19,8 @@ def JsonConfigEncoding(config):
 
 def JsonConfigGroup(configarray):
     """
-
+    Method to transform the result of an sql config request in Json
+    Format
     """
     listconf = []
     for i in configarray:

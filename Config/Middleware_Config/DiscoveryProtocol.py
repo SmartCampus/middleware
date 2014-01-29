@@ -46,6 +46,7 @@ class DiscoveryProtocol:
 
         Return the result of the PUT request
         """
+        #TODO test this method
         try:
             self.connectingToBridge.request("PUT","/config",confInJson)
             responseConf = self.connectingToBridge.getresponse()
@@ -65,6 +66,7 @@ class DiscoveryProtocol:
 def main():
     """
     methode main
+    testing purpose
     """
     Discover = DiscoveryProtocol("home.cecchinel.fr","9001")
 

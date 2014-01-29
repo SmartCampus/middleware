@@ -13,4 +13,3 @@ Discovery Protocol Class Test
         DiscoveryProtocolTest.__doc__
 
 """
-import Middleware_Config.DiscoveryProtocol

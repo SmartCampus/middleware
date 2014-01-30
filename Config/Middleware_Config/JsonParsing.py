@@ -28,3 +28,4 @@ def JsonConfigGroup(configarray):
     conf = {'config_sensors' : listconf}
     return json.JSONEncoder().encode(conf)
 
+#TODO JSON DECODING

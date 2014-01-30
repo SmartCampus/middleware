@@ -1,4 +1,3 @@
-__author__ = 'matthieujimenez'
 import http.client
 import json
 
@@ -9,6 +8,10 @@ class DiscoveryProtocol:
 
     Parameters:
     connectingToBridge -- it's an HTTPConnection object containing the adress of the bridge to reach
+
+    Available Method:
+    discoverRequest()
+    putConfig(confInJson)
     """
     def __init__(self,ipAdress,port):
         """
@@ -20,17 +23,18 @@ class DiscoveryProtocol:
         """
         self.connectingToBridge = http.client.HTTPConnection(ipAdress,port)
 
+
     def discoverRequest(self):
         """
         Method to retrieve the board connected to a bridge at a given URL
 
         Return:
-        BoardsJson -- Json Object conataing the list of all Boards connected to the Bridge
+        BoardsJson -- Json Object containing the list of all Boards connected to the Bridge
         """
         try:
-            self.connectingToBridge.request("GET","/boards")
+            self.connectingToBridge.request("GET", "/boards")
             responseBoards = self.connectingToBridge.getresponse()
-            if (responseBoards.status == http.client.OK):
+            if responseBoards.status == http.client.OK:
                 BoardsName = responseBoards.read().decode()
                 BoardsJson = json.loads(BoardsName)
                 return BoardsJson
@@ -39,6 +43,7 @@ class DiscoveryProtocol:
         except Exception as exception:
             print(type(exception))
             print(exception.args)
+
 
     def putConfig(self,confInJson):
         """
@@ -60,7 +65,6 @@ class DiscoveryProtocol:
         except Exception as exception:
             print(type(exception))
             print(exception.args)
-
 
 
 def main():

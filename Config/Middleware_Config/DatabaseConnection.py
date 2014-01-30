@@ -1,89 +1,116 @@
 import re
-
 import postgresql.driver as pgdriver
-
 import Config.Middleware_Config.JsonParsing as jsp
 
 
-def retrieveUserMdp(Pathfile):
+class DatabaseConnection:
     """
-    Method to retrieve the credentials to access the database
-    they are stored in a .txt file (login first line and password second)
+    class that implements the Database Connection and allow custom resquest
 
-    Keyword Argument:
-    Pathfile -- Path to access the file
+    Parameter:
+    dbconnection -- Database connection object
 
-    Return a list containing the login and the password
+    Available Method:
+    fetchBridgeData(name)
+    fetchSensorConfig(boardId)
     """
-    with open(Pathfile,"r",encoding='utf-8') as f:
-    #lecture du fichier
-        data = f.read()
-        return re.split("\n",data)
+    def __init__(self,pathToDBFile):
+        """
+        Constructor of the class
 
+        Keywords Arguments:
+        pathToDBFile -- location of the file containing all informations needed to connect to the database
+        """
+        try:
+            self.dbconnection = self.connectToDatabase(self.retrieveDbInformation(pathToDBFile))
 
-def connectToDatabase(user,ip,port,base):
-    """
-    Method to connect to the database
+        except Exception as exception:
+            print(type(exception))
+            print(exception.args)
 
-    Keyword Argument:
-    user -- list containing the login and the password
-    ip -- Ip or URL address of the database
-    port -- port (usually 5432)
-    base -- name of the database to access
+    def retrieveDbInformation(self,Pathfile):
+        """
+        Method to retrieve the database adress and the credentials to access it
+        they are stored in a .txt file
+        Text file must have the following format:
+        login \n
+        password \n
+        IP or url \n
+        Port \n
+        base name \n
 
-    Return a Connection Object
-    """
-    db = pgdriver.connect(
-        user = user[0],
-        password = user[1],
-        host = ip,
-        port = port,
-        database = base
-    )
-    return db
+        Keyword Argument:
+        Pathfile -- Path to access the file
 
+        Return a list containing the login and the password
+        """
+        with open(Pathfile,"r",encoding='utf-8') as f:
+        #lecture du fichier
+            data = f.read()
+            return re.split("\n", data)
 
+    def connectToDatabase(self,dbConf):
+        """
+        Method to connect to the database
 
-def fetchBridgeData(name,db):
-    """
-    Method to retrieve from the database the Ip address and port number of
-    a bridge
+        Keyword Argument:
+        dbConf -- list containing ( user password ip port base )
 
-    Keyword Argument
-    name -- id of the bridge
-    db -- Database Connection object
+        Return a Connection Object
+        """
+        db = pgdriver.connect(
+            user = dbConf[0],
+            password = dbConf[1],
+            host = dbConf[2],
+            port = dbConf[3],
+            database = dbConf[4]
+        )
+        return db
 
-    Return a list containing the ip (or URL) and the port number of the bridge
-    """
-    #TODO exception
-    ps = db.prepare("Select ip,port \
-                  from bridge \
-                  where idbridge = $1")
-    return ps(name)[0]
+    def fetchBridgeData(self, name):
+        """
+        Method to retrieve from the database the Ip address and port number of
+        a bridge
 
+        Keyword Argument
+        name -- id of the bridge
 
-def fetchSensorConfig(boardId,db):
-    """
-    Method to retrieve from the database the configuration of all sensor of a board
+        Return a list containing the ip (or URL) and the port number of the bridge
+        """
+        try:
+            ps = self.dbconnection.prepare("Select ip,port \
+                          from bridge \
+                          where idbridge = $1")
+            return ps(name)[0]
 
-    Keyword Argument
-    boardId -- id of the board
-    db -- Database Connection object
+        except Exception as exception:
+            print(type(exception))
+            print(exception.args)
 
-    Return a list sensor's configuration
-    a configuration contains:
-    - id of the sensor
-    - id of the board
-    - pin of the sensor on the board
-    - frequency of the measure
-    - Ip adress of the collector
-    - port number of the collector
-    """
-    #TODO exception
-    ps = db.prepare("Select c.idcapteur,p.idboard,p.boardpin,c.frequency,p.endpointIP,p.port \
-                  from capteur c, capteurphy p \
-                  where p.idboard = $1 and p.idcapteur = c.idcapteur")
-    return ps(boardId)
+    def fetchSensorConfig(self, boardId):
+        """
+        Method to retrieve from the database the configuration of all sensor of a board
+
+        Keyword Argument
+        boardId -- id of the board
+
+        Return a list sensor's configuration
+        a configuration contains:
+        - id of the sensor
+        - id of the board
+        - pin of the sensor on the board
+        - frequency of the measure
+        - Ip adress of the collector
+        - port number of the collector
+        """
+        try:
+            ps = self.dbconnection.prepare("Select c.idcapteur,p.idboard,p.boardpin,c.frequency,p.endpointIP,p.port \
+                          from capteur c, capteurphy p \
+                          where p.idboard = $1 and p.idcapteur = c.idcapteur")
+            return ps(boardId)
+        except Exception as exception:
+            print(type(exception))
+            print(exception.args)
 
 
 def main():
@@ -92,11 +119,10 @@ def main():
     testing purpose
     """
     #TODO more sensors, more boards on a same bridge
-    user = retrieveUserMdp("../sql_database/user.txt")
-    db = connectToDatabase(user,"127.0.0.1","5432","smartcampusconfig")
-    print(fetchBridgeData("pi-1",db))
-    print(fetchSensorConfig("ard-101",db))
-    test =jsp.JsonConfigGroup(fetchSensorConfig("ard-101",db))
+    clas = DatabaseConnection("../sql_database/user.txt")
+    print(clas.fetchBridgeData("pi-1"))
+    print(clas.fetchSensorConfig("ard-101"))
+    test =jsp.JsonConfigGroup(clas.fetchSensorConfig("ard-101"))
     print(test)
 
 

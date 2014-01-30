@@ -1,5 +1,4 @@
 import http.client
-import json
 
 
 class DiscoveryProtocol:
@@ -36,8 +35,7 @@ class DiscoveryProtocol:
             responseBoards = self.connectingToBridge.getresponse()
             if responseBoards.status == http.client.OK:
                 BoardsName = responseBoards.read().decode()
-                BoardsJson = json.loads(BoardsName)
-                return BoardsJson
+                return BoardsName
             else:
                 raise Exception('An error occured the sever send',responseBoards.status,responseBoards.reason)
         except Exception as exception:
@@ -59,6 +57,7 @@ class DiscoveryProtocol:
             if status == http.client.ACCEPTED or status == http.client.OK or status == http.client.NO_CONTENT:
                 print(status)
                 print(responseConf.reason)
+                print(responseConf.read().decode())
             else:
                 raise Exception('An error occured the sever send',responseConf.status,responseConf.reason)
 

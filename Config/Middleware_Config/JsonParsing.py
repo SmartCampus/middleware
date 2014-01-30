@@ -14,7 +14,7 @@ def JsonConfigEncoding(config):
     conf['freq'] = config[3]
     conf['endpointIP'] = config[4]
     conf['endpointPort'] = config[5]
-    return json.JSONEncoder().encode(conf)
+    return conf
 
 
 def JsonConfigGroup(configarray):
@@ -29,3 +29,11 @@ def JsonConfigGroup(configarray):
     return json.JSONEncoder().encode(conf)
 
 #TODO JSON DECODING
+def JsonBoardsDecode(jsonboard):
+    BoardsJson = json.loads(jsonboard)
+    listj = BoardsJson["boards"]
+    print(listj)
+    listf = []
+    for i in listj:
+        listf.append(i['id'])
+    return listf

@@ -112,6 +112,16 @@ class DatabaseConnection:
             print(type(exception))
             print(exception.args)
 
+    def fetchAllBridge(self):
+        """
+        
+        """
+        try:
+            ps = self.dbconnection.prepare("Select idbridge from bridge")
+            return ps()
+        except Exception as exception:
+            print(type(exception))
+            print(exception.args)
 
 def main():
     """
@@ -121,8 +131,8 @@ def main():
     #TODO more sensors, more boards on a same bridge
     clas = DatabaseConnection("../sql_database/user.txt")
     print(clas.fetchBridgeData("pi-1"))
-    print(clas.fetchSensorConfig("ard-101"))
-    test =jsp.JsonConfigGroup(clas.fetchSensorConfig("ard-101"))
+    print(clas.fetchSensorConfig("NEWTON_B332_B2"))
+    test =jsp.JsonConfigGroup(clas.fetchSensorConfig("NEWTON_B332_B2"))
     print(test)
 
 

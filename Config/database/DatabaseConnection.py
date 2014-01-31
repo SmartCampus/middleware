@@ -1,6 +1,6 @@
 import re
 import postgresql.driver as pgdriver
-import Config.Middleware_Config.JsonParsing as jsp
+import Config.config_sensor.JsonParsing as jsp
 
 
 class DatabaseConnection:
@@ -114,7 +114,7 @@ class DatabaseConnection:
 
     def fetchAllBridge(self):
         """
-        
+
         """
         try:
             ps = self.dbconnection.prepare("Select idbridge from bridge")

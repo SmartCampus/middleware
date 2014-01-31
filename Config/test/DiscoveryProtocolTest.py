@@ -13,3 +13,4 @@ Discovery Protocol Class Test
         DiscoveryProtocolTest.__doc__
 
 """
+#TODO test

@@ -1,9 +1,9 @@
 """
 Main script
 """
-from Config.Middleware_Config import DiscoveryProtocol as DP
-from Config.Middleware_Config import DatabaseConnection as DC
-from Config.Middleware_Config import JsonParsing as JP
+from Config.config_sensor import DiscoveryProtocol as DP
+from Config.config_sensor import JsonParsing as JP
+from Config.database import DatabaseConnection as DC
 
 
 def main(pathToDBConfFile,bridgeID):
@@ -17,6 +17,7 @@ def main(pathToDBConfFile,bridgeID):
     for i in listboard:
        listconfig = listconfig + (db.fetchSensorConfig(i))
     jsonConf = JP.JsonConfigGroup(listconfig)
+    print(jsonConf)
     bridgeconnection.putConfig(jsonConf)
 
 if __name__ == '__main__':

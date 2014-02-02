@@ -1,13 +1,13 @@
 package fr.unice.smart_campus.middleware.collector.resources;
 
 import fr.unice.smart_campus.middleware.collector.DataAccess;
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.codehaus.jettison.json.JSONTokener;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-
 import java.util.Date;
 
 import static javax.ws.rs.core.Response.Status;
@@ -26,28 +26,53 @@ public class ValueResource {
 	public Response postValue (String jsonString) {
 
 		String errorMessage = null;
-        boolean success =  false;
+		int messagesCount = 0;
 
 		try {
-			JSONObject json = new JSONObject(new JSONTokener(jsonString));
 
-			String name = json.getString("n");
-			String value = json.getString("v");
-			String time = json.getString("t");
+			JSONArray messages;
+			boolean success = true;
 
-			Date date = new Date(Long.parseLong(time) * 1000);
+			// Parse a JSON object or a JSON array
+			try {
+				JSONObject jsonObject = new JSONObject(new JSONTokener(jsonString));
+				messages = new JSONArray();
+				messages.put(jsonObject);
+			} catch (JSONException exc) {
+				messages = new JSONArray(new JSONTokener(jsonString));
+			}
 
-			// TODO: TEMP: Display values
-			System.out.println(
-				"Received: name = " + name + ", value = " + value + ", time = " + time + " (" + date + ");");
-            success = DataAccess.getInstance().addValue(name, time, value);
-            if (success == false) errorMessage = "Value not posted";
-		} catch (JSONException exc) {
-			errorMessage = exc.getMessage();
+			messagesCount = messages.length();
+
+			// Process messages
+			for (int i = 0; i < messagesCount; i++) {
+				JSONObject message = (JSONObject) messages.get(i);
+
+				String name  = message.getString("n");
+				String value = message.getString("v");
+				String time  = message.getString("t");
+
+				Date date = new Date(Long.parseLong(time) * 1000);
+
+				// TODO: Temporarily display values
+				System.out.println(
+						"Received: name = " + name + ", value = " + value + ", time = " + time + " (" + date + ");");
+
+				// Store the message in the messages queue
+				success = DataAccess.getInstance().addValue(name, time, value) && success;
+			}
+
+            if (success == false) {
+	            errorMessage = "Values not posted";
+            }
+
 		} catch (NumberFormatException exc) {
 			errorMessage = "Wrong timestamp format";
+		} catch (Exception exc) {
+			errorMessage = exc.getMessage();
 		}
 
+		// HTTP response
 		if (errorMessage != null) {
 			return Response
 					.status(Status.BAD_REQUEST)
@@ -57,7 +82,7 @@ public class ValueResource {
 
 		return Response
 				.status(Status.CREATED)
-				.entity("Value posted with success!")
+				.entity(messagesCount + " value(s) posted with success!")
 				.build();
 	}
 

@@ -114,11 +114,15 @@ class DatabaseConnection:
 
     def fetchAllBridge(self):
         """
-
+        Method to retrieve from the database a list of all the bridge that have been declared
         """
         try:
             ps = self.dbconnection.prepare("Select idbridge from bridge")
-            return ps()
+            resultat = ps()
+            listbridge = []
+            for i in resultat:
+                listbridge.append(i[0])
+            return listbridge
         except Exception as exception:
             print(type(exception))
             print(exception.args)

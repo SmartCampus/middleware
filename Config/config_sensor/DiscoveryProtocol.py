@@ -20,8 +20,11 @@ class DiscoveryProtocol:
         ipAdress -- IP adress if the bridge to reach
         port -- Port number of the REST interface of the bridge
         """
-        self.connectingToBridge = http.client.HTTPConnection(ipAdress,port)
-
+        try:
+            self.connectingToBridge = http.client.HTTPConnection(ipAdress,port,timeout=8)
+        except Exception as exception:
+            print(type(exception))
+            print(exception.args)
 
     def discoverRequest(self):
         """

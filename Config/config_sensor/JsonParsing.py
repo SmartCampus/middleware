@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 def JsonConfigEncoding(config):
     """
-    Method to transform a list of the configuration of a sensor
+    Method to transform a list of configuration of a sensor
     in Json Format
     """
     conf = OrderedDict()
@@ -19,7 +19,7 @@ def JsonConfigEncoding(config):
 
 def JsonConfigGroup(configarray):
     """
-    Method to transform the result of an sql config request in Json
+    Method to aggregate in a Json all the configuration for many sensors in Json
     Format
     """
     listconf = []
@@ -28,11 +28,13 @@ def JsonConfigGroup(configarray):
     conf = {'config_sensors' : listconf}
     return json.JSONEncoder().encode(conf)
 
-#TODO JSON DECODING
+
 def JsonBoardsDecode(jsonboard):
+    """
+    Method to decode a Json object which contain a list of boards in a list
+    """
     BoardsJson = json.loads(jsonboard)
     listj = BoardsJson["boards"]
-    print(listj)
     listf = []
     for i in listj:
         listf.append(i['id'])

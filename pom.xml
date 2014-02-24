@@ -9,8 +9,8 @@
 
 	<modules>
 		<module>collector</module>
-        <module>dataAPI</module>
-        <module>dataAccessor</module>
+        <module>data-api</module>
+        <module>data-accessor</module>
     </modules>
 
 </project>

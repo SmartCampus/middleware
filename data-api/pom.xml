@@ -34,6 +34,11 @@
             <artifactId>jetty-server</artifactId>
             <version>9.1.0.v20131115</version>
         </dependency>
+        <dependency>
+            <groupId>fr.unice.smart_campus.middleware</groupId>
+            <artifactId>dataAccessor</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

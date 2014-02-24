@@ -1,6 +1,8 @@
 package fr.unice.smart_campus.middleware.dataAPI.resources;
 
 
+import fr.unice.smart_campus.middleware.dataAccessor.App;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
@@ -17,17 +19,19 @@ public class SensorResource {
 	@Produces("text/plain")
 	@Consumes("application/json")
 	public Response postValue (String jsonString) {
-        return Response
-                .status(Status.ACCEPTED)
-                .entity("Hello World!")
-                .build();
+        return null;
 	}
 
 
 	@GET
 	@Produces("text/plain")
 	public Response getValue () {
-		return null;
+        App test = new App();
+
+        return Response
+                .status(Status.ACCEPTED)
+                .entity(test.test())
+                .build();
 	}
 
 

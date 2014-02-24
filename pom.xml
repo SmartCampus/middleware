@@ -10,6 +10,7 @@
 	<modules>
 		<module>collector</module>
         <module>dataAPI</module>
+        <module>dataAccessor</module>
     </modules>
 
 </project>

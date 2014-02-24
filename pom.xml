@@ -9,6 +9,7 @@
 
 	<modules>
 		<module>collector</module>
+		<module>mq</module>
 	</modules>
 
 </project>

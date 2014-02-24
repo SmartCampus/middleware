@@ -1,10 +1,12 @@
 package fr.unice.smart_campus.middleware.dataapi;
 
 
+import java.text.ParseException;
+
 public class Helper {
 
 
-    public static TimeRange getTimestamps(String date) {
+    public static TimeRange getTimestamps(String date) throws ParseException {
 
         long first = 0L;
         long second = 0L;

@@ -3,9 +3,12 @@ package fr.unice.smart_campus.middleware.dataapi.resources;
 
 import fr.unice.smart_campus.middleware.dataaccessor.DataAccessor;
 import fr.unice.smart_campus.middleware.dataapi.Helper;
+import fr.unice.smart_campus.middleware.dataapi.TimeRange;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+
+import java.text.ParseException;
 
 import static javax.ws.rs.core.Response.Status;
 
@@ -34,16 +37,18 @@ public class SensorResource {
     public Response getDataFromSensor (@PathParam("idSensor") String idSensor,
                                        @QueryParam("date") String date) {
 
-
-        long timestampFirst = 0;
-        long timestampSecond = 0;
+        TimeRange time = new TimeRange(0L, 0L);
 
         if (date != null) {
-            Helper.getTimestamps(date);
+            try {
+                time = Helper.getTimestamps(date);
+            } catch (ParseException exc) {
+                //TODO
+            }
         }
 
         DataAccessor access = new DataAccessor();
-        String data = idSensor + " : " + access.getDataFromSensor(idSensor, timestampFirst, timestampSecond) + " : " + date;
+        String data = idSensor + " : " + access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond()) + " : " + date;
 
         return Response
                 .status(Status.ACCEPTED)

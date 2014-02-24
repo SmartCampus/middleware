@@ -5,12 +5,12 @@ public class TimeRange {
     long first;
     long second;
 
-    TimeRange(long first) {
+    public TimeRange(long first) {
         this.first = first;
         this.second = 0L;
     }
 
-    TimeRange(long first, long second) {
+    public TimeRange(long first, long second) {
         this.first = first;
         this.second = second;
     }

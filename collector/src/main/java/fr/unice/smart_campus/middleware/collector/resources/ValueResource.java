@@ -52,17 +52,16 @@ public class ValueResource {
 				String value = message.getString("v");
 				String time  = message.getString("t");
 
-				Date date = new Date(Long.parseLong(time) * 1000);
-
 				// TODO: Temporarily display values
+				Date date = new Date(Long.parseLong(time) * 1000);
 				System.out.println(
 						"Received: name = " + name + ", value = " + value + ", time = " + time + " (" + date + ");");
 
 				// Store the message in the messages queue
-				success = DataAccess.getInstance().addValue(name, time, value) && success;
+				success = DataAccess.getInstance().postValue(name, time, value) && success;
 			}
 
-            if (success == false) {
+            if (!success) {
 	            errorMessage = "Values not posted";
             }
 
@@ -90,20 +89,20 @@ public class ValueResource {
 	@GET
 	@Produces("text/plain")
 	public Response getValue () {
-		return getWrongCommandErrorResponse();
+		return getWrongMethodErrorResponse();
 	}
 
 
 	@PUT
 	@Produces("text/plain")
 	public Response putValue () {
-		return getWrongCommandErrorResponse();
+		return getWrongMethodErrorResponse();
 	}
 
 
-	private static Response getWrongCommandErrorResponse () {
+	private static Response getWrongMethodErrorResponse () {
 		return Response
-				.status(Status.NOT_FOUND)
+				.status(Status.METHOD_NOT_ALLOWED)
 				.entity("Error: Use the POST HTTP command to post a value into the collector")
 				.build();
 	}

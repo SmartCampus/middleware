@@ -20,12 +20,4 @@
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
-    <!-- Set up the JNDI resource reference for the connection pool -->
-    <resource-ref>
-        <description>My DataSource Reference</description>
-        <res-ref-name>jdbc/MessagesQueue</res-ref-name>
-        <res-type>javax.sql.DataSource</res-type>
-        <res-auth>Container</res-auth>
-    </resource-ref>
-
 </web-app>

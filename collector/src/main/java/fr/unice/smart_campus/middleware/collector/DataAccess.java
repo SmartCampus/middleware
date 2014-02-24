@@ -1,110 +1,71 @@
 package fr.unice.smart_campus.middleware.collector;
 
-import org.postgresql.ds.PGSimpleDataSource;
-import org.postgresql.util.PSQLException;
 
-import javax.naming.*;
-import java.sql.*;
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.codehaus.jettison.json.JSONObject;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.jms.*;
 
 /**
  * DataAccess class
- * Singleton class which allows to insert values in the Message Queue Database (PostgreSQL)
+ * Interface to post sensor values into the middleware
  */
 public class DataAccess {
 
-    private Connection con;
-    private static DataAccess instance;
+	private final static String brokerURL = "tcp://localhost:61616";
 
-    /**
-     * Get the instance
-     * @return DataAccess instance
-     */
-    public static DataAccess getInstance() {
-        if (instance == null) {
-            instance = new DataAccess();
-        }
-        return instance;
-    }
+	private static DataAccess instance;
+	private Session session;
+	private MessageProducer producer;
 
-    /**
-     * Private constructor
-     * Get connection from data source (defined in jetty-env.xml)
-     */
-    private DataAccess() {
 
-        try {
-            Context initialContext = new InitialContext();
-            if ( initialContext == null){
-                System.err.println("Cannot get InitalContext");
-            }
-            else {
-                // Get the data source from the context
-                PGSimpleDataSource datasource = (PGSimpleDataSource)initialContext.lookup("java:/comp/env/jdbc/MessagesQueue");
-                if (datasource != null){
-                    // Get the connection from the datasource
-                    con = datasource.getConnection();
-                }
-                else {
-                    System.err.println("Failed to get datasource");
-                }
-            }
-        } catch (NamingException ex) {
-            System.err.println("Cannot get connection: " + ex);
-        } catch (SQLException ex){
-            System.err.println("Cannot get connection: " + ex);
-        } catch (Exception ex){
-            System.err.println("General error on attempting connection: " + ex);
-        }
-    }
+	/**
+	 * Get the class instance
+	 */
+	public static synchronized DataAccess getInstance () throws JMSException {
+		if (instance == null) {
+			instance = new DataAccess();
+		}
+		return instance;
+	}
 
-    /**
-     * Add value of sensor in the message queues
-     * @param ident sensor identifier
-     * @param time time of the data
-     * @param value value of the data
-     * @return true if data insert is successful, false otherwise
-     */
-    public boolean addValue(String ident, String time, String value) {
-        PreparedStatement st = null;
-        ResultSet rs = null;
-        Logger lgr = Logger.getLogger(DataAccess.class.getName());
+	/**
+	 * Private constructor
+	 * Get connection from data source (defined in jetty-env.xml)
+	 */
+	private DataAccess () throws JMSException {
 
-        try {
-            String stm = "INSERT INTO \"public\".\"MESSAGES\" (identifier, time, value) VALUES(?, ?, ?)";
-            st = con.prepareStatement(stm);
-            st.setString(1, ident);
-            st.setString(2, time);
-            st.setString(3, value);
+		ConnectionFactory factory = new ActiveMQConnectionFactory(brokerURL);
+		Connection connection = factory.createConnection();
+		connection.start();
 
-            if (st.executeUpdate() == 1) {
-                System.out.println("Valeur ajoutée dans la base de données.");
-                return true;
-            }
+		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		Destination destination = session.createQueue("svalues");
+		producer = session.createProducer(destination);
+	}
 
-        } catch (PSQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage());
-            return false;
-        } catch (SQLException ex) {
-            lgr.log(Level.SEVERE, ex.getMessage());
-            return false;
-        }
-        return false;
-    }
+	/**
+	 * Post a sensor value in the MQ
+	 *
+	 * @param name  The sensor identifier
+	 * @param time  The timestamp
+	 * @param value The sensor value
+	 * @return true if data insert is successful, false otherwise
+	 */
+	public boolean postValue (String name, String time, String value) {
+		try {
+			JSONObject json = new JSONObject();
+			json.put("name", name);
+			json.put("time", time);
+			json.put("value", value);
 
-    /**
-     * Close the connection from the data source
-     */
-    public void close() {
-        try {
-            if (con != null) {
-                con.close();
-            }
-        } catch (SQLException ex) {
-            Logger lgr = Logger.getLogger(DataAccess.class.getName());
-            lgr.log(Level.WARNING, ex.getMessage(), ex);
-        }
-    }
+			Message message = session.createTextMessage(json.toString());
+			producer.send(message);
+
+		} catch (Exception exc) {
+			return false;
+		}
+
+		return true;
+	}
 }

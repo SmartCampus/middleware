@@ -9,7 +9,7 @@
 
 	<modules>
 		<module>collector</module>
-		<module>mq</module>
+		<module>message-queue</module>
         <module>data-api</module>
         <module>data-accessor</module>
     </modules>

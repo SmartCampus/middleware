@@ -10,8 +10,9 @@
 	<modules>
 		<module>collector</module>
 		<module>message-queue</module>
-        <module>data-api</module>
-        <module>data-accessor</module>
-    </modules>
+		<module>data-processor</module>
+		<module>data-accessor</module>
+		<module>data-api</module>
+	</modules>
 
 </project>

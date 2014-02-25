@@ -43,18 +43,20 @@ public class SensorResource {
             try {
                 time = Helper.getTimestamps(date);
             } catch (ParseException exc) {
-                //TODO
+                return Response
+                        .status(Status.BAD_REQUEST)
+                        .entity(exc.getMessage())
+                        .build();
             }
         }
 
         DataAccessor access = new DataAccessor();
-        String data = idSensor + " : " + access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond()) + " : " + date;
+        access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond());
 
         return Response
                 .status(Status.ACCEPTED)
-                .entity(data)
+                .entity("")
                 .build();
-
     }
 
     @POST

@@ -3,34 +3,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<name>message-queue</name>
+
 	<artifactId>message-queue</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<version>1.0.0-SNAPSHOT</version>
 
 	<parent>
-		<artifactId>middleware</artifactId>
 		<groupId>fr.unice.smart_campus.middleware</groupId>
-		<version>0.0.1-SNAPSHOT</version>
+		<artifactId>middleware</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-
-	<properties>
-		<java.version>1.6</java.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	</properties>
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.5.1</version>
-				<inherited>true</inherited>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.activemq.tooling</groupId>
 				<artifactId>maven-activemq-plugin</artifactId>

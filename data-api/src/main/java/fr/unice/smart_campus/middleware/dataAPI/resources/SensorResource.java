@@ -37,8 +37,8 @@ public class SensorResource {
     public Response getDataFromSensor (@PathParam("idSensor") String idSensor,
                                        @QueryParam("date") String date) {
 
+        // URL Dates parsing
         TimeRange time = new TimeRange(0L, 0L);
-
         if (date != null) {
             try {
                 time = Helper.getTimestamps(date);

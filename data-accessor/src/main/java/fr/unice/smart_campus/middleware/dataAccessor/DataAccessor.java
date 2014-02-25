@@ -4,12 +4,43 @@ package fr.unice.smart_campus.middleware.dataaccessor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
 /**
  * Hello world!
  *
  */
 public class DataAccessor
 {
+    public static Connection connection;
+
+    public DataAccessor () {
+        connection = null;
+        try {
+            Properties properties = new Properties();
+            //properties.load(new FileInputStream("resources/database.properties"));
+            properties.load(DataAccessor.class.getClassLoader().getResourceAsStream("resources/database.properties"));
+
+            String connectionStr = "jdbc:postgresql://" + properties.get("hostname") + ":" + properties.get("port")
+                    + "/" + properties.get("dbname");
+            connection = DriverManager.getConnection(connectionStr,
+                    (String)properties.get("username"), (String)properties.get("password"));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      *
      * @return JSON String list of sensors

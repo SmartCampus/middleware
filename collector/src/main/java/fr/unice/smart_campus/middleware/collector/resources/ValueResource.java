@@ -1,10 +1,10 @@
 package fr.unice.smart_campus.middleware.collector.resources;
 
 import fr.unice.smart_campus.middleware.collector.DataAccess;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
-import org.codehaus.jettison.json.JSONTokener;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -45,8 +45,13 @@ public class ValueResource {
 			messagesCount = messages.length();
 
 			// Process messages
-			for (int i = 0; i < messagesCount; i++) {
+			for (int i = 0; i < messagesCount && success; i++) {
 				JSONObject message = (JSONObject) messages.get(i);
+
+				// Check JSON object size
+				if (message.length() != 3) {
+					throw new Exception("Invalid JSON object size");
+				}
 
 				String name  = message.getString("n");
 				String value = message.getString("v");
@@ -57,8 +62,8 @@ public class ValueResource {
 				System.out.println(
 						"Received: name = " + name + ", value = " + value + ", time = " + time + " (" + date + ");");
 
-				// Store the message in the messages queue
-				success = DataAccess.getInstance().postValue(name, time, value) && success;
+				// Store the message into the message queue
+				success = DataAccess.getInstance().postMessage(message);
 			}
 
             if (!success) {

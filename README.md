@@ -24,3 +24,7 @@ Before running the modules, you have to install the middleware by running the Ma
 7. Config
 
 *NB: See the README of each module for documentation.*
+
+## Notes
+
+In this release, the collector is implemented, the message queue server works, the data processor only prints message queue data. The data API, the data accessor, the config module and the sensors API do not work yet.

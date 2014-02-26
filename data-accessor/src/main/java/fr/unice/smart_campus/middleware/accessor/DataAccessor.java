@@ -1,5 +1,4 @@
-package fr.unice.smart_campus.middleware.dataaccessor;
-
+package fr.unice.smart_campus.middleware.accessor;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,13 +8,15 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
+
 /**
  * DataAccessor
  */
 public class DataAccessor {
+
 	public Connection connection;
 
-	public DataAccessor() {
+	public DataAccessor () {
 		connection = null;
 		try {
 			Properties properties = new Properties();
@@ -39,7 +40,7 @@ public class DataAccessor {
 	/**
 	 * @return JSON String list of sensors
 	 */
-	public String getSensors() {
+	public String getSensors () {
 		String sensors = "";
 
 		//TODO Retrieve sensors list from config database
@@ -53,13 +54,13 @@ public class DataAccessor {
 
 		jsonObject.put("sensors", jsonArray);
 		sensors = jsonArray.toString();
-	    /* */
+		/* */
 
 		return sensors;
 	}
 
 
-	public String getDataFromSensor(String idSensor, long beg, long end) {
+	public String getDataFromSensor (String idSensor, long beg, long end) {
 
 		String selectSQL = "SELECT * FROM \"public\".\"SensorsData\" WHERE sensor_id = ?";
 		PreparedStatement ps = null;

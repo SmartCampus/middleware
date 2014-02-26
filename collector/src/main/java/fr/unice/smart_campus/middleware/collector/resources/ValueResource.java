@@ -71,9 +71,9 @@ public class ValueResource {
 				}
 			}
 
-            if (!success) {
-	            errorMessage = "Values not posted (internal server error)";
-            }
+			if (!success) {
+				errorMessage = "Values not posted (internal server error)";
+			}
 
 		} catch (NumberFormatException exc) {
 			errorMessage = "Wrong timestamp format";

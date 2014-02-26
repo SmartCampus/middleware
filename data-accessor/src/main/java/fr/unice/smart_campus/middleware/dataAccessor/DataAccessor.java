@@ -4,84 +4,90 @@ package fr.unice.smart_campus.middleware.dataaccessor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
 /**
  * DataAccessor
- *
  */
-public class DataAccessor
-{
-    public static Connection connection;
+public class DataAccessor {
+	public Connection connection;
 
-    public DataAccessor () {
-        connection = null;
-        try {
-            Properties properties = new Properties();
-            properties.load(getClass().getClassLoader().getResourceAsStream("sensorsdata-database.properties"));
+	public DataAccessor() {
+		connection = null;
+		try {
+			Properties properties = new Properties();
+			properties.load(getClass().getClassLoader().getResourceAsStream("sensorsdata-database.properties"));
 
-            String connectionStr = "jdbc:postgresql://" + properties.get("hostname") + ":" + properties.get("port")
-                    + "/" + properties.get("dbname");
+			String connectionStr = "jdbc:postgresql://" + properties.get("hostname") + ":" + properties.get("port")
+					+ "/" + properties.get("dbname");
 
-            connection = DriverManager.getConnection(connectionStr,
-                    (String)properties.get("username"), (String)properties.get("password"));
+			connection = DriverManager.getConnection(connectionStr,
+					(String) properties.get("username"), (String) properties.get("password"));
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    /**
-     *
-     * @return JSON String list of sensors
-     */
-    public String getSensors () {
-        String sensors = "";
+	/**
+	 * @return JSON String list of sensors
+	 */
+	public String getSensors() {
+		String sensors = "";
 
-        //TODO Retrieve sensors list from config database
+		//TODO Retrieve sensors list from config database
 
         /* TEST */
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		JSONObject jsonObject = new JSONObject();
 
-        jsonArray.put("ARD-1");
-        jsonArray.put("ARD-2");
+		jsonArray.put("ARD-1");
+		jsonArray.put("ARD-2");
 
-        jsonObject.put("sensors", jsonArray);
-        sensors = jsonArray.toString();
-        /* */
+		jsonObject.put("sensors", jsonArray);
+		sensors = jsonArray.toString();
+	    /* */
 
-        return sensors;
-    }
+		return sensors;
+	}
 
 
-    public String getDataFromSensor(String idSensor, long beg, long end) {
-        String data = "";
+	public String getDataFromSensor(String idSensor, long beg, long end) {
 
-        //TODO Retrieve data of sensor from database
+		String selectSQL = "SELECT * FROM \"public\".\"SensorsData\" WHERE sensor_id = ?";
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 
-        /* TEST */
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		JSONObject jsonObject = new JSONObject();
 
-        jsonArray.put("ARD-1");
-        jsonArray.put("ARD-2");
+		try {
+			ps = connection.prepareStatement(selectSQL);
+			ps.setString(1, idSensor);
+			rs = ps.executeQuery();
 
-        jsonObject.put("sensors", jsonArray);
-        data = jsonArray.toString();
-        /* */
+			while (rs.next()) {
+				JSONObject obj = new JSONObject();
+				obj.put("date", rs.getString("sensor_date"));
+				obj.put("value", rs.getString("sensor_value"));
+				jsonArray.put(obj);
+			}
 
-        return data;
-    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		jsonObject.put("id", idSensor);
+		jsonObject.put("values", jsonArray);
+		String data = jsonObject.toString();
+
+		return data;
+	}
 }

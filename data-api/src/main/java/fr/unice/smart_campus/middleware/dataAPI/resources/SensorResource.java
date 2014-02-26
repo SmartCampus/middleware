@@ -7,9 +7,6 @@ import fr.unice.smart_campus.middleware.dataapi.TimeRange;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.text.ParseException;
 
 import static javax.ws.rs.core.Response.Status;
@@ -55,11 +52,11 @@ public class SensorResource {
         }
 
         DataAccessor access = new DataAccessor();
-        access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond());
+        String data = access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond());
 
         return Response
                 .status(Status.ACCEPTED)
-                .entity("")
+                .entity(data)
                 .build();
     }
 

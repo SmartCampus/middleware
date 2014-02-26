@@ -36,9 +36,9 @@ CREATE DATABASE "SensorsData"  WITH OWNER "smartcampus" ENCODING 'UTF8';
 
 DROP TABLE IF EXISTS "public"."SensorsData";
 CREATE TABLE "public"."SensorsData" (
-	"id" varchar NOT NULL COLLATE "default",
-	"date" varchar NOT NULL COLLATE "default",
-	"value" varchar NOT NULL COLLATE "default"
+	"sensor_id" varchar NOT NULL COLLATE "default",
+	"sensor_date" varchar NOT NULL COLLATE "default",
+	"sensor_value" varchar NOT NULL COLLATE "default"
 )
 WITH (OIDS=FALSE);
 ALTER TABLE "public"."SensorsData" OWNER TO "smartcampus";

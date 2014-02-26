@@ -15,7 +15,7 @@ Before running the modules (data API and data processor), you have to initialize
 4. **Create the table** *SensorsData*, owned by *smartcampus*;
 5. **Grant users** depending on theirs privileges.
 
-The *SensorsData* table is composed by three columns : *id*, *date* and *value*, to store values of sensors depending on time. The primary key is the pair *id-date*, and the value can not be null.
+The *SensorsData* table is composed by three columns : *sensor_id*, *sensor_date* and *sensor_value*, to store values of sensors depending on time. The primary key is the pair *id-date*, and the *sensor_value* can not be null.
 
 
 ## Config

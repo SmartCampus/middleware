@@ -63,11 +63,16 @@ public class ValueResource {
 						"Received: name = " + name + ", value = " + value + ", time = " + time + " (" + date + ");");
 
 				// Store the message into the message queue
-				success = DataAccess.getInstance().postMessage(message);
+				try {
+					success = DataAccess.getInstance().postMessage(message);
+				} catch (Exception exc) {
+					success = false;
+					exc.printStackTrace();
+				}
 			}
 
             if (!success) {
-	            errorMessage = "Values not posted";
+	            errorMessage = "Values not posted (internal server error)";
             }
 
 		} catch (NumberFormatException exc) {

@@ -3,20 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-	<display-name>Middleware collector REST API</display-name>
+	<display-name>Middleware data REST API</display-name>
 
 	<servlet>
-		<servlet-name>collector-servlet</servlet-name>
+		<servlet-name>data-api-servlet</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
 			<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>fr.unice.smart_campus.middleware.collector.resources</param-value>
+			<param-value>fr.unice.smart_campus.middleware.dataapi.resources</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>collector-servlet</servlet-name>
+		<servlet-name>data-api-servlet</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 

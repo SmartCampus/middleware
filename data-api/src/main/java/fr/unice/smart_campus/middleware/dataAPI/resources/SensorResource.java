@@ -8,6 +8,8 @@ import fr.unice.smart_campus.middleware.dataapi.TimeRange;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 
 import static javax.ws.rs.core.Response.Status;
@@ -23,6 +25,8 @@ public class SensorResource {
     @Produces("application/json")
 	public Response getSensors () {
         DataAccessor access = new DataAccessor();
+
+
         String sensors = access.getSensors();
 
         return Response

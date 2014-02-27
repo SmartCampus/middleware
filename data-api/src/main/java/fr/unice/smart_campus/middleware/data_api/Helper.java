@@ -43,6 +43,6 @@ public class Helper {
 	 */
 	private static long getTimestamp (String date) throws ParseException {
 		Date d = sdf.parse(date);
-		return d.getTime();
+		return d.getTime() / 1000;
 	}
 }

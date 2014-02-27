@@ -20,4 +20,12 @@
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 
+    <!-- Set up the JNDI resource reference for the connection pool -->
+    <resource-ref>
+        <description>SensorsData resource Reference</description>
+        <res-ref-name>jdbc/SensorsData</res-ref-name>
+        <res-type>javax.sql.PooledConnection</res-type>
+        <res-auth>Container</res-auth>
+    </resource-ref>
+
 </web-app>

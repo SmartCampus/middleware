@@ -52,6 +52,7 @@ public class SensorResource {
 
 		DataAccessor access = new DataAccessor();
 		String data = access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond());
+		access.close();
 
 		return Response
 				.status(Status.ACCEPTED)

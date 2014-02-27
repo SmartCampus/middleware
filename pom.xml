@@ -14,7 +14,6 @@
 		<module>collector</module>
 		<module>message-queue</module>
 		<module>data-processor</module>
-		<module>data-accessor</module>
 		<module>data-api</module>
 	</modules>
 

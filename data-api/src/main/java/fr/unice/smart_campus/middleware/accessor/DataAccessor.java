@@ -2,11 +2,14 @@ package fr.unice.smart_campus.middleware.accessor;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.postgresql.ds.PGPoolingDataSource;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.*;
-import java.util.Properties;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
 /**
@@ -19,22 +22,29 @@ public class DataAccessor {
 	public DataAccessor () {
 		connection = null;
 		try {
-			Properties properties = new Properties();
-			properties.load(getClass().getClassLoader().getResourceAsStream("sensorsdata-database.properties"));
 
-			String connectionStr = "jdbc:postgresql://" + properties.get("hostname") + ":" + properties.get("port")
-					+ "/" + properties.get("dbname");
+			Context initialContext = new InitialContext();
+			if ( initialContext == null){
+				System.err.println("Cannot get InitalContext");
+			}
+			else {
+				// Get the data source from the context
+				PGPoolingDataSource datasource = (PGPoolingDataSource)initialContext.lookup("java:/comp/env/jdbc/SensorsData");
+				if (datasource != null){
+					// Get the connection from the datasource
+					connection = datasource.getConnection();
+				}
+				else {
+					System.err.println("Failed to get datasource");
+				}
+			}
 
-			connection = DriverManager.getConnection(connectionStr,
-					(String) properties.get("username"), (String) properties.get("password"));
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (SQLException ex){
+			System.err.println("Cannot get connection: " + ex);
+		} catch (Exception ex){
+			System.err.println("General error on attempting connection: " + ex);
 		}
+
 	}
 
 	/**
@@ -80,6 +90,7 @@ public class DataAccessor {
 				obj.put("value", rs.getString("sensor_value"));
 				jsonArray.put(obj);
 			}
+			ps.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -89,6 +100,18 @@ public class DataAccessor {
 		jsonObject.put("values", jsonArray);
 		String data = jsonObject.toString();
 
+
 		return data;
+	}
+
+	/**
+	 * To close and release connection
+	 */
+	public void close() {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

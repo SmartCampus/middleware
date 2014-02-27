@@ -56,4 +56,4 @@ GRANT DELETE ON "SensorsData" TO "dataprocessor";
 -- ----------------------------
 --  Primary key structure for table SensorsData
 -- ----------------------------
-ALTER TABLE "public"."SensorsData" ADD PRIMARY KEY ("id", "date") NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE "public"."SensorsData" ADD PRIMARY KEY ("sensor_id", "sensor_date") NOT DEFERRABLE INITIALLY IMMEDIATE;

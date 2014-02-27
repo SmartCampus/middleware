@@ -1,6 +1,6 @@
 # Data Processor module
 
-The data processor goal is to provide a scalable processing module that processes sensors data from the message queue.
+The data processor goal is to provide a scalable processing module that processes sensors data from the message queue and stores them into the database.
 
 ## How to run it
 

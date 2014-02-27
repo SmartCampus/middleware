@@ -1,6 +1,6 @@
 # Data API module
 
-The data API goal is to provide a simple API to allow users to retrieve sensors data.
+The data API goal is to provide a simple API to allow users to retrieve sensors data from the database. It abstracts physical and virtual sensors.
 
 ## How to run it
 

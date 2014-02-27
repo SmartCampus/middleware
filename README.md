@@ -8,7 +8,7 @@ The middleware is the core system of the SmartCampus architecture. It is compose
 - **Data API**, to retrieve physical and virtual sensors data ;
 - **Config**, to easily configure the sensors network ;
 - **Sensors API**, to manage sensors configurations ;
-- (The sensors database that contains sensors data and sensors configurations).
+- The sensors database which contains sensors data and sensors configurations.
 
 ## How to install it
 
@@ -26,4 +26,4 @@ Before running the modules, you have to install the middleware by running the Ma
 
 ## Notes
 
-In this release, the collector is implemented, the message queue server works, the data processor only prints message queue data. The data API, the data accessor, the config module and the sensors API do not work yet.
+In this release, the collector is implemented, the message queue server works, the data processor stores messages into the database and the data API allows users to browse sensors data in the database.

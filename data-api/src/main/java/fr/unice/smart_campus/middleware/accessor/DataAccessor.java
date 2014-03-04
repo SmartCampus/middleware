@@ -1,12 +1,24 @@
 package fr.unice.smart_campus.middleware.accessor;
 
+import groovy.lang.GroovyShell;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.postgresql.ds.PGPoolingDataSource;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.net.ssl.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +31,12 @@ import java.sql.SQLException;
 public class DataAccessor {
 
 	public Connection connection;
+	public static String dataConfigApiUrl = "https://smartcampus.jimenez.lu:5000/sensors";
+
+	public class Indexes {
+		public int indexBeg;
+		public int indexEnd;
+	}
 
 	/**
 	 * DataAccessor Constructor to access SensorsData database
@@ -53,23 +71,121 @@ public class DataAccessor {
 	/**
 	 * @return JSON String list of sensors
 	 */
-	public String getSensors () {
-		String sensors = "";
+	public String getSensors (String idSensor) {
 
-		//TODO Retrieve sensors list from config database
+		String data = "";
+		String url = "https://smartcampus.jimenez.lu:5000/sensors";
 
-        /* TEST */
+		if (idSensor != null) url += "/" + idSensor;
+
+		URL obj = null;
+		try {
+
+			// Create a trust manager that does not validate certificate chains
+			TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
+				public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+					return null;
+				}
+				public void checkClientTrusted(X509Certificate[] certs, String authType) {
+				}
+				public void checkServerTrusted(X509Certificate[] certs, String authType) {
+				}
+			}
+			};
+
+			// Install the all-trusting trust manager
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+			// Create all-trusting host name verifier
+			HostnameVerifier allHostsValid = new HostnameVerifier() {
+				public boolean verify(String hostname, SSLSession session) {
+					return true;
+				}
+			};
+
+			// Install the all-trusting host verifier
+			HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+
+			obj = new URL(url);
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			con.setRequestMethod("GET");
+			con.setRequestProperty("Content-type", "application/json");
+			Reader reader = new InputStreamReader(con.getInputStream());
+			while (true) {
+				int ch = reader.read();
+				if (ch == -1) {
+					break;
+				}
+				data += (char)ch;
+			}
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (KeyManagementException e) {
+			e.printStackTrace();
+		}
+
+		return data;
+	}
+
+	public String getDataFromSensor(String idSensor, long beg, long end) throws Exception {
+
+		String data = "";
+		String type = "";
+		try {
+			JSONObject sensors = new JSONObject(getSensors(idSensor));
+			type = sensors.getString("sensorType");
+		} catch (JSONException exc) {
+			throw new Exception("Invalid sensor");
+		}
+
+		if (type.equalsIgnoreCase("virtual")) data = getDataFromVirtualSensor(idSensor, beg, end);
+		else if (type.equalsIgnoreCase("physical")) data = getDataFromPhysicalSensor(idSensor, beg, end);
+
+		return data;
+	}
+
+
+
+	public String getDataFromVirtualSensor (String idSensor, long beg, long end) throws SQLException {
+
+		// Example test -> 485 température ambiante
+		/*String script = "int capteur = $(1);" +
+				"float resistance = (float)(1023-capteur)*10000/capteur;" +
+				"1/(Math.log(resistance/10000)/3975+1/298.15)-273.15";*/
+
+		JSONObject o = new JSONObject(getSensors(idSensor));
+		String script = o.getString("script");
+
+		Indexes ind = findSensorIdInScript(script);
+
+		JSONObject dataSensor = new JSONObject(extractDataFromScript(script, ind, beg, end));
+
 		JSONArray jsonArray = new JSONArray();
 		JSONObject jsonObject = new JSONObject();
 
-		jsonArray.put("ARD-1");
-		jsonArray.put("ARD-2");
+		for (int i = 0; i < dataSensor.getJSONArray("values").length(); i++) {
+			JSONObject valueSensor = dataSensor.getJSONArray("values").getJSONObject(i);
 
-		jsonObject.put("sensors", jsonArray);
-		sensors = jsonArray.toString();
-		/* */
+			/* Retrieving results in JSON Array */
+			JSONObject obj = new JSONObject();
+			obj.put("date", valueSensor.getString("date"));
+			obj.put("value", computeScript(script, ind, valueSensor.getString("value")));
+			jsonArray.put(obj);
+		}
 
-		return sensors;
+		/* Returned JSON Object */
+		jsonObject.put("id", idSensor);
+		jsonObject.put("values", jsonArray);
+		String data = jsonObject.toString();
+
+		return data;
 	}
 
 	/**
@@ -85,7 +201,7 @@ public class DataAccessor {
 	 * @return a JSON Object with the values of the sensor, depending on time.
 	 * @throws SQLException if there is a problem with the database connection.
 	 */
-	public String getDataFromSensor (String idSensor, long beg, long end) throws SQLException {
+	public String getDataFromPhysicalSensor(String idSensor, long beg, long end) throws SQLException {
 
 		/* SQL Statement */
 		String selectSQL = "SELECT * FROM \"public\".\"SensorsData\" WHERE sensor_id = ?";
@@ -143,6 +259,39 @@ public class DataAccessor {
 		String data = jsonObject.toString();
 
 		return data;
+	}
+
+
+	private String extractDataFromScript(String script, Indexes ind, long beg, long end) throws SQLException {
+
+		String sensor_id = script.substring(ind.indexBeg+2, ind.indexEnd);
+		String data = getDataFromPhysicalSensor(sensor_id, beg, end);
+
+		return data;
+	}
+
+	private Indexes findSensorIdInScript(String script) {
+		Indexes ind = new Indexes();
+
+		int indexBeg = 0;
+		int indexEnd = 0;
+
+		indexBeg = script.indexOf("$");
+		indexEnd = script.indexOf(")", indexBeg);
+
+		ind.indexBeg = indexBeg;
+		ind.indexEnd = indexEnd;
+
+		return ind;
+	}
+
+	private String computeScript(String script, Indexes ind, String value) {
+
+		script = script.substring(0, ind.indexBeg) +
+				value + script.substring(ind.indexEnd+1);
+
+		GroovyShell shell = new GroovyShell();
+		return shell.evaluate(script).toString();
 	}
 
 	/**

@@ -27,7 +27,7 @@ public class SensorResource {
 		try {
 			// Try to get access to the database
 			access = new DataAccessor();
-			data = access.getSensors();
+			data = access.getSensors(null);
 			access.close();
 		} catch (Exception e) {
 			return Response
@@ -41,6 +41,7 @@ public class SensorResource {
 				.entity(data)
 				.build();
 	}
+
 
 	/**
 	 * GET request to retrieve values of one sensor (id)

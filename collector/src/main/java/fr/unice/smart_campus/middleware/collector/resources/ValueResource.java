@@ -25,13 +25,12 @@ public class ValueResource {
 	@Consumes("application/json")
 	public Response postValue (String jsonString) {
 
-		String errorMessage = null;
+		String userErrorMessage = null;
 		int messagesCount = 0;
 
 		try {
 
 			JSONArray messages;
-			boolean success = true;
 
 			// Parse a JSON object or a JSON array
 			try {
@@ -45,7 +44,7 @@ public class ValueResource {
 			messagesCount = messages.length();
 
 			// Process messages
-			for (int i = 0; i < messagesCount && success; i++) {
+			for (int i = 0; i < messagesCount; i++) {
 				JSONObject message = (JSONObject) messages.get(i);
 
 				// Check JSON object size
@@ -64,28 +63,30 @@ public class ValueResource {
 
 				// Store the message into the message queue
 				try {
-					success = DataAccess.getInstance().postMessage(message);
+					DataAccess.getInstance().postMessage(message);
 				} catch (Exception exc) {
-					success = false;
+
 					exc.printStackTrace();
+
+					// HTTP internal server error
+					return Response
+							.status(Status.INTERNAL_SERVER_ERROR)
+							.entity("Internal server error: " + exc.getMessage())
+							.build();
 				}
 			}
 
-			if (!success) {
-				errorMessage = "Values not posted (internal server error)";
-			}
-
 		} catch (NumberFormatException exc) {
-			errorMessage = "Wrong timestamp format";
+			userErrorMessage = "Wrong timestamp format";
 		} catch (Exception exc) {
-			errorMessage = exc.getMessage();
+			userErrorMessage = exc.getMessage();
 		}
 
-		// HTTP response
-		if (errorMessage != null) {
+		// HTTP user error response
+		if (userErrorMessage != null) {
 			return Response
 					.status(Status.BAD_REQUEST)
-					.entity("Error: " + errorMessage)
+					.entity("Error: " + userErrorMessage)
 					.build();
 		}
 

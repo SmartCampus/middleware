@@ -8,12 +8,12 @@ def JsonConfigEncoding(config):
     in Json Format
     """
     conf = OrderedDict()
-    conf['id'] = config[0]
-    conf['board']= config[1]
-    conf['pin'] = config[2]
-    conf['freq'] = str(config[3])
-    conf['endpointIP'] = config[4]
-    conf['endpointPort'] = str(config[5])
+    conf['id'] = config['name']
+    conf['board']= config['board']
+    conf['pin'] = config['pin']
+    conf['freq'] = str(config['frequency'])
+    conf['endpointIP'] = config['endpoint']['ip']
+    conf['endpointPort'] = str(config['endpoint']['port'])
     return conf
 
 

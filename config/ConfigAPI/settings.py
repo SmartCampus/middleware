@@ -96,9 +96,9 @@ sensors = {
     'item_title': 'sensor',
 
     # by default the standard item entry point is defined as
-    # '/people/<ObjectId>'. We leave it untouched, and we also enable an
+    # '/sensors/<ObjectId>'. We leave it untouched, and we also enable an
     # additional read-only entry point. This way consumers can also perform
-    # GET requests at '/people/<lastname>'.
+    # GET requests at '/sensors/<name>'.
     'additional_lookup': {
             'url': 'regex("[\w]+")',
         'field': 'name'
@@ -109,7 +109,7 @@ sensors = {
     'cache_expires': 10,
 
     # most global settings can be overridden at resource level
-    #'item_methods': ['GET', 'POST','PATCH','DELETE'],
+
     'allowed_roles': ['user', 'admin'],
     'allowed_item_roles': ['user', 'admin'],
     'public_methods': ['GET'],
@@ -121,9 +121,9 @@ bridges = {
     'item_title': 'bridge',
 
     # by default the standard item entry point is defined as
-    # '/people/<ObjectId>'. We leave it untouched, and we also enable an
+    # '/bridges/<ObjectId>'. We leave it untouched, and we also enable an
     # additional read-only entry point. This way consumers can also perform
-    # GET requests at '/people/<lastname>'.
+    # GET requests at '/bridges/<name>'.
     'additional_lookup': {
         'url': 'regex("[\w]+")',
         'field': 'name'

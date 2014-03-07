@@ -7,10 +7,10 @@ import javax.jms.*;
 
 
 /**
- * DataAccess class
+ * InputDataAccess class
  * Interface to retrieve sensor values from the message queue
  */
-public class DataAccess {
+public class InputDataAccess {
 
 	private final static String DESTINATION_URL = "tcp://localhost:61616";
 	private final static String QUEUE_NAME      = "sensor-values-queue";

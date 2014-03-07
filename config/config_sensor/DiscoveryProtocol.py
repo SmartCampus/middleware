@@ -65,8 +65,9 @@ class DiscoveryProtocol:
                 raise Exception('An error occured the sever send',responseConf.status,responseConf.reason)
 
         except Exception as exception:
-            print(type(exception))
-            print(exception.args)
+           # print(type(exception))
+            #print(exception.args)
+            print()
 
 
 def main():

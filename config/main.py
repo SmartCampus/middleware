@@ -3,20 +3,20 @@ __author__ = 'matthieujimenez'
 """
 import multiprocessing
 import time
-import Config.database.DatabaseConnection as DC
-import Config.config_sensor.scriptbridge as SB
+from config_sensor import scriptbridge as SB
+import config_sensor.SensorApi as SA
 
 
-def configsensor(pathToDBFile):
+def configsensor(ip,port):
     """
     Method to propagate a new config to every bridge present in the database
     """
-    db = DC.DatabaseConnection(pathToDBFile)
-    listbridge = db.fetchAllBridge()
+    api = SA.SensorApi(ip,port)
+    listbridge = api.fetchAllBridge()
     listproc = []
     encours = True
     for i in listbridge:
-       pi = multiprocessing.Process(target=SB.scriptbridge, args=(pathToDBFile, i))
+       pi = multiprocessing.Process(target=SB.scriptbridge, args=(ip,port, i))
        pi.start()
        time.sleep(5)
        listproc.append(pi)
@@ -30,4 +30,4 @@ def configsensor(pathToDBFile):
 
 
 if __name__ == '__main__':
-    configsensor("database/user.txt")
+    configsensor("smartcampus.jimenez.lu","5000")

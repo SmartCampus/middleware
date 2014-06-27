@@ -1,6 +1,5 @@
 package fr.unice.smart_campus.middleware.collector;
 
-
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.json.JSONObject;
 
@@ -17,8 +16,7 @@ public class DataAccess {
 	private final static String QUEUE_NAME      = "sensor-values-queue";
 
 	private static DataAccess instance;
-	private Session session;
-	private MessageProducer producer;
+	private Connection connection;
 
 
 	/**
@@ -38,12 +36,8 @@ public class DataAccess {
 	private DataAccess () throws JMSException {
 
 		ConnectionFactory factory = new ActiveMQConnectionFactory(DESTINATION_URL);
-		Connection connection = factory.createConnection();
+		connection = factory.createConnection();
 		connection.start();
-
-		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		Destination destination = session.createQueue(QUEUE_NAME);
-		producer = session.createProducer(destination);
 	}
 
 
@@ -53,15 +47,13 @@ public class DataAccess {
 	 * @param json The JSON object that contains sensor data
 	 * @return true if data insert is successful, false otherwise
 	 */
-	public boolean postMessage (JSONObject json) {
-		try {
-			Message message = session.createTextMessage(json.toString());
-			producer.send(message);
-		} catch (JMSException exc) {
-			exc.printStackTrace();
-			return false;
-		}
+	public void postMessage (JSONObject json) throws JMSException {
 
-		return true;
+		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		Destination destination = session.createQueue(QUEUE_NAME);
+		MessageProducer producer = session.createProducer(destination);
+
+		Message message = session.createTextMessage(json.toString());
+		producer.send(message);
 	}
 }

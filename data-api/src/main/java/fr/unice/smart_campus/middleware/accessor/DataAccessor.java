@@ -1,5 +1,6 @@
 package fr.unice.smart_campus.middleware.accessor;
 
+import fr.unice.smart_campus.middleware.data_api.Helper;
 import groovy.lang.GroovyShell;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +32,7 @@ import java.sql.SQLException;
 public class DataAccessor {
 
 	public Connection connection;
-	public static String dataConfigApiUrl = "https://smartcampus.jimenez.lu:5000/sensors";
+	public static String dataConfigApiUrl = "http://54.77.0.115:5000/sensors";
 
 	public class Indexes {
 		public int indexBeg;
@@ -74,7 +75,7 @@ public class DataAccessor {
 	public String getSensors (String idSensor) {
 
 		String data = "";
-		String url = "https://smartcampus.jimenez.lu:5000/sensors";
+		String url = "http://54.77.0.115:5000/sensors";
 
 		if (idSensor != null) url += "/" + idSensor;
 
@@ -134,7 +135,7 @@ public class DataAccessor {
 		return data;
 	}
 
-	public String getDataFromSensor(String idSensor, long beg, long end) throws Exception {
+	public String getDataFromSensor(String idSensor, long beg, long end, boolean convert) throws Exception {
 
 		String data = "";
 		String type = "";
@@ -145,15 +146,15 @@ public class DataAccessor {
 			throw new Exception("Invalid sensor");
 		}
 
-		if (type.equalsIgnoreCase("virtual")) data = getDataFromVirtualSensor(idSensor, beg, end);
-		else if (type.equalsIgnoreCase("physical")) data = getDataFromPhysicalSensor(idSensor, beg, end);
+		if (type.equalsIgnoreCase("virtual")) data = getDataFromVirtualSensor(idSensor, beg, end, convert);
+		else if (type.equalsIgnoreCase("physical")) data = getDataFromPhysicalSensor(idSensor, beg, end, convert);
 
 		return data;
 	}
 
 
 
-	public String getDataFromVirtualSensor (String idSensor, long beg, long end) throws SQLException {
+	public String getDataFromVirtualSensor (String idSensor, long beg, long end, boolean convert) throws SQLException {
 
 		// Example test -> 485 température ambiante
 		/*String script = "int capteur = $(1);" +
@@ -165,7 +166,7 @@ public class DataAccessor {
 
 		Indexes ind = findSensorIdInScript(script);
 
-		JSONObject dataSensor = new JSONObject(extractDataFromScript(script, ind, beg, end));
+		JSONObject dataSensor = new JSONObject(extractDataFromScript(script, ind, beg, end, convert));
 
 		JSONArray jsonArray = new JSONArray();
 		JSONObject jsonObject = new JSONObject();
@@ -175,7 +176,12 @@ public class DataAccessor {
 
 			/* Retrieving results in JSON Array */
 			JSONObject obj = new JSONObject();
-			obj.put("date", valueSensor.getString("date"));
+            String date;
+            if (convert)
+                date = Helper.getDateFromTimestamp(Long.parseLong(valueSensor.getString("date"))).toString();
+            else
+                date = valueSensor.getString("date");
+			obj.put("date", date);
 			obj.put("value", computeScript(script, ind, valueSensor.getString("value")));
 			jsonArray.put(obj);
 		}
@@ -198,10 +204,11 @@ public class DataAccessor {
 	 * @param idSensor ID sensor that we want to retrieve values
 	 * @param beg timestamp of beginning date
 	 * @param end timestamp of ending date
+     * @param convert convert timestamp to date
 	 * @return a JSON Object with the values of the sensor, depending on time.
 	 * @throws SQLException if there is a problem with the database connection.
 	 */
-	public String getDataFromPhysicalSensor(String idSensor, long beg, long end) throws SQLException {
+	public String getDataFromPhysicalSensor(String idSensor, long beg, long end, boolean convert) throws SQLException {
 
 		/* SQL Statement */
 		String selectSQL = "SELECT * FROM \"public\".\"SensorsData\" WHERE sensor_id = ?";
@@ -242,7 +249,12 @@ public class DataAccessor {
 			/* Retrieving results in JSON Array */
 			while (rs.next()) {
 				JSONObject obj = new JSONObject();
-				obj.put("date", rs.getString("sensor_date"));
+                String date;
+                if (convert)
+                    date = Helper.getDateFromTimestamp(Long.parseLong(rs.getString("sensor_date"))).toString();
+                else
+                    date =rs.getString("sensor_date");
+				obj.put("date", date);
 				obj.put("value", rs.getString("sensor_value"));
 				jsonArray.put(obj);
 			}
@@ -262,10 +274,10 @@ public class DataAccessor {
 	}
 
 
-	private String extractDataFromScript(String script, Indexes ind, long beg, long end) throws SQLException {
+	private String extractDataFromScript(String script, Indexes ind, long beg, long end, boolean convert) throws SQLException {
 
 		String sensor_id = script.substring(ind.indexBeg+2, ind.indexEnd);
-		String data = getDataFromPhysicalSensor(sensor_id, beg, end);
+		String data = getDataFromPhysicalSensor(sensor_id, beg, end, convert);
 
 		return data;
 	}

@@ -45,4 +45,13 @@ public class Helper {
 		Date d = sdf.parse(date);
 		return d.getTime() / 1000;
 	}
+
+    /**
+     * Convert the timestamp value to a date object
+     * @param timestamp Timestamp
+     * @return the date corresponding to the timestamp parameter
+     */
+    public static Date getDateFromTimestamp (long timestamp){
+        return new Date(timestamp * 1000);
+    }
 }

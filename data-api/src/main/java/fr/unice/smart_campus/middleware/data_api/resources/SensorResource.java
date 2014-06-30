@@ -53,6 +53,7 @@ public class SensorResource {
 	 * @param idSensor Identifier of the sensor
 	 * @param date Dates of recorded values that you want. Optional.
 	 *             Format : yyyy-MM-dd HH:mm:ss or yyyy-MM-dd HH:mm:ss/yyyy-MM-dd HH:mm:ss
+     * @param convert Convert timestamp to human-readable date
 	 * @return a JSON Object with the values of the sensor, depending on time.
 	 *          (or 500 HTTP error if the connection to the database does not work
 	 *          or 400 HTTP error if the url is not correct)
@@ -61,7 +62,8 @@ public class SensorResource {
 	@Path("{idSensor}/data")
 	@Produces("application/json")
 	public Response getDataFromSensor (@PathParam("idSensor") String idSensor,
-	                                   @QueryParam("date") String date) {
+	                                   @QueryParam("date") String date,
+                                       @QueryParam("convert") boolean convert) {
 
 		// URL Dates parsing
 		TimeRange time = new TimeRange(0L, 0L);
@@ -82,7 +84,7 @@ public class SensorResource {
 		try {
 			// Try to get access to the database
 			access = new DataAccessor();
-			data = access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond());
+			data = access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond(), convert);
 			access.close();
 		} catch (Exception e) {
 			access.close();

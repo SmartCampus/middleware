@@ -166,7 +166,7 @@ public class DataAccessor {
 
 		Indexes ind = findSensorIdInScript(script);
 
-		JSONObject dataSensor = new JSONObject(extractDataFromScript(script, ind, beg, end, convert));
+		JSONObject dataSensor = new JSONObject(extractDataFromScript(script, ind, beg, end, false));
 
 		JSONArray jsonArray = new JSONArray();
 		JSONObject jsonObject = new JSONObject();

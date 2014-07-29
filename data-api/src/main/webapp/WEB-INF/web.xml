@@ -3,22 +3,42 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-	<display-name>Middleware data REST API</display-name>
+    <display-name>Middleware data REST API</display-name>
 
-	<servlet>
-		<servlet-name>data-api-servlet</servlet-name>
-		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-		<init-param>
-			<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>fr.unice.smart_campus.middleware.data_api.resources</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+    <filter>
+        <filter-name>cross-origin</filter-name>
+        <filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class>
+        <init-param>
+            <param-name>allowedOrigins</param-name>
+            <param-value>*</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowedMethods</param-name>
+            <param-value>*</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowedHeaders</param-name>
+            <param-value>*</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>cross-origin</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <servlet>
+        <servlet-name>data-api-servlet</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>fr.unice.smart_campus.middleware.data_api.resources</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
-	<servlet-mapping>
-		<servlet-name>data-api-servlet</servlet-name>
-		<url-pattern>/*</url-pattern>
-	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>data-api-servlet</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
 
     <!-- Set up the JNDI resource reference for the connection pool -->
     <resource-ref>

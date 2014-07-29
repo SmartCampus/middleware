@@ -32,7 +32,7 @@ import java.sql.SQLException;
 public class DataAccessor {
 
 	public Connection connection;
-	public static String dataConfigApiUrl = System.getProperty("middleware.ip");
+	public static String dataConfigApiUrl = System.getProperty("middleware.ip") + ":5000/sensors";
     ;
 
 	public class Indexes {
@@ -76,7 +76,7 @@ public class DataAccessor {
 	public String getSensors (String idSensor) {
 
 		String data = "";
-		String url = System.getProperty("middleware.ip");
+		String url = System.getProperty("middleware.ip") + ":5000/sensors";
 
 		if (idSensor != null) url += "/" + idSensor;
 

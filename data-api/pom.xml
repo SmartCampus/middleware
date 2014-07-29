@@ -56,6 +56,12 @@
 				<artifactId>maven-jetty-plugin</artifactId>
 				<version>6.1.26</version>
 				<configuration>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>middleware.ip</name>
+                            <value>134.59.134.227</value>
+                        </systemProperty>
+                    </systemProperties>
 					<connectors>
 						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
 							<port>8081</port>

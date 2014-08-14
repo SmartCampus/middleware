@@ -7,6 +7,8 @@ import fr.unice.smart_campus.middleware.data_api.TimeRange;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static javax.ws.rs.core.Response.Status;
 
@@ -42,6 +44,26 @@ public class SensorResource {
 				.build();
 	}
 
+    /**
+     * GET requiest to retrieve the last value of one sensor (id)
+     * @param idSensor Identifier of the sensor
+     * @param convert Convert timestamp to human-readable date
+     * @return a JSON Object with the last value of the sensor
+     *          (or 500 HTTP error if the connection to the database does not work
+     *          or 400 HTTP error if the url is not correct)
+     */
+    @GET
+    @Path("{idSensor}/data/last")
+    @Produces("application/json")
+    public Response getLastDataFromSensor(@PathParam("idSensor") String idSensor,
+                                          @QueryParam("convert") boolean convert)
+    {
+        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date now = new Date();
+        String strDate = sdfDate.format(now);
+
+        return getDataFromSensor(idSensor, strDate, convert);
+    }
 
 	/**
 	 * GET request to retrieve values of one sensor (id)

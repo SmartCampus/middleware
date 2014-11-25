@@ -5,6 +5,7 @@ This module is in python and contain two part:
 see the readme
 
 ##config_sensor
-to the config script:
-python3 main.py (doesn't need any additional libraries) pour adapter cette partie remplacer juste dans la dernière ligne de main.py
-smartcampus.jimenez.lu par votre serveur en train de tourner
+to launch the config script:
+python3 main.py (doesn't need any additional libraries)
+to adapt this part to your installation just modify the las lign of main.py:
+replace smartcampus.jimenez.lu with the adress of your running instance of config API

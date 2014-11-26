@@ -61,6 +61,11 @@
                             <name>middleware.ip</name>
                             <value>134.59.134.227</value>
                         </systemProperty>
+                        <systemProperty>
+                            <name>mode</name>
+                            <value>DEBUG</value>
+                            <!--<value>PROD</value>!-->
+                        </systemProperty>
                     </systemProperties>
 					<connectors>
 						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">

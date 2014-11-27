@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by cyrilcecchinel on 30/06/2014.
@@ -15,10 +16,9 @@ import java.util.Date;
 public class HelperTest extends TestCase {
     @Test
     public void testTimestampToDate(){
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(0);
+        Calendar cal = new GregorianCalendar();
         cal.set(2014, Calendar.JUNE, 30, 20, 45, 00);
         Date date = cal.getTime();
-        assertEquals("Test timestamp to date conversion", Helper.getDateFromTimestamp(1404153900), date);
+        assertEquals("Test timestamp to date conversion", Helper.getDateFromTimestamp(cal.getTimeInMillis()/1000).getTime(), (date.getTime()/1000)*1000);
     }
 }

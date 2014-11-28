@@ -1,4 +1,9 @@
-killall screen
+screen -X -S MessageQueue kill
+screen -X -S Collector kill
+screen -X -S DataProcessor kill
+screen -X -S DataAPI kill
+screen -X -S ConfigAPI kill
+
 echo 'Killing previous instances ...'
 sleep 3
 screen -S MessageQueue -d -m ./message-queue-script.sh
@@ -12,3 +17,6 @@ screen -S DataAPI -d -m ./data-api-script.sh
 echo 'Starting Data API ...'
 screen -S ConfigAPI -d -m ./configAPI-script.sh
 echo 'Starting Config API ...'
+sleep 5
+cd ..
+mvn com.smartbear.soapui:soapui-maven-plugin:4.6.1:test

@@ -56,8 +56,13 @@ cd ..
 
 Configure mongo database
 -------------------------
-First, enter "mongo" in your command line, then use the command "use <DatabaseName>" in order to create your database. You can use the name "ConfigDatabase" which is located in setting.py.
-Second, you must modify run.py and add your certificates or remove them (line 23) :
+```
+#! Mongo database
+echo -e "use <DatabaseName>" > create_mongodb_tmp.js
+mongo < create_mongodb_tmp.js
+```
+
+Now, you must modify run.py and add your certificates or remove them (line 23) :
 ```
 ssl_options={
 				"certfile":  "server.crt",
@@ -77,7 +82,8 @@ Message Queue
 ```
 cd ..
 git reset --hard HEAD
-git pull origin develop-PFE2015
+git pull origin develop-PFE2015 --tags
+git checkout server
 #! We have to configure run.py, settings.py and data/-api/pom.xml  
 #! So, we saved them in an extern directory and we copy them in this script.
 #! cp ../savedFiles/run.py config/ConfigAPI/run.py

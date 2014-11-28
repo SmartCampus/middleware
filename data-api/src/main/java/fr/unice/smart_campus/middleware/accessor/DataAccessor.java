@@ -33,7 +33,7 @@ public class DataAccessor {
 
 	public Connection connection;
 	public static String dataConfigApiUrl = "http://" + System.getProperty("middleware.ip") + ":5000/sensors";
-    ;
+    public static String mode = System.getProperty("mode");
 
 	public class Indexes {
 		public int indexBeg;
@@ -139,17 +139,20 @@ public class DataAccessor {
 	public String getDataFromSensor(String idSensor, long beg, long end, boolean convert) throws Exception {
 
 		String data = "";
-		String type = "";
-		try {
-			JSONObject sensors = new JSONObject(getSensors(idSensor));
-			type = sensors.getString("sensorType");
-		} catch (JSONException exc) {
-			throw new Exception("Invalid sensor");
-		}
+		if(mode.equals("DEBUG")){
+            data = getDataFromPhysicalSensor(idSensor, beg, end, convert);
+        }else {
+            String type = "";
+            try {
+                JSONObject sensors = new JSONObject(getSensors(idSensor));
+                type = sensors.getString("sensorType");
+            } catch (JSONException exc) {
+                throw new Exception("Invalid sensor");
+            }
 
-		if (type.equalsIgnoreCase("virtual")) data = getDataFromVirtualSensor(idSensor, beg, end, convert);
-		else if (type.equalsIgnoreCase("physical")) data = getDataFromPhysicalSensor(idSensor, beg, end, convert);
-
+            if (type.equalsIgnoreCase("virtual")) data = getDataFromVirtualSensor(idSensor, beg, end, convert);
+            else if (type.equalsIgnoreCase("physical")) data = getDataFromPhysicalSensor(idSensor, beg, end, convert);
+        }
 		return data;
 	}
 

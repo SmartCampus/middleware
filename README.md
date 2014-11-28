@@ -24,6 +24,8 @@ Before running the modules, you have to install the middleware by running the Ma
 
 *NB: See the README of each module for documentation.*
 
+You can also use the scripts located in ./scripts
+
 ## Notes
 
 In this release, the collector is implemented, the message queue server works, the data processor stores messages into the database and the data API allows users to browse sensors data in the database.

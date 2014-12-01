@@ -1,7 +1,4 @@
 cd ..
-git reset --hard HEAD
-git pull origin develop-PFE2015 --tags
-git checkout server
 #! We have to configure run.py, settings.py and data/-api/pom.xml  
 #! So, we saved them in a extern directory and we copy them in this script.
 #! cp ../savedFiles/run.py config/ConfigAPI/run.py

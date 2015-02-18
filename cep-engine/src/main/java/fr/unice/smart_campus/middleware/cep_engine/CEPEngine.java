@@ -40,7 +40,7 @@ public class CEPEngine {
         /** Creation of the system **/
         ActorSystem system = ActorSystem.create("Simulation", ConfigFactory.load());
         ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(Actor.class)), "remotePool");
-        system.actorOf(Props.create(CEPInterfaceActor.class), "CEPInterfaceActor");
+        system.actorOf(Props.create(CEPInterfaceActor.class, this), "CEPInterfaceActor");
 
         CEPListener cepListener = new CEPListener(actorRef);
 

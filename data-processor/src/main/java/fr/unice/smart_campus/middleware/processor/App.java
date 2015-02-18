@@ -54,7 +54,7 @@ public class App extends UntypedActor implements MessageListener {
                 this.sendEventToCEPEngine(jsonObject.toString());
 
                 // Save sensor data into the database
-//				outputDataAccess.saveSensorData(name, time, value);
+				outputDataAccess.saveSensorData(name, time, value);
 
             } catch (JMSException e) {
                 e.printStackTrace();

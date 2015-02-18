@@ -1,6 +1,7 @@
 package fr.unice.smart_campus.middleware.processor;
 
 import akka.actor.ActorRef;
+import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -68,8 +69,8 @@ public class App extends UntypedActor implements MessageListener {
      * @param messageToSend
      */
     private void sendEventToCEPEngine(String messageToSend){
-        ActorRef actorRef = this.getContext().actorFor("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
-        actorRef.tell(messageToSend, this.sender());
+        ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
+        actorSelection.tell(messageToSend, this.sender());
     }
 
 

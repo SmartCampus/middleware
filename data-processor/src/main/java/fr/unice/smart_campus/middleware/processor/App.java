@@ -1,5 +1,7 @@
 package fr.unice.smart_campus.middleware.processor;
 
+import akka.actor.ActorRef;
+import akka.actor.UntypedActor;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -13,53 +15,70 @@ import javax.jms.TextMessage;
  * Message processor application
  * Consumes messages from the message queue, process data and store raw sensor data into the database
  */
-public class App implements MessageListener {
+public class App extends UntypedActor implements MessageListener {
 
-	private OutputDataAccess outputDataAccess;
-
-
-	public App () throws Exception {
-
-		// Create output proxy
-		outputDataAccess = new OutputDataAccess();
-
-		// Create input listener
-		InputDataAccess.createMessageListener(this);
-	}
+    private OutputDataAccess outputDataAccess;
 
 
-	/**
-	 * Executed when a message is received from the message queue
-	 * @param message The sensor data message
-	 */
-	@Override
-	public void onMessage (Message message) {
-		if (message instanceof TextMessage) {
-			try {
-				String jsonString = ((TextMessage) message).getText();
+    public App() throws Exception {
 
-				// TODO: TEMP: Print received JSON message
-				System.out.println(jsonString);
+        // Create output proxy
+        outputDataAccess = new OutputDataAccess();
 
-				// Extract sensor information
-				JSONObject jsonObject = new JSONObject(new JSONTokener(jsonString));
-				String name  = jsonObject.getString("n");
-				String time  = jsonObject.getString("t");
-				String value = jsonObject.getString("v");
-
-				// TODO: Make the value pass through multiples processors to process it
-
-				// Save sensor data into the database
-				outputDataAccess.saveSensorData(name, time, value);
-
-			} catch (JMSException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        // Create input listener
+        InputDataAccess.createMessageListener(this);
+    }
 
 
-	public static void main (String[] args) throws Exception {
-		new App();
-	}
+    /**
+     * Executed when a message is received from the message queue
+     *
+     * @param message The sensor data message
+     */
+    @Override
+    public void onMessage(Message message) {
+        if (message instanceof TextMessage) {
+            try {
+                String jsonString = ((TextMessage) message).getText();
+
+                // TODO: TEMP: Print received JSON message
+                System.out.println(jsonString);
+
+                // Extract sensor information
+                JSONObject jsonObject = new JSONObject(new JSONTokener(jsonString));
+                String name = jsonObject.getString("n");
+                String time = jsonObject.getString("t");
+                String value = jsonObject.getString("v");
+
+                // creation of the actor that has to send an event to the CEP Engine to allowed the process the data.
+                this.sendEventToCEPEngine(jsonObject.toString());
+
+                // Save sensor data into the database
+//				outputDataAccess.saveSensorData(name, time, value);
+
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Creation of the actor that has to send an event
+     * to the CEP Engine to allowed the process the data.
+     * @param messageToSend
+     */
+    private void sendEventToCEPEngine(String messageToSend){
+        ActorRef actorRef = this.getContext().actorFor("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
+        actorRef.tell(messageToSend, this.sender());
+    }
+
+
+    @Override
+    public void onReceive(Object message) throws Exception {
+
+    }
+
+    public static void main(String[] args) throws Exception {
+        new App();
+    }
 }

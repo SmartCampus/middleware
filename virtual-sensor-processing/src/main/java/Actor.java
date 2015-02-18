@@ -20,7 +20,7 @@ public class Actor extends UntypedActor {
         if (message instanceof String) {
             this.loggingAdapter.error(message.toString());
 
-            ActorRef actorRef = this.getContext().actorFor("akka.tcp://Simulation@192.168.0.100:2553/user/CEPInterfaceActor");
+            ActorRef actorRef = this.getContext().actorFor("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
             actorRef.tell("Romain et Jerome chez Twitter",this.sender());
         }
         loggingAdapter.error(message.toString());

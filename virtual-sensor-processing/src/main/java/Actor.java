@@ -1,4 +1,5 @@
 import akka.actor.ActorRef;
+import akka.actor.ActorSelection;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
@@ -20,8 +21,8 @@ public class Actor extends UntypedActor {
         if (message instanceof String) {
             this.loggingAdapter.error(message.toString());
 
-            ActorRef actorRef = this.getContext().actorFor("akka.tcp://Simulation@192.168.0.100:2553/user/CEPInterfaceActor");
-            actorRef.tell("Romain et Jerome chez Twitter",this.sender());
+            ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
+            actorSelection.tell("Romain et Jerome chez Twitter",this.sender());
         }
         loggingAdapter.error(message.toString());
     }

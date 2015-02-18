@@ -1,3 +1,5 @@
+package fr.unice.smart_campus.middleware.virtual_sensor_processing;
+
 import akka.actor.*;
 import akka.dispatch.Dispatchers;
 import akka.dispatch.Mailboxes;
@@ -13,6 +15,5 @@ public class Main {
     public static void main(String[] args) {
         // creation of the actor system (Actor factory)
         ActorSystem actorSystem = ActorSystem.create("ActorSystemFactory", ConfigFactory.load());
-
     }
 }

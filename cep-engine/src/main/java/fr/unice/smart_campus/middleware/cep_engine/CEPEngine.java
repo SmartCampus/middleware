@@ -1,3 +1,5 @@
+package fr.unice.smart_campus.middleware.cep_engine;
+
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;

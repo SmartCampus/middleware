@@ -1,3 +1,5 @@
+package fr.unice.smart_campus.middleware.virtual_sensor_processing;
+
 import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 import akka.actor.Props;
@@ -22,7 +24,7 @@ public class Actor extends UntypedActor {
             this.loggingAdapter.error(message.toString());
 
             ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
-            actorSelection.tell("Romain et Jerome chez Twitter",this.sender());
+            actorSelection.tell("Romain et Jerome chez Twitter", this.sender());
         }
         loggingAdapter.error(message.toString());
     }

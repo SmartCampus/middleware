@@ -1,3 +1,5 @@
+package fr.unice.smart_campus.middleware.cep_engine;
+
 import java.io.Serializable;
 
 public class RoomSensorEvent extends CEPEvent implements Serializable {

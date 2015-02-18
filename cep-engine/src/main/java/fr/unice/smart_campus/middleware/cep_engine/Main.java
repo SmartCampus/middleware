@@ -1,3 +1,5 @@
+package fr.unice.smart_campus.middleware.cep_engine;
+
 import java.util.Random;
 
 public class Main {

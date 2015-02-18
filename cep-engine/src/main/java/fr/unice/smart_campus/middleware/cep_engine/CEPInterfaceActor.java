@@ -1,3 +1,5 @@
+package fr.unice.smart_campus.middleware.cep_engine;
+
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;

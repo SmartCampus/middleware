@@ -13,6 +13,5 @@ public class Main {
     public static void main(String[] args) {
         // creation of the actor system (Actor factory)
         ActorSystem actorSystem = ActorSystem.create("ActorSystemFactory", ConfigFactory.load());
-
     }
 }

@@ -1,8 +1,7 @@
 package fr.unice.smart_campus.middleware.processor;
 
-import akka.actor.ActorRef;
-import akka.actor.ActorSelection;
-import akka.actor.UntypedActor;
+import akka.actor.*;
+import com.typesafe.config.ConfigFactory;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -80,6 +79,7 @@ public class App extends UntypedActor implements MessageListener {
     }
 
     public static void main(String[] args) throws Exception {
-        new App();
+        ActorSystem actorSystem = ActorSystem.create("ActorSystemFactory", ConfigFactory.load());
+        actorSystem.actorOf(Props.create(App.class));
     }
 }

@@ -1,6 +1,6 @@
-package fr.unice.smart_campus.middleware.config.collector.resources;
+package fr.unice.smart_campus.middleware.collector.resources;
 
-import fr.unice.smart_campus.middleware.config.collector.DataAccess;
+import fr.unice.smart_campus.middleware.collector.DataAccess;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

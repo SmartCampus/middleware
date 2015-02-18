@@ -1,4 +1,4 @@
-package fr.unice.smart_campus.middleware.config.collector;
+package fr.unice.smart_campus.middleware.collector;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.json.JSONObject;

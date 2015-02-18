@@ -46,7 +46,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>fr.unice.smart_campus.middleware.config.processor.App</mainClass>
+					<mainClass>fr.unice.smart_campus.middleware.processor.App</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

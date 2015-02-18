@@ -1,4 +1,4 @@
-package fr.unice.smart_campus.middleware.config.config;
+package fr.unice.smart_campus.middleware.config;
 
 
 public class TimeRange {

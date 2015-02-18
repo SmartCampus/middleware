@@ -1,8 +1,7 @@
-package fr.unice.smart_campus.middleware.config.processor;
+package fr.unice.smart_campus.middleware.processor;
 
 
 import fr.unice.smart_campus.middleware.database.OutputDataAccess;
-import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 

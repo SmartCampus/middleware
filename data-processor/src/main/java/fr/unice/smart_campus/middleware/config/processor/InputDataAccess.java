@@ -1,4 +1,4 @@
-package fr.unice.smart_campus.middleware.processor;
+package fr.unice.smart_campus.middleware.config.processor;
 
 
 import org.apache.activemq.ActiveMQConnectionFactory;

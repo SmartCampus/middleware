@@ -1,6 +1,9 @@
-package fr.unice.smart_campus.middleware.processor;
+package fr.unice.smart_campus.middleware.database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Properties;
 
 
@@ -16,7 +19,7 @@ public class OutputDataAccess {
 	/**
 	 * Create a new connection to the database
 	 */
-	public OutputDataAccess () throws Exception {
+	public OutputDataAccess() throws Exception {
 		Properties properties = new Properties();
 		properties.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
 

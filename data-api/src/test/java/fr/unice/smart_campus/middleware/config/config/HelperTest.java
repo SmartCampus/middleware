@@ -1,10 +1,9 @@
-package fr.unice.smart_campus.middleware.data_api;
+package fr.unice.smart_campus.middleware.config.config;
 
 
 import junit.framework.TestCase;
 import org.junit.Test;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;

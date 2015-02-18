@@ -1,4 +1,4 @@
-package fr.unice.smart_campus.middleware.data_api;
+package fr.unice.smart_campus.middleware.config.config;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

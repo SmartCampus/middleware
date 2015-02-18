@@ -1,5 +1,6 @@
-package fr.unice.smart_campus.middleware.processor;
+package fr.unice.smart_campus.middleware.config.processor;
 
+import fr.unice.smart_campus.middleware.database.OutputDataAccess;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 

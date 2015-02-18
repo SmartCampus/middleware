@@ -18,9 +18,11 @@ import javax.jms.TextMessage;
 public class App extends UntypedActor implements MessageListener {
 
     private OutputDataAccess outputDataAccess;
-
+    private ActorRef actorRef;
 
     public App() throws Exception {
+        ActorSystem actorSystem = ActorSystem.create("ActorSystemFactory", ConfigFactory.load());
+        this.actorRef = actorSystem.actorOf(Props.create(ActorSenderToCEP.class));
 
         // Create output proxy
         outputDataAccess = new OutputDataAccess();
@@ -51,7 +53,7 @@ public class App extends UntypedActor implements MessageListener {
                 String value = jsonObject.getString("v");
 
                 // creation of the actor that has to send an event to the CEP Engine to allowed the process the data.
-                this.sendEventToCEPEngine(jsonObject.toString());
+                this.actorRef.tell(jsonObject.toString(),ActorRef.noSender());
 
                 // Save sensor data into the database
 				outputDataAccess.saveSensorData(name, time, value);
@@ -60,16 +62,6 @@ public class App extends UntypedActor implements MessageListener {
                 e.printStackTrace();
             }
         }
-    }
-
-    /**
-     * Creation of the actor that has to send an event
-     * to the CEP Engine to allowed the process the data.
-     * @param messageToSend
-     */
-    private void sendEventToCEPEngine(String messageToSend){
-        ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
-        actorSelection.tell(messageToSend, this.sender());
     }
 
 

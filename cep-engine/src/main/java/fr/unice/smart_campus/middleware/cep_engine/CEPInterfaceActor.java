@@ -3,7 +3,6 @@ package fr.unice.smart_campus.middleware.cep_engine;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import com.espertech.esper.client.EPRuntime;
 import org.json.JSONObject;
 
 public class CEPInterfaceActor extends UntypedActor {
@@ -14,6 +13,10 @@ public class CEPInterfaceActor extends UntypedActor {
         this.loggingAdapter = Logging.getLogger(this.context().system(), this);
     }
 
+    public CEPInterfaceActor(CEPEngine cepRT) {
+        this.loggingAdapter = Logging.getLogger(this.context().system(), this);
+        this.cepRT = cepRT;
+    }
 
     @Override
     public void onReceive(Object message) throws Exception {

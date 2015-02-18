@@ -11,12 +11,14 @@
 	<packaging>pom</packaging>
 
 	<modules>
+        <module>database</module>
 		<module>collector</module>
 		<module>message-queue</module>
 		<module>data-processor</module>
 		<module>data-api</module>
 		<module>virtual-sensor-processing</module>
 		<module>cep-engine</module>
+        <module>config</module>
 	</modules>
 
 	<properties>

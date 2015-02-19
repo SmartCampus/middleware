@@ -1,4 +1,4 @@
-package fr.unice.smart_campus.middleware.cep_engine;
+package fr.unice.smart_campus.middleware.akka.actor;
 
 import akka.actor.UntypedActor;
 

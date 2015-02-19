@@ -6,6 +6,7 @@ import akka.actor.Props;
 import akka.routing.FromConfig;
 import com.espertech.esper.client.*;
 import com.typesafe.config.ConfigFactory;
+import fr.unice.smart_campus.middleware.akka.actor.Actor;
 
 public class CEPEngine {
 
@@ -40,7 +41,7 @@ public class CEPEngine {
         /** Creation of the system **/
         ActorSystem system = ActorSystem.create("Simulation", ConfigFactory.load());
         ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(Actor.class)), "remotePool");
-        system.actorOf(Props.create(CEPInterfaceActor.class), "CEPInterfaceActor");
+        system.actorOf(Props.create(CEPInterfaceActor.class, this), "CEPInterfaceActor");
 
         CEPListener cepListener = new CEPListener(actorRef);
 
@@ -50,6 +51,7 @@ public class CEPEngine {
     }
 
     public void sendEvent(CEPEvent event){
+        System.out.println("Sending event to CEP : " + event.toString());
         cepRT.sendEvent(event);
     }
 }

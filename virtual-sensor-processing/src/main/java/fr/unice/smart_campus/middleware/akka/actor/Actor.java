@@ -1,15 +1,9 @@
-package fr.unice.smart_campus.middleware.virtual_sensor_processing;
+package fr.unice.smart_campus.middleware.akka.actor;
 
-import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
-import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import akka.routing.FromConfig;
-import scala.util.parsing.combinator.testing.Str;
-
-import java.util.Objects;
 
 public class Actor extends UntypedActor {
     private LoggingAdapter loggingAdapter;

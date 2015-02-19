@@ -6,6 +6,7 @@ import akka.actor.Props;
 import akka.routing.FromConfig;
 import com.espertech.esper.client.*;
 import com.typesafe.config.ConfigFactory;
+import fr.unice.smart_campus.middleware.akka.actor.Actor;
 
 public class CEPEngine {
 

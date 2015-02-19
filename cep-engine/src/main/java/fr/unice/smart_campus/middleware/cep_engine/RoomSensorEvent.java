@@ -20,8 +20,8 @@ public class RoomSensorEvent extends CEPEvent implements Serializable {
     public String toString() {
         return "{" +
                 "\"v\":\"" + value + "\"" +
-                ", \"n\"=\"" + name + "\"" +
-                ", \"t\"=\"" + timeStamp + "\"" +
+                ", \"n\":\"" + name + "\"" +
+                ", \"t\":\"" + timeStamp + "\"" +
                 '}';
     }
 

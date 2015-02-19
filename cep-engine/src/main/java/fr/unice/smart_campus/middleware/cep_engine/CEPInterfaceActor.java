@@ -25,7 +25,7 @@ public class CEPInterfaceActor extends UntypedActor {
             // TODO change event
             JSONObject jsonObject = new JSONObject((String) message);
 
-            RoomSensorEvent tick = new RoomSensorEvent(jsonObject.getString("n"), jsonObject.getString("v"), jsonObject.getString("t"));
+            RoomSensorEvent tick = new RoomSensorEvent(jsonObject.getString("v"), jsonObject.getString("n"), jsonObject.getString("t"));
 
             cepRT.sendEvent(tick);
         }

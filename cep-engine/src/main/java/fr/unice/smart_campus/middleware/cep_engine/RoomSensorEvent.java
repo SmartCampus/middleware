@@ -18,10 +18,10 @@ public class RoomSensorEvent extends CEPEvent implements Serializable {
 
     @Override
     public String toString() {
-        return "RoomSensorEvent{" +
-                "value='" + value + '\'' +
-                ", name='" + name + '\'' +
-                ", timeStamp='" + timeStamp + '\'' +
+        return "{" +
+                "\"v\":\"" + value + "\"" +
+                ", \"n\"=\"" + name + "\"" +
+                ", \"t\"=\"" + timeStamp + "\"" +
                 '}';
     }
 

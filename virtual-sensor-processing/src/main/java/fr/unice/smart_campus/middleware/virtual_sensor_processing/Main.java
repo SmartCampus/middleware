@@ -6,6 +6,7 @@ import akka.dispatch.Mailboxes;
 import akka.event.EventStream;
 import akka.event.LoggingAdapter;
 import com.typesafe.config.ConfigFactory;
+import fr.unice.smart_campus.middleware.akka.actor.DatabaseAccessActor;
 import scala.Function0;
 import scala.collection.*;
 import scala.concurrent.ExecutionContextExecutor;
@@ -15,5 +16,6 @@ public class Main {
     public static void main(String[] args) {
         // creation of the actor system (Actor factory)
         ActorSystem actorSystem = ActorSystem.create("ActorSystemFactory", ConfigFactory.load());
+        actorSystem.actorOf(Props.create(DatabaseAccessActor.class), "DatabaseAccessActor");
     }
 }

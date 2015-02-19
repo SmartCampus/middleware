@@ -51,6 +51,7 @@ public class CEPEngine {
     }
 
     public void sendEvent(CEPEvent event){
+        System.out.println("Sending event to CEP : " + event.toString());
         cepRT.sendEvent(event);
     }
 }

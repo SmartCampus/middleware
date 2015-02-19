@@ -15,11 +15,10 @@ public class Actor extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Exception {
         if (message instanceof String) {
-            this.loggingAdapter.error(message.toString());
+            this.loggingAdapter.info(message.toString());
 
             ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
             actorSelection.tell("Romain et Jerome chez Twitter", this.sender());
         }
-        loggingAdapter.error(message.toString());
     }
 }

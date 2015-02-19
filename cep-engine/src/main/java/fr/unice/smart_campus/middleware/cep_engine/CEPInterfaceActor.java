@@ -21,7 +21,7 @@ public class CEPInterfaceActor extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Exception {
         if (message instanceof String) {
-            this.loggingAdapter.error(message.toString() + "___________  cep interface actor __________");
+            this.loggingAdapter.info(message.toString() + "___________  cep interface actor __________");
             // TODO change event
             JSONObject jsonObject = new JSONObject((String) message);
 

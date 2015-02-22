@@ -4,9 +4,7 @@ import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import fr.unice.smart_campus.middleware.database.OutputDataAccess;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.util.Random;
 

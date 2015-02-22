@@ -137,64 +137,8 @@ public class DataAccessor {
         return data;
     }
 
-    public String getDataFromSensor(String idSensor, long beg, long end, boolean convert) throws Exception {
-
-        String data = "";
-
-        String type = "";
-        try {
-            JSONObject sensors = new JSONObject(getSensors(idSensor));
-            type = sensors.getString("sensorType");
-        } catch (JSONException exc) {
-            throw new Exception("Invalid sensor");
-        }
-
-        if (type.equalsIgnoreCase("virtual")) data = getDataFromVirtualSensor(idSensor, beg, end, convert);
-        else if (type.equalsIgnoreCase("physical")) data = getDataFromPhysicalSensor(idSensor, beg, end, convert);
-
-        return data;
-    }
 
 
-    public String getDataFromVirtualSensor(String idSensor, long beg, long end, boolean convert) throws SQLException {
-
-        // Example test -> 485 température ambiante
-        /*String script = "int capteur = $(1);" +
-				"float resistance = (float)(1023-capteur)*10000/capteur;" +
-				"1/(Math.log(resistance/10000)/3975+1/298.15)-273.15";*/
-
-        JSONObject o = new JSONObject(getSensors(idSensor));
-        String script = o.getString("script");
-
-        Indexes ind = findSensorIdInScript(script);
-
-        JSONObject dataSensor = new JSONObject(extractDataFromScript(script, ind, beg, end, false));
-
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-
-        for (int i = 0; i < dataSensor.getJSONArray("values").length(); i++) {
-            JSONObject valueSensor = dataSensor.getJSONArray("values").getJSONObject(i);
-
-			/* Retrieving results in JSON Array */
-            JSONObject obj = new JSONObject();
-            String date;
-            if (convert)
-                date = Helper.getDateFromTimestamp(Long.parseLong(valueSensor.getString("date"))).toString();
-            else
-                date = valueSensor.getString("date");
-            obj.put("date", date);
-            obj.put("value", computeScript(script, ind, valueSensor.getString("value")));
-            jsonArray.put(obj);
-        }
-
-		/* Returned JSON Object */
-        jsonObject.put("id", idSensor);
-        jsonObject.put("values", jsonArray);
-        String data = jsonObject.toString();
-
-        return data;
-    }
 
     /**
      * Returns a JSON object which contains all values of one sensor
@@ -210,7 +154,16 @@ public class DataAccessor {
      * @return a JSON Object with the values of the sensor, depending on time.
      * @throws SQLException if there is a problem with the database connection.
      */
-    public String getDataFromPhysicalSensor(String idSensor, long beg, long end, boolean convert) throws SQLException {
+    public String getDataFromSensor(String idSensor, long beg, long end, boolean convert) throws Exception {
+
+
+        String type = "";
+        try {
+            JSONObject sensors = new JSONObject(getSensors(idSensor));
+            type = sensors.getString("sensorType");
+        } catch (JSONException exc) {
+            throw new Exception("Invalid sensor");
+        }
 
 		/* SQL Statement */
         String selectSQL = "SELECT * FROM \"public\".\"SensorsData\" WHERE sensor_id = ?";
@@ -276,37 +229,6 @@ public class DataAccessor {
     }
 
 
-    private String extractDataFromScript(String script, Indexes ind, long beg, long end, boolean convert) throws SQLException {
-
-        String sensor_id = script.substring(ind.indexBeg + 2, ind.indexEnd);
-        String data = getDataFromPhysicalSensor(sensor_id, beg, end, convert);
-
-        return data;
-    }
-
-    private Indexes findSensorIdInScript(String script) {
-        Indexes ind = new Indexes();
-
-        int indexBeg = 0;
-        int indexEnd = 0;
-
-        indexBeg = script.indexOf("$");
-        indexEnd = script.indexOf(")", indexBeg);
-
-        ind.indexBeg = indexBeg;
-        ind.indexEnd = indexEnd;
-
-        return ind;
-    }
-
-    private String computeScript(String script, Indexes ind, String value) {
-
-        script = script.substring(0, ind.indexBeg) +
-                value + script.substring(ind.indexEnd + 1);
-
-        GroovyShell shell = new GroovyShell();
-        return shell.evaluate(script).toString();
-    }
 
     /**
      * To close and release connection

@@ -3,13 +3,10 @@ package fr.unice.smart_campus.middleware.processor;
 import akka.actor.*;
 import com.typesafe.config.ConfigFactory;
 
-import fr.unice.smart_campus.middleware.database.OutputDataAccess;
-import akka.actor.ActorSelection;
-import akka.actor.UntypedActor;
+import fr.unice.smart_campus.middleware.database.SensorsDataOutputDataAccess;
 
 
 import akka.actor.ActorRef;
-import fr.unice.smart_campus.middleware.processor.ActorSenderToCEP;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -26,7 +23,7 @@ import javax.jms.TextMessage;
  */
 public class App implements MessageListener {
 
-    private OutputDataAccess outputDataAccess;
+    private SensorsDataOutputDataAccess sensorsDataOutputDataAccess;
     private ActorRef actorRef;
 
     public App() throws Exception {
@@ -34,7 +31,7 @@ public class App implements MessageListener {
         this.actorRef = actorSystem.actorOf(Props.create(ActorSenderToCEP.class));
 
         // Create output proxy
-        outputDataAccess = new OutputDataAccess();
+        sensorsDataOutputDataAccess = new SensorsDataOutputDataAccess();
 
         // Create input listener
         InputDataAccess.createMessageListener(this);
@@ -65,7 +62,7 @@ public class App implements MessageListener {
                 this.actorRef.tell(jsonObject.toString(),ActorRef.noSender());
 
                 // Save sensor data into the database
-                outputDataAccess.saveSensorData(name, time, value);
+                sensorsDataOutputDataAccess.saveSensorData(name, time, value);
 
             } catch (JMSException e) {
                 e.printStackTrace();

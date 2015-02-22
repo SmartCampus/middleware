@@ -11,7 +11,7 @@ import java.util.Properties;
  * OutputDataAccess class
  * Interface to retrieve sensor values from the message queue
  */
-public class OutputDataAccess {
+public class SensorsDataOutputDataAccess {
 
 	private Connection connection;
 
@@ -19,7 +19,7 @@ public class OutputDataAccess {
 	/**
 	 * Create a new connection to the database
 	 */
-	public OutputDataAccess() throws Exception {
+	public SensorsDataOutputDataAccess() throws Exception {
 		Properties properties = new Properties();
 		properties.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
 

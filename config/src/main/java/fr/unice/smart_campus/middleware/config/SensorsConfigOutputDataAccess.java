@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class OutputDataAccess {
+public class SensorsConfigOutputDataAccess {
 
     private Connection connection;
 
@@ -20,7 +20,7 @@ public class OutputDataAccess {
     /**
      * Create a new connection to the database
      */
-    public OutputDataAccess () throws Exception {
+    public SensorsConfigOutputDataAccess() throws Exception {
         Properties properties = new Properties();
         properties.load(getClass().getClassLoader().getResourceAsStream("database.properties"));
 

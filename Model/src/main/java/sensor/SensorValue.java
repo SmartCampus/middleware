@@ -13,8 +13,6 @@ public class SensorValue implements Serializable{
     public long timestamp;
     public String value;
 
-
-
     public SensorValue() {
     }
 

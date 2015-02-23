@@ -21,7 +21,7 @@ public class SensorsConfigOutputDataAccess {
 
     public SensorsConfigOutputDataAccess(){
         try {
-            mongoClient= new MongoClient( System.getProperty("middleware.ip"), 5000 );
+            mongoClient= new MongoClient();
             db = mongoClient.getDB( "ConfigDatabase" );
             coll = db.getCollection("sensors");
         } catch (UnknownHostException e) {

@@ -32,7 +32,7 @@ public class SensorsConfigInputDataAccess {
 
     public SensorsConfigInputDataAccess(){
         try {
-            mongoClient= new MongoClient( System.getProperty("middleware.ip"), 5000 );
+            mongoClient= new MongoClient();
             db = mongoClient.getDB( "ConfigDatabase" );
             coll = db.getCollection("sensors");
         } catch (UnknownHostException e) {
@@ -130,7 +130,7 @@ public class SensorsConfigInputDataAccess {
     public SensorParams getSensor(String idSensor) {
         BasicDBObject query = new BasicDBObject(SensorParams.NAME_COLUMN,idSensor);
 
-        Cursor cursor = coll.find(query);
+        Cursor cursor = coll.find();
 
         try {
             while(cursor.hasNext()) {
@@ -140,5 +140,6 @@ public class SensorsConfigInputDataAccess {
             cursor.close();
         }
         return null;
+
     }
 }

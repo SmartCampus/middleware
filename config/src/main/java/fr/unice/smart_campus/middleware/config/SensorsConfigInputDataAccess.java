@@ -1,5 +1,8 @@
 package fr.unice.smart_campus.middleware.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.unice.smart_campus.middleware.config.model.SensorParams;
+
 import javax.net.ssl.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,11 +23,11 @@ public class SensorsConfigInputDataAccess {
     /**
      * @return JSON String list of sensors
      */
-    public String getSensors(String idSensor) {
+    public SensorParams getSensors(String idSensor) {
 
         String data = "";
         String url = configDatabaseURL;
-
+        System.out.println(configDatabaseURL);
         if (idSensor != null) url += "/" + idSensor;
 
         URL obj = null;
@@ -81,7 +84,14 @@ public class SensorsConfigInputDataAccess {
         } catch (KeyManagementException e) {
             e.printStackTrace();
         }
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            SensorParams sensorParams = mapper.readValue(data, SensorParams.class);
+            return sensorParams;
+        } catch (IOException e) {
+            e.printStackTrace();
 
-        return data;
+        }
+        return null;
     }
 }

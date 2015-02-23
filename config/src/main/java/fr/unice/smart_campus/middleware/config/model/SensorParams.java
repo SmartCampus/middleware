@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * Created by clement0210 on 15-02-18.
  */
+
 public class SensorParams {
 
     private String name, kind, script;

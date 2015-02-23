@@ -15,7 +15,7 @@ public class SensorParams {
     public static final String NAME_COLUMN="name";
     public static final String KIND_COLUMN="kind";
     public static final String FREQUENCY_COLUMN="frequency";
-    public   static final String SENSORTYPE_COLUMN="sensorType";
+    public static final String SENSORTYPE_COLUMN="sensorType";
     public static final String SCRIPT_COLUMN="script";
     public static final String PARENTS_COLUMN="parents";
 

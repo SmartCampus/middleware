@@ -1,7 +1,6 @@
 package fr.unice.smart_campus.middleware.accessor;
 
-import fr.unice.smart_campus.middleware.config.Helper;
-import groovy.lang.GroovyShell;
+import fr.unice.smart_campus.middleware.Helper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

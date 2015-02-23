@@ -1,9 +1,6 @@
 package fr.unice.smart_campus.middleware.config;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import com.mongodb.*;
 import config.SensorParams;
 import config.SensorType;
 
@@ -17,7 +14,6 @@ import java.util.regex.Pattern;
 
 public class SensorsConfigOutputDataAccess {
 
-    private String configDatabaseURL="http://" + System.getProperty("middleware.ip") + ":5000/sensors";
     private MongoClient mongoClient;
     private DB db;
     private DBCollection coll;
@@ -44,12 +40,6 @@ public class SensorsConfigOutputDataAccess {
         if(!check(sensorParams)){
             return false;
         }
-        /**List<BasicDBObject> parents=new ArrayList<BasicDBObject>();
-        for(String sensor: sensorParams.getParentSensors()){
-            parents.add(new BasicDBObject("name",sensor));
-        }*/
-
-
 
         coll.insert(sensorParams.toDoc());
         return true;

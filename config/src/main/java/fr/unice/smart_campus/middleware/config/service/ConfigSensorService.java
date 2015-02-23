@@ -15,17 +15,17 @@ public class ConfigSensorService {
     SensorsConfigInputDataAccess sensorsConfigInputDataAccess=new SensorsConfigInputDataAccess();
     SensorsConfigOutputDataAccess sensorsConfigOutputDataAccess=new SensorsConfigOutputDataAccess();
 
-    /**@PUT
+    @PUT
     @Produces("text/plain")
     @Path("/")
-    public boolean addSensor(@QueryParam("sensor_params") SensorParams sensorParams){
+    public boolean addSensor(SensorParams sensorParams){
         return sensorsConfigOutputDataAccess.saveSensorParams(sensorParams);
     }
-    */
+
     @GET
     @Produces("application/json")
     @Path("/{sensor_id}")
-    public String getSensor(@PathParam("sensor_id") String sensorID){
+    public SensorParams getSensor(@PathParam("sensor_id") String sensorID){
         return sensorsConfigInputDataAccess.getSensors(sensorID);
     }
 }

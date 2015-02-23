@@ -4,6 +4,7 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import org.json.JSONObject;
+import sensor.SensorValue;
 
 public class CEPInterfaceActor extends UntypedActor {
     private LoggingAdapter loggingAdapter;
@@ -28,6 +29,9 @@ public class CEPInterfaceActor extends UntypedActor {
             RoomSensorEvent tick = new RoomSensorEvent(jsonObject.getString("v"), jsonObject.getString("n"), jsonObject.getString("t"));
 
             cepRT.sendEvent(tick);
+        }
+        if(message instanceof SensorValue){
+            this.loggingAdapter.info("................."+message.toString());
         }
     }
 }

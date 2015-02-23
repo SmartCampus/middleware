@@ -7,6 +7,11 @@ import akka.event.LoggingAdapter;
 import fr.unice.smart_campus.middleware.database.SensorsDataOutputDataAccess;
 import org.json.JSONObject;
 
+/**
+ * DatabaseAccessActor is an Akka Actor.
+ * This class receive an event and process it.
+ * The process consist of putting the data received (an SensorValue) into the database Sensor's data.
+ */
 public class DatabaseAccessActor extends UntypedActor {
 
     private SensorsDataOutputDataAccess sensorsDataOutputDataAccess;
@@ -14,7 +19,7 @@ public class DatabaseAccessActor extends UntypedActor {
 
     public DatabaseAccessActor() throws Exception {
         this.loggingAdapter = Logging.getLogger(this.context().system(), this);
-        sensorsDataOutputDataAccess = new SensorsDataOutputDataAccess();
+//  TODO      sensorsDataOutputDataAccess = new SensorsDataOutputDataAccess();
     }
 
     @Override
@@ -25,15 +30,12 @@ public class DatabaseAccessActor extends UntypedActor {
             String name = jsonObject.getString("n");
             String time = jsonObject.getString("t");
             String value = jsonObject.getString("v");
-
             sensorsDataOutputDataAccess.saveSensorData(name, time, value);
-            System.out.println(name+"____"+time+"_____"+value);
         }
         if(message instanceof SensorValue){
             this.loggingAdapter.info(message.toString());
             SensorValue sensorValueMessage = (SensorValue) message;
-            sensorsDataOutputDataAccess.saveSensorData(sensorValueMessage.getName(), String.valueOf(sensorValueMessage.getTimestamp()), sensorValueMessage.getValue());
-            System.out.println(sensorValueMessage.getName() + "--" + String.valueOf(sensorValueMessage.getTimestamp()) + "--" + sensorValueMessage.getValue());
+//  TODO          sensorsDataOutputDataAccess.saveSensorData(sensorValueMessage.getName(), String.valueOf(sensorValueMessage.getTimestamp()), sensorValueMessage.getValue());
         }
     }
 }

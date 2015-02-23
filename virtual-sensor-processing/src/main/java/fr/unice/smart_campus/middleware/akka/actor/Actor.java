@@ -34,7 +34,7 @@ public class Actor extends UntypedActor {
             }
         }
         if(message instanceof SensorValue){
-            this.loggingAdapter.info("___---___"+message.toString());
+            this.loggingAdapter.info("_-_-_"+message.toString());
 
             ActorSelection databaseAccess = this.getContext().actorSelection("akka://ActorSystemFactory/user/DatabaseAccessActor");
             databaseAccess.tell(message, this.self());

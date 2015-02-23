@@ -4,6 +4,10 @@ import sensor.SensorValue;
 import akka.actor.ActorRef;
 import com.espertech.esper.client.*;
 
+/**
+ * Listener of the event from the CEP engine.
+ * When it receive a message from the CEP engine, it transfers the message to a remote Akka actor
+ */
 public class CEPListener implements UpdateListener{
     public ActorRef actorRef;
     public CEPListener(ActorRef actorRef) {
@@ -11,11 +15,10 @@ public class CEPListener implements UpdateListener{
     }
 
     public void update(final EventBean[] newData, EventBean[] oldData) {
-        String message = ((CEPEvent)newData[0].getUnderlying()).toString();
+        CEPEvent message = (CEPEvent)newData[0].getUnderlying();
         System.out.println("Send message to Akka actor : " + message);
 
-        // TODO : envoyer un message avec un vrai contenu
-        SensorValue sensorValueToSend = new SensorValue("12",123645 ,"13");
+        SensorValue sensorValueToSend = new SensorValue(message.getName(), Long.parseLong(message.getTimeStamp()),message.getValue());
         this.actorRef.tell(sensorValueToSend, ActorRef.noSender());
     }
 }

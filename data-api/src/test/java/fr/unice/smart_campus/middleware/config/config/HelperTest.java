@@ -1,7 +1,7 @@
 package fr.unice.smart_campus.middleware.config.config;
 
 
-import fr.unice.smart_campus.middleware.config.Helper;
+import fr.unice.smart_campus.middleware.Helper;
 import junit.framework.TestCase;
 import org.junit.Test;
 

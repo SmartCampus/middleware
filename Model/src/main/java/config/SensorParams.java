@@ -1,9 +1,11 @@
 package config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +36,12 @@ public class SensorParams {
         this.frequency=(Integer) o.get(FREQUENCY_COLUMN);
         this.sensorType =SensorType.valueOf((String)o.get(SENSORTYPE_COLUMN));
         this.script=(String) o.get(SCRIPT_COLUMN);
-        //this.parentSensors=(List<String>) o.get(PARENTS_COLUMN);
+        BasicDBList list=(BasicDBList) o.get(PARENTS_COLUMN);
+        this.parentSensors=new ArrayList<String>();
+        for(Object obj:list){
+            parentSensors.add((String)obj);
+        }
+
 
     }
     public SensorParams(String name, String kind, String script, SensorType sensorType, int frequency, List<String> parentSensors) {
@@ -113,12 +120,18 @@ public class SensorParams {
     }
 
     public BasicDBObject toDoc(){
+        BasicDBList parents=new BasicDBList();
+        if(parentSensors!=null){
+            for(String sensor: parentSensors){
+                parents.add(new BasicDBObject("name",sensor));
+            }
+        }
         BasicDBObject doc = new BasicDBObject(SensorParams.NAME_COLUMN,name)
                 .append(SensorParams.KIND_COLUMN, kind)
                 .append(SensorParams.FREQUENCY_COLUMN, frequency)
                 .append(SensorParams.SCRIPT_COLUMN, script)
                 .append(SensorParams.SENSORTYPE_COLUMN, sensorType.name())
-                .append(SensorParams.PARENTS_COLUMN, parentSensors);
+                .append(SensorParams.PARENTS_COLUMN, parents);
         return doc;
     }
 

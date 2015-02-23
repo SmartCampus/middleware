@@ -18,23 +18,8 @@ public class Actor extends UntypedActor {
 
     @Override
     public void onReceive(Object message) throws Exception {
-        if (message instanceof String) {
-            this.loggingAdapter.info(message.toString());
-            JSONObject jsonObject = new JSONObject(message.toString());
-            String name = jsonObject.getString("n");
-            String time = jsonObject.getString("t");
-            String value = jsonObject.getString("v");
-
-            ActorSelection databaseAccess = this.getContext().actorSelection("akka://ActorSystemFactory/user/DatabaseAccessActor");
-            databaseAccess.tell(message, this.self());
-
-            if ((new Random().nextInt(4)) == 0) {
-                ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
-                actorSelection.tell("{\"n\":\"testAkkaActor\", \"v\":\"12\", \"t\":\"12343\"}", this.sender());
-            }
-        }
         if(message instanceof SensorValue){
-            this.loggingAdapter.info("___---___"+message.toString());
+            this.loggingAdapter.info("_-_-_"+message.toString());
 
             ActorSelection databaseAccess = this.getContext().actorSelection("akka://ActorSystemFactory/user/DatabaseAccessActor");
             databaseAccess.tell(message, this.self());

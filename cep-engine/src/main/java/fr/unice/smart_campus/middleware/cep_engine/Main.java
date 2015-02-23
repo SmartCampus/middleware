@@ -7,9 +7,9 @@ public class Main {
         CEPEngine cepEngine = new CEPEngine();
 
         // We generate a few ticks...
-//        for (int i = 0; i < 15; i++) {
-//            GenerateRandomTick(cepEngine, i);
-//        }
+        for (int i = 0; i < 15; i++) {
+            GenerateRandomTick(cepEngine, i);
+        }
     }
 
     private static Random generator = new Random();

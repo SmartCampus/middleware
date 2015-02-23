@@ -1,8 +1,9 @@
 package fr.unice.smart_campus.middleware.config.config;
 
+import config.SensorParams;
+import config.SensorType;
 import fr.unice.smart_campus.middleware.config.SensorsConfigOutputDataAccess;
-import fr.unice.smart_campus.middleware.config.model.SensorParams;
-import fr.unice.smart_campus.middleware.config.model.SensorType;
+
 import junit.framework.TestCase;
 import org.junit.Test;
 
@@ -86,7 +87,7 @@ public class ConfigTest extends TestCase {
         parentsSensors.add("TEMP_443");
         parentsSensors.add("TEMP_444");
         sensorParams.setParentSensors(parentsSensors);
-        sensorParams.setSensorType(SensorType.VIRUTAL_COMPOSITE);
+        sensorParams.setSensorType(SensorType.VIRTUAL_COMPOSITE);
         sensorParams.setScript("int B=3975; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
         assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), true);
     }
@@ -99,7 +100,7 @@ public class ConfigTest extends TestCase {
         parentsSensors.add("TEMP_443");
         parentsSensors.add("TEMP_444");
         sensorParams.setParentSensors(parentsSensors);
-        sensorParams.setSensorType(SensorType.VIRUTAL_COMPOSITE);
+        sensorParams.setSensorType(SensorType.VIRTUAL_COMPOSITE);
         sensorParams.setScript("int B=3975; a=$(TEMP_443)*$(TEMP_445); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
         assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), false);
     }
@@ -113,7 +114,7 @@ public class ConfigTest extends TestCase {
         List<String> parentsSensors=new ArrayList<String>();
         parentsSensors.add("TEMP_443");
         sensorParams.setParentSensors(parentsSensors);
-        sensorParams.setSensorType(SensorType.VIRUTAL_COMPOSITE);
+        sensorParams.setSensorType(SensorType.VIRTUAL_COMPOSITE);
         sensorParams.setScript("int B=3975; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
         assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), false);
     }

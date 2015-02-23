@@ -1,8 +1,9 @@
 package fr.unice.smart_campus.middleware.config.service;
 
+import config.SensorParams;
 import fr.unice.smart_campus.middleware.config.SensorsConfigInputDataAccess;
 import fr.unice.smart_campus.middleware.config.SensorsConfigOutputDataAccess;
-import fr.unice.smart_campus.middleware.config.model.SensorParams;
+
 import javax.ws.rs.*;
 
 /**
@@ -26,6 +27,6 @@ public class ConfigSensorService {
     @Produces("application/json")
     @Path("/{sensor_id}")
     public SensorParams getSensor(@PathParam("sensor_id") String sensorID){
-        return sensorsConfigInputDataAccess.getSensors(sensorID);
+        return sensorsConfigInputDataAccess.getSensor(sensorID);
     }
 }

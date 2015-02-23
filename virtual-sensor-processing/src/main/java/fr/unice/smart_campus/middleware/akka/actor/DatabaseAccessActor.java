@@ -1,6 +1,6 @@
 package fr.unice.smart_campus.middleware.akka.actor;
 
-import SensorModel.SensorValue;
+import sensor.SensorValue;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
@@ -33,7 +33,7 @@ public class DatabaseAccessActor extends UntypedActor {
             this.loggingAdapter.info(message.toString());
             SensorValue sensorValueMessage = (SensorValue) message;
             sensorsDataOutputDataAccess.saveSensorData(sensorValueMessage.getName(), String.valueOf(sensorValueMessage.getTimestamp()), sensorValueMessage.getValue());
-            System.out.println(sensorValueMessage.getName()+"--"+String.valueOf(sensorValueMessage.getTimestamp())+"--"+sensorValueMessage.getValue());
+            System.out.println(sensorValueMessage.getName() + "--" + String.valueOf(sensorValueMessage.getTimestamp()) + "--" + sensorValueMessage.getValue());
         }
     }
 }

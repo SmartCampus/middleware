@@ -1,4 +1,4 @@
-package SensorModel;
+package sensor;
 
 import java.io.Serializable;
 

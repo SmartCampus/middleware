@@ -1,12 +1,11 @@
 package fr.unice.smart_campus.middleware.akka.actor;
 
-import SensorModel.SensorValue;
+import sensor.SensorValue;
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import org.json.JSONObject;
-import sun.management.Sensor;
 
 import java.util.Random;
 

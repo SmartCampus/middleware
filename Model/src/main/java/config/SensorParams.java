@@ -24,7 +24,7 @@ public class SensorParams {
 
     private String name, kind, script;
     private SensorType sensorType;
-    private int frequency;
+    private double frequency;
     private List<String> parentSensors;
 
     public SensorParams() {
@@ -33,7 +33,7 @@ public class SensorParams {
     public SensorParams(DBObject o){
         this.name= (String) o.get(NAME_COLUMN);
         this.kind= (String) o.get(KIND_COLUMN);
-        this.frequency=(Integer) o.get(FREQUENCY_COLUMN);
+        this.frequency=(Double) o.get(FREQUENCY_COLUMN);
         this.sensorType =SensorType.valueOf((String)o.get(SENSORTYPE_COLUMN));
         this.script=(String) o.get(SCRIPT_COLUMN);
         BasicDBList list=(BasicDBList) o.get(PARENTS_COLUMN);
@@ -90,7 +90,7 @@ public class SensorParams {
     }
 
     @JsonProperty
-    public int getFrequency() {
+    public double getFrequency() {
         return frequency;
     }
 

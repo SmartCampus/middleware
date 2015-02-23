@@ -1,8 +1,8 @@
-package fr.unice.smart_campus.middleware.config.resources;
+package fr.unice.smart_campus.middleware.resources;
 
 import fr.unice.smart_campus.middleware.accessor.DataAccessor;
-import fr.unice.smart_campus.middleware.config.Helper;
-import fr.unice.smart_campus.middleware.config.TimeRange;
+import fr.unice.smart_campus.middleware.Helper;
+import fr.unice.smart_campus.middleware.TimeRange;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;

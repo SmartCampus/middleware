@@ -9,7 +9,7 @@ import javax.ws.rs.*;
 /**
  * Created by clement0210 on 22/02/15.
  */
-@Path("/sensors_params")
+@Path("/")
 
 public class ConfigSensorService {
 
@@ -18,14 +18,14 @@ public class ConfigSensorService {
 
     @PUT
     @Produces("text/plain")
-    @Path("/")
+    @Path("/sensors_params")
     public boolean addSensor(SensorParams sensorParams){
         return sensorsConfigOutputDataAccess.saveSensorParams(sensorParams);
     }
 
     @GET
     @Produces("application/json")
-    @Path("/{sensor_id}")
+    @Path("/sensors_params/{sensor_id}")
     public SensorParams getSensor(@PathParam("sensor_id") String sensorID){
         return sensorsConfigInputDataAccess.getSensor(sensorID);
     }

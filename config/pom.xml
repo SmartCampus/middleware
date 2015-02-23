@@ -65,7 +65,7 @@
                     <systemProperties>
                         <systemProperty>
                             <name>middleware.ip</name>
-                            <value>54.171.106.46</value>
+                            <value>52.16.33.142</value>
                         </systemProperty>
                         <systemProperty>
                             <name>mode</name>

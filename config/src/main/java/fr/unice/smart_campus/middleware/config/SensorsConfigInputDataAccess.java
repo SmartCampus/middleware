@@ -25,7 +25,6 @@ import java.util.List;
  */
 public class SensorsConfigInputDataAccess {
 
-    private String configDatabaseURL="http://" + System.getProperty("middleware.ip") + ":5000/sensors";
     private MongoClient mongoClient;
     private DB db;
     private DBCollection coll;
@@ -41,7 +40,7 @@ public class SensorsConfigInputDataAccess {
         }
     }
 
-    public SensorParams getSensorFormParentsSensors(List<SensorParams> sensorParamsList){
+    public SensorParams getSensorFormParentsSensors(List<String> sensorParams){
         List<String> parentsSensors=new ArrayList<String>();
         parentsSensors.add("TEMP_443");
         parentsSensors.add("TEMP_444");
@@ -51,6 +50,22 @@ public class SensorsConfigInputDataAccess {
         sensorParamses.add(sensorParams1);
         //sensorParamses.add(sensorParams2);
         return sensorParams1;
+        /**BasicDBList parents=new BasicDBList();
+        if(parents!=null){
+            for(String sensor: sensorParams){
+                parents.add(new BasicDBObject("name",sensor));
+            }
+        }
+        BasicDBObject query = new BasicDBObject(SensorParams.PARENTS_COLUMN,parents);
+        Cursor cursor = coll.find(query);
+        try {
+            while(cursor.hasNext()) {
+                return new SensorParams(cursor.next());
+            }
+        } finally {
+            cursor.close();
+        }
+        return null;*/
     }
 
     public List<SensorParams> getAllPhysicalSensors(){

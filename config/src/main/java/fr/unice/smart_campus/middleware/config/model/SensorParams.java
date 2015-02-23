@@ -1,5 +1,7 @@
 package fr.unice.smart_campus.middleware.config.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 /**
@@ -14,7 +16,7 @@ public class SensorParams {
 
     public SensorParams() {
     }
-
+    @JsonProperty
     public String getName() {
         return name;
     }
@@ -23,6 +25,7 @@ public class SensorParams {
         this.name = name;
     }
 
+    @JsonProperty
     public String getKind() {
         return kind;
     }
@@ -31,6 +34,7 @@ public class SensorParams {
         this.kind = kind;
     }
 
+    @JsonProperty
     public String getScript() {
         return script;
     }
@@ -39,6 +43,7 @@ public class SensorParams {
         this.script = script;
     }
 
+    @JsonProperty
     public SensorType getSensorType() {
         return sensorType;
     }
@@ -47,6 +52,7 @@ public class SensorParams {
         this.sensorType = sensorType;
     }
 
+    @JsonProperty
     public int getFrequency() {
         return frequency;
     }
@@ -55,6 +61,7 @@ public class SensorParams {
         this.frequency = frequency;
     }
 
+    @JsonProperty
     public List<String> getParentSensors() {
         return parentSensors;
     }

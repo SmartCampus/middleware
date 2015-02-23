@@ -21,7 +21,7 @@ public class ConfigTest extends TestCase {
         List<String> parentsSensors=new ArrayList<String>();
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.PHYSICAL);
-       assertEquals(sensorsConfigOutputDataAccess.saveSensorParams(sensorParams), true);
+       assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), true);
     }
     @Test
     public void testCheckPhysicalWithScript() throws Exception {
@@ -31,7 +31,7 @@ public class ConfigTest extends TestCase {
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.PHYSICAL);
         sensorParams.setScript("int B=3975; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
-        assertEquals(sensorsConfigOutputDataAccess.saveSensorParams(sensorParams), false);
+        assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), false);
     }
     @Test
     public void testCheckPhysicalWithTooManySensors() throws Exception {
@@ -41,7 +41,7 @@ public class ConfigTest extends TestCase {
         parentsSensors.add("TEMP_443");
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.PHYSICAL);
-        assertEquals(sensorsConfigOutputDataAccess.saveSensorParams(sensorParams), false);
+        assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), false);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class ConfigTest extends TestCase {
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.VIRTUAL_FILTER);
         sensorParams.setScript("int B=3975; a=$(TEMP_443); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
-        assertEquals(sensorsConfigOutputDataAccess.saveSensorParams(sensorParams), true);
+        assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), true);
     }
     @Test
     public void testCheckFilterWithWrongScript() throws Exception {
@@ -64,7 +64,7 @@ public class ConfigTest extends TestCase {
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.VIRTUAL_FILTER);
         sensorParams.setScript("int B=3975; a=$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
-        assertEquals(sensorsConfigOutputDataAccess.saveSensorParams(sensorParams), false);
+        assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), false);
     }
     @Test
     public void testCheckFilterWithNotGoodParentSensors() throws Exception {
@@ -76,7 +76,7 @@ public class ConfigTest extends TestCase {
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.VIRTUAL_FILTER);
         sensorParams.setScript("int B=3975; a=$(TEMP_443); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
-        assertEquals(sensorsConfigOutputDataAccess.saveSensorParams(sensorParams), false);
+        assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), false);
     }
     @Test
     public void testCheckGoodComposite() throws Exception {
@@ -88,7 +88,7 @@ public class ConfigTest extends TestCase {
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.VIRUTAL_COMPOSITE);
         sensorParams.setScript("int B=3975; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
-        assertEquals(sensorsConfigOutputDataAccess.saveSensorParams(sensorParams), true);
+        assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), true);
     }
 
     @Test
@@ -101,7 +101,7 @@ public class ConfigTest extends TestCase {
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.VIRUTAL_COMPOSITE);
         sensorParams.setScript("int B=3975; a=$(TEMP_443)*$(TEMP_445); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
-        assertEquals(sensorsConfigOutputDataAccess.saveSensorParams(sensorParams), false);
+        assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), false);
     }
 
 
@@ -115,6 +115,6 @@ public class ConfigTest extends TestCase {
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.VIRUTAL_COMPOSITE);
         sensorParams.setScript("int B=3975; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
-        assertEquals(sensorsConfigOutputDataAccess.saveSensorParams(sensorParams), false);
+        assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), false);
     }
 }

@@ -46,4 +46,5 @@ public class SensorValue implements Serializable{
                 ", value='" + value + '\'' +
                 '}';
     }
+
 }

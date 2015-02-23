@@ -19,7 +19,7 @@ public class DatabaseAccessActor extends UntypedActor {
 
     public DatabaseAccessActor() throws Exception {
         this.loggingAdapter = Logging.getLogger(this.context().system(), this);
-//  TODO      sensorsDataOutputDataAccess = new SensorsDataOutputDataAccess();
+        sensorsDataOutputDataAccess = new SensorsDataOutputDataAccess();
     }
 
     @Override
@@ -35,7 +35,7 @@ public class DatabaseAccessActor extends UntypedActor {
         if(message instanceof SensorValue){
             this.loggingAdapter.info(message.toString());
             SensorValue sensorValueMessage = (SensorValue) message;
-//  TODO          sensorsDataOutputDataAccess.saveSensorData(sensorValueMessage.getName(), String.valueOf(sensorValueMessage.getTimestamp()), sensorValueMessage.getValue());
+            sensorsDataOutputDataAccess.saveSensorData(sensorValueMessage.getName(), String.valueOf(sensorValueMessage.getTimestamp()), sensorValueMessage.getValue());
         }
     }
 }

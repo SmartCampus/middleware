@@ -38,9 +38,12 @@ public class SensorParams {
         this.script=(String) o.get(SCRIPT_COLUMN);
         BasicDBList list=(BasicDBList) o.get(PARENTS_COLUMN);
         this.parentSensors=new ArrayList<String>();
-        for(Object obj:list){
-            parentSensors.add((String)obj);
+        if(list!=null){
+            for(Object obj:list){
+                parentSensors.add((String)obj);
+            }
         }
+
 
 
     }

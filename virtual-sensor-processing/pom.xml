@@ -30,6 +30,11 @@
             <artifactId>database</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>fr.unice.smart_campus.middleware</groupId>
+            <artifactId>model</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 

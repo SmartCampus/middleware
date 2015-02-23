@@ -1,10 +1,12 @@
 package fr.unice.smart_campus.middleware.akka.actor;
 
+import SensorModel.SensorValue;
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import org.json.JSONObject;
+import sun.management.Sensor;
 
 import java.util.Random;
 
@@ -30,6 +32,18 @@ public class Actor extends UntypedActor {
             if ((new Random().nextInt(4)) == 0) {
                 ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
                 actorSelection.tell("{\"n\":\"testAkkaActor\", \"v\":\"12\", \"t\":\"12343\"}", this.sender());
+            }
+        }
+        if(message instanceof SensorValue){
+            this.loggingAdapter.info("___---___"+message.toString());
+
+            ActorSelection databaseAccess = this.getContext().actorSelection("akka://ActorSystemFactory/user/DatabaseAccessActor");
+            databaseAccess.tell(message, this.self());
+
+            if ((new Random().nextInt(4)) == 0) {
+                ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
+                SensorValue sensorValue = new SensorValue("testAkkaActor",12,"12343");
+                actorSelection.tell(sensorValue, this.sender());
             }
         }
     }

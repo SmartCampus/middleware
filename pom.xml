@@ -19,7 +19,8 @@
 		<module>virtual-sensor-processing</module>
 		<module>cep-engine</module>
         <module>config</module>
-	</modules>
+        <module>Model</module>
+    </modules>
 
 	<properties>
 		<java.version>1.6</java.version>

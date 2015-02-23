@@ -34,7 +34,7 @@ public class SensorParams {
         this.name= (String) o.get(NAME_COLUMN);
         this.kind= (String) o.get(KIND_COLUMN);
         this.frequency=(Double) o.get(FREQUENCY_COLUMN);
-        this.sensorType =SensorType.valueOf((String)o.get(SENSORTYPE_COLUMN));
+        this.sensorType =SensorType.valueOf(((String)o.get(SENSORTYPE_COLUMN)).toUpperCase());
         this.script=(String) o.get(SCRIPT_COLUMN);
         BasicDBList list=(BasicDBList) o.get(PARENTS_COLUMN);
         this.parentSensors=new ArrayList<String>();
@@ -130,7 +130,7 @@ public class SensorParams {
                 .append(SensorParams.KIND_COLUMN, kind)
                 .append(SensorParams.FREQUENCY_COLUMN, frequency)
                 .append(SensorParams.SCRIPT_COLUMN, script)
-                .append(SensorParams.SENSORTYPE_COLUMN, sensorType.name())
+                .append(SensorParams.SENSORTYPE_COLUMN, sensorType.name().toLowerCase())
                 .append(SensorParams.PARENTS_COLUMN, parents);
         return doc;
     }

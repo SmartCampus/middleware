@@ -24,14 +24,6 @@ public class DatabaseAccessActor extends UntypedActor {
 
     @Override
     public void onReceive(Object message) throws Exception {
-        if (message instanceof String) {
-            this.loggingAdapter.info(message.toString());
-            JSONObject jsonObject = new JSONObject(message.toString());
-            String name = jsonObject.getString("n");
-            String time = jsonObject.getString("t");
-            String value = jsonObject.getString("v");
-            sensorsDataOutputDataAccess.saveSensorData(name, time, value);
-        }
         if(message instanceof SensorValue){
             this.loggingAdapter.info(message.toString());
             SensorValue sensorValueMessage = (SensorValue) message;

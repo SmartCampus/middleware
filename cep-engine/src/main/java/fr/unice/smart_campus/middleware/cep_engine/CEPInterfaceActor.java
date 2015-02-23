@@ -21,17 +21,15 @@ public class CEPInterfaceActor extends UntypedActor {
 
     @Override
     public void onReceive(Object message) throws Exception {
-        if (message instanceof String) {
-            this.loggingAdapter.info("___________  cep interface actor __________" + message.toString());
-            // TODO change event
-            JSONObject jsonObject = new JSONObject((String) message);
-
-            RoomSensorEvent tick = new RoomSensorEvent(jsonObject.getString("v"), jsonObject.getString("n"), jsonObject.getString("t"));
-
-            cepRT.sendEvent(tick);
-        }
         if(message instanceof SensorValue){
             this.loggingAdapter.info("................."+message.toString());
+            SensorValue sensorValue = (SensorValue)message;
+            RoomSensorEvent tick = new RoomSensorEvent(
+                    sensorValue.getValue(),
+                    sensorValue.getName(),
+                    String.valueOf(sensorValue.getTimestamp()));
+
+            cepRT.sendEvent(tick);
         }
     }
 }

@@ -32,6 +32,8 @@ public class ScriptEvaluatorActor extends UntypedActor {
         if (message instanceof TypedSensorValueList) {
             TypedSensorValueList sensors = (TypedSensorValueList) message;
 
+            this.loggingAdapter.info(message.toString());
+
             SensorValue response = evaluateScript(sensors.getSensorValues());
 
             ActorSelection databaseAccess = this.getContext().actorSelection("akka://ActorSystemFactory/user/DatabaseAccessActor");

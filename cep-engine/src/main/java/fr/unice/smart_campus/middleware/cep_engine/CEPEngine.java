@@ -50,7 +50,6 @@ public class CEPEngine {
         // create Akka ActorSystem and actors
         ActorSystem system = ActorSystem.create("Simulation", ConfigFactory.load());
         ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(ScriptEvaluatorActor.class)), "remotePool");
-        system.actorOf(Props.create(CEPInterfaceActor.class, this), "CEPInterfaceActor");
 
         // Create the configuration of our CEPEngine
         Configuration cepConfig = new Configuration();
@@ -125,6 +124,8 @@ public class CEPEngine {
             EPStatement cepStatement = cepAdm.createEPL(statement.toString());
             cepStatement.addListener(listener);
         }
+
+        system.actorOf(Props.create(CEPInterfaceActor.class, this), "CEPInterfaceActor");
     }
 
     private Class<? extends CEPEvent> generateCepEvent(ClassPool pool, String className) throws Exception {

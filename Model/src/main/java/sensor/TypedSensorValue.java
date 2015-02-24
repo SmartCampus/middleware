@@ -1,18 +1,19 @@
 package sensor;
 
 public class TypedSensorValue extends SensorValue {
-    private  TypedSensorValue type;
 
-    public TypedSensorValue(String name, long timestamp, String value, TypedSensorValue type) {
+    private  SensorValueType type;
+
+    public TypedSensorValue(String name, long timestamp, String value, SensorValueType type) {
         super(name, timestamp, value);
         this.type = type;
     }
 
-    public TypedSensorValue getType() {
+    public SensorValueType getType() {
         return type;
     }
 
-    public void setType(TypedSensorValue type) {
+    public void setType(SensorValueType type) {
         this.type = type;
     }
 }

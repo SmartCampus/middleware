@@ -2,24 +2,22 @@ package sensor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class SensorValues implements Serializable {
+public class TypedSensorValueList implements Serializable {
     private static final long serialVersionUID = 7526479295622776148L;
 
-    private List<SensorValue> sensorValues;
+    private List<TypedSensorValue> sensorValues;
 
-    public SensorValues() {
-        this.sensorValues = new ArrayList<SensorValue>();
+    public TypedSensorValueList() {
+        this.sensorValues = new ArrayList<TypedSensorValue>();
     }
 
-    public List<SensorValue> getSensorValues() {
+    public List<TypedSensorValue> getSensorValues() {
         return sensorValues;
     }
 
-    public void setSensorValues(List<SensorValue> sensorValues) {
+    public void setSensorValues(List<TypedSensorValue> sensorValues) {
         this.sensorValues = sensorValues;
     }
 

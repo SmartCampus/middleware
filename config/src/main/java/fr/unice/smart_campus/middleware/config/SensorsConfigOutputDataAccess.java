@@ -73,6 +73,8 @@ public class SensorsConfigOutputDataAccess {
 
                 try{
                     sensorsFromScript.add(matcher.group(1));
+                    // We adapt the script to be compatible with the shell
+                    sensorParams.setScript(sensorParams.getScript().replaceAll("\\$\\(" + matcher.group(1) + "\\)", matcher.group(1)));
                 }
                 catch (IndexOutOfBoundsException e){
                     return false;

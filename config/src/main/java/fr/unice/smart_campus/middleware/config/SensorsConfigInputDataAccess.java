@@ -69,13 +69,14 @@ public class SensorsConfigInputDataAccess {
     }
 
     public List<SensorParams> getAllPhysicalSensors(){
-        /**List<String> parentsSensors=new ArrayList<String>();
+        List<String> parentsSensors=new ArrayList<String>();
         SensorParams sensorParams1=new SensorParams("TEMP_443","temp","", SensorType.PHYSICAL,20,parentsSensors);
         SensorParams sensorParams2=new SensorParams("TEMP_444","temp","", SensorType.PHYSICAL,20,parentsSensors);
         List<SensorParams> sensorParamses=new ArrayList<SensorParams>();
         sensorParamses.add(sensorParams1);
         sensorParamses.add(sensorParams2);
-        return sensorParamses;*/
+        return sensorParamses;
+        /**
         List<SensorParams> sensorParamsList=new ArrayList<SensorParams>();
         BasicDBObject query = new BasicDBObject(SensorParams.SENSORTYPE_COLUMN,SensorType.PHYSICAL.name().toLowerCase());
         Cursor cursor = coll.find(query);
@@ -88,18 +89,24 @@ public class SensorsConfigInputDataAccess {
             cursor.close();
         }
         return sensorParamsList;
+         */
     }
+
     public List<SensorParams> getAllVirtualSensors(){
-        /**List<String> parentsSensors=new ArrayList<String>();
+        List<String> parentsSensors=new ArrayList<String>();
         parentsSensors.add("TEMP_443");
-        parentsSensors.add("TEMP_444");
-        SensorParams sensorParams1=new SensorParams("CV1","temp","int B=3975; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;", SensorType.VIRTUAL_COMPOSITE,20,parentsSensors);
-        SensorParams sensorParams2=new SensorParams("CV2","temp","int B=124; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;", SensorType.VIRTUAL_COMPOSITE,20,parentsSensors);
+        SensorParams sensorParams1=new SensorParams("CV1","temp","int B=3975; a=$(TEMP_443); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;", SensorType.VIRTUAL_FILTER,20,parentsSensors);
+
+        List<String> parentsSensors2=new ArrayList<String>();
+        parentsSensors2.add("TEMP_443");
+        parentsSensors2.add("TEMP_444");
+        SensorParams sensorParams2=new SensorParams("CV2","temp","int B=124; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;", SensorType.VIRTUAL_COMPOSITE,20,parentsSensors2);
+
         List<SensorParams> sensorParamses=new ArrayList<SensorParams>();
         sensorParamses.add(sensorParams1);
         sensorParamses.add(sensorParams2);
-        return sensorParamses;*/
-
+        return sensorParamses;
+/**
         List<SensorParams> sensorParamsList=new ArrayList<SensorParams>();
         BasicDBObject query = new BasicDBObject(SensorParams.SENSORTYPE_COLUMN,SensorType.VIRTUAL_COMPOSITE.name().toLowerCase());
         Cursor cursor = coll.find(query);
@@ -123,6 +130,7 @@ public class SensorsConfigInputDataAccess {
             cursor.close();
         }
         return sensorParamsList;
+ */
     }
     /**
      * @return JSON String list of sensors

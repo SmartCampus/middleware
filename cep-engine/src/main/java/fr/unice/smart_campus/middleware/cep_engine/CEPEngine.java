@@ -6,51 +6,128 @@ import akka.actor.Props;
 import akka.routing.FromConfig;
 import com.espertech.esper.client.*;
 import com.typesafe.config.ConfigFactory;
+import config.SensorParams;
 import fr.unice.smart_campus.middleware.akka.actor.Actor;
+import fr.unice.smart_campus.middleware.config.SensorsConfigInputDataAccess;
+import javassist.ClassPool;
+import javassist.CtClass;
+import sensor.SensorValueType;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CEPEngine {
 
     private EPRuntime cepRT;
 
-    public CEPEngine() {
+    public CEPEngine() throws Exception {
         this.init();
     }
 
-    private void init() {
-        //The Configuration is meant only as an initialization-time object.
-        Configuration cepConfig = new Configuration();
+    private void init() throws Exception {
+        // Retrieve sensors Param from ConfigDatabase
+        SensorsConfigInputDataAccess sensorsConfigInputDataAccess = new SensorsConfigInputDataAccess();
+        List<SensorParams> physicalSensors = sensorsConfigInputDataAccess.getAllPhysicalSensors();
+        List<SensorParams> virtualSensors = sensorsConfigInputDataAccess.getAllVirtualSensors();
 
-        /** registerEventType **/
-        cepConfig.addEventType("StockParkingSensor", ParkingSensorEvent.class.getName());
-        cepConfig.addEventType("StockRoomSensor", RoomSensorEvent.class.getName());
-        EPServiceProvider cep = EPServiceProviderManager.getProvider("myCEPEngine", cepConfig);
-
-        cepRT = cep.getEPRuntime();
-        EPAdministrator cepAdm = cep.getEPAdministrator();
-
-        /** Deploy Statement **/
-        EPStatement cepStatement1 = cepAdm.createEPL("" +
-                "select a, b \n" +
-                "  from StockRoomSensor.win:time(30 minutes) a , StockParkingSensor.win:time(30 minutes) b" +
-                " where a.name = b.name");
-        // TODO : event a la volée !!
-        // TODO : join dans les requetes !!
-        EPStatement cepStatementbis = cepAdm.createEPL("select * from StockRoomSensor");
-        EPStatement cepStatement2 = cepAdm.createEPL("select * from StockParkingSensor");
-
-        /** Creation of the system **/
+        // create Akka ActorSystem and actors
         ActorSystem system = ActorSystem.create("Simulation", ConfigFactory.load());
         ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(Actor.class)), "remotePool");
         system.actorOf(Props.create(CEPInterfaceActor.class, this), "CEPInterfaceActor");
 
-        CEPListener cepListener = new CEPListener(actorRef);
+        // Create the configuration of our CEPEngine
+        Configuration cepConfig = new Configuration();
+        // Create events class and register them in CEPEngine
+        ClassPool pool = ClassPool.getDefault();
 
-        cepStatement1.addListener(cepListener);
-        cepStatementbis.addListener(cepListener);
-        cepStatement2.addListener(cepListener);
+        for (SensorParams sensorParams : physicalSensors) {
+            String name = sensorParams.getName();
+            generateCepEvent(pool, name);
+            cepConfig.addEventType(name, name);
+        }
+
+        for (SensorParams sensorParams : virtualSensors) {
+            String name = sensorParams.getName();
+            generateCepEvent(pool, name);
+            cepConfig.addEventType(name, name);
+        }
+
+        // Create and store CEPListener. One CEPListener is created for every SensorValueType
+        Map<SensorValueType, CEPListener> cepListenerMap = new HashMap<SensorValueType, CEPListener>();
+        for (SensorValueType type : SensorValueType.values()) {
+            Class<? extends CEPListener> listenerClass = this.generateCepListener(pool, type.name() + "Listener");
+
+            CEPListener listener = listenerClass.getConstructor(ActorRef.class).newInstance(actorRef);
+            listener.setType(type);
+
+            cepListenerMap.put(type, listener);
+        }
+
+        // Create our CEP Provider and get the runtime CEP
+        EPServiceProvider cep = EPServiceProviderManager.getProvider("SmartCampusCepEngine", cepConfig);
+        cepRT = cep.getEPRuntime();
+
+
+        // Get the EPAdimistrator. We use it to declare our rules
+        EPAdministrator cepAdm = cep.getEPAdministrator();
+
+        for (SensorParams virtualSensorParam : virtualSensors) {
+            StringBuilder statement = new StringBuilder();
+
+            List<String> parentSensors = virtualSensorParam.getParentSensors();
+
+            String timeParams = ".win:time(30 minutes)";
+
+            StringBuilder selectString = new StringBuilder();
+            selectString.append(" select ");
+            selectString.append(" a0 ");
+
+            StringBuilder fromString = new StringBuilder();
+            fromString.append(" from ");
+            fromString.append(parentSensors.get(0));
+            fromString.append(timeParams);
+            fromString.append(" a0 ");
+
+            for (int i = 1; i < parentSensors.size(); i++) {
+                selectString.append(" , a" + i + " ");
+
+                fromString.append(" , ");
+                fromString.append(parentSensors.get(i));
+                fromString.append(timeParams);
+                fromString.append(" a" + i + " ");
+            }
+
+            statement.append(selectString.toString());
+            statement.append(fromString.toString());
+
+            // TODO get real SensorValueType from SensorParam
+            CEPListener listener = cepListenerMap.get(SensorValueType.DOUBLE);
+
+            System.out.println(statement.toString());
+
+            EPStatement cepStatement = cepAdm.createEPL(statement.toString());
+            cepStatement.addListener(listener);
+        }
     }
 
-    public void sendEvent(CEPEvent event){
+    private Class<? extends CEPEvent> generateCepEvent(ClassPool pool, String className) throws Exception {
+        CtClass cepEventSuperClass = pool.get(CEPEvent.class.getName());
+        CtClass cc = pool.makeClass(className, cepEventSuperClass);
+
+        // Generate class
+        return cc.toClass();
+    }
+
+    private Class<? extends CEPListener> generateCepListener(ClassPool pool, String className) throws Exception {
+        CtClass cepµListenerSuperClass = pool.get(CEPListener.class.getName());
+        CtClass cc = pool.makeClass(className, cepµListenerSuperClass);
+
+        // Generate class
+        return cc.toClass();
+    }
+
+    public void sendEvent(CEPEvent event) {
         System.out.println("Sending event to CEP : " + event.toString());
         cepRT.sendEvent(event);
     }

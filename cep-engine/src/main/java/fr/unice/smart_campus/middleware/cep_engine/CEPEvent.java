@@ -1,16 +1,17 @@
 package fr.unice.smart_campus.middleware.cep_engine;
 
-public abstract class CEPEvent {
+import java.io.Serializable;
+
+public abstract class CEPEvent implements Serializable {
+    public final long serialVersionUID = 1234567891922321327L;
+
     protected String value;
     protected String name;
-    protected String timeStamp;
+    protected long timeStamp;
 
-    public CEPEvent() {
-        this.value = "";
-        this.name = "";
-        this.timeStamp = "";
-    }
-    public CEPEvent(String value, String name, String timeStamp) {
+    public CEPEvent(){}
+
+    public CEPEvent(String value, String name, long timeStamp) {
         this.value = value;
         this.name = name;
         this.timeStamp = timeStamp;
@@ -21,7 +22,7 @@ public abstract class CEPEvent {
         return "{" +
                 "\"v\":\"" + value + "\"" +
                 ", \"n\":\"" + name + "\"" +
-                ", \"t\":\"" + timeStamp + "\"" +
+                ", \"t\":" + timeStamp + "" +
                 '}';
     }
 
@@ -33,7 +34,7 @@ public abstract class CEPEvent {
         return name;
     }
 
-    public String getTimeStamp() {
+    public long getTimeStamp() {
         return timeStamp;
     }
 
@@ -45,7 +46,7 @@ public abstract class CEPEvent {
         this.name = name;
     }
 
-    public void setTimeStamp(String timeStamp) {
+    public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
     }
 }

@@ -12,6 +12,8 @@ import sensor.SensorValueType;
 import sensor.TypedSensorValue;
 import sensor.TypedSensorValueList;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class ScriptEvaluatorActor extends UntypedActor {
         }
     }
 
-    protected SensorValue evaluateScript(List<TypedSensorValue> sensors) {
+    protected SensorValue evaluateScript(List<TypedSensorValue> sensors) throws Exception {
         SensorValue res = new SensorValue();
 
         //get sensors names
@@ -67,22 +69,23 @@ public class ScriptEvaluatorActor extends UntypedActor {
         return res;
     }
 
-    protected Object getValue(String value, SensorValueType type) {
+    protected Object getValue(String value, SensorValueType type) throws Exception{
         try {
-            switch (type) {
-                case INTEGER:
-                    return Integer.valueOf(value);
-                case DOUBLE:
-                    return Double.valueOf(value);
-                case BOOLEAN:
-                    return Boolean.valueOf(value);
-                case STRING:
-                default:
-                    return value;
-            }
-        } catch (Exception e) {
-            //TODO return un vrai truc :)
-            return value;
+            Method m = type.getClassType().getDeclaredMethod("valueOf", String.class);
+
+            return m.invoke(null, value);
+        } catch (NoSuchMethodException e) {
+            this.loggingAdapter.error("No such method exception. The object " + type.getClassType().getName() + " must have a static method valueOf(String) with public access");
+            this.loggingAdapter.error(e.getMessage());
+            throw new Exception(e);
+        } catch (InvocationTargetException e) {
+            this.loggingAdapter.error("Invocation target exception. The method valueOf threw an exception");
+            this.loggingAdapter.error(e.getMessage());
+            throw new Exception(e);
+        } catch (IllegalAccessException e) {
+            this.loggingAdapter.error("Illegal access exception. The object " + type.getClassType().getName() + " must have a static method valueOf(String) with public access");
+            this.loggingAdapter.error(e.getMessage());
+            throw new Exception(e);
         }
     }
 

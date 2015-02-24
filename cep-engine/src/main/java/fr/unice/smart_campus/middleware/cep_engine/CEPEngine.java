@@ -7,7 +7,7 @@ import akka.routing.FromConfig;
 import com.espertech.esper.client.*;
 import com.typesafe.config.ConfigFactory;
 import config.SensorParams;
-import fr.unice.smart_campus.middleware.akka.actor.Actor;
+import fr.unice.smart_campus.middleware.akka.actor.ScriptEvaluatorActor;
 import fr.unice.smart_campus.middleware.config.SensorsConfigInputDataAccess;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -33,7 +33,7 @@ public class CEPEngine {
 
         // create Akka ActorSystem and actors
         ActorSystem system = ActorSystem.create("Simulation", ConfigFactory.load());
-        ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(Actor.class)), "remotePool");
+        ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(ScriptEvaluatorActor.class)), "remotePool");
         system.actorOf(Props.create(CEPInterfaceActor.class, this), "CEPInterfaceActor");
 
         // Create the configuration of our CEPEngine

@@ -3,10 +3,12 @@ package fr.unice.smart_campus.middleware.cep_engine;
 import akka.actor.ActorRef;
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
-import com.espertech.esper.event.bean.BeanEventBean;
 import sensor.SensorValueType;
 import sensor.TypedSensorValue;
+import sensor.TypedSensorValueList;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,30 +28,22 @@ public abstract class CEPListener implements UpdateListener {
     }
 
     public void update(final EventBean[] newData, EventBean[] oldData) {
-        // TODO Recuperer N message
-        // TODO Creer objetAkka a envoyer
-//        System.out.println("Type : " + type);
-//        System.out.println("SizeNew : " + newData.length);
-//        System.out.println(newData[0].getUnderlying().toString());
+        TypedSensorValueList akkaMessage = new TypedSensorValueList();
 
+        List<TypedSensorValue> typedSensorValues = new ArrayList<TypedSensorValue>();
 
         Map map = (Map) newData[0].getUnderlying();
-        for(int i =0; i < map.size(); i ++){
-            CEPEvent event = (CEPEvent) ((EventBean)map.get("a"+i)).getUnderlying();
+        for (int i = 0; i < map.size(); i++) {
+            CEPEvent event = (CEPEvent) ((EventBean) map.get("a" + i)).getUnderlying();
             System.out.println(event);
+            TypedSensorValue typedSensorValue = new TypedSensorValue(event.getName(), event.getTimeStamp(), event.getValue(), this.type);
+
+            typedSensorValues.add(typedSensorValue);
         }
 
-//        for(Object o : map.keySet()){
-//            System.out.println("keyClass : "  + o.getClass());
-//            System.out.println("keyContent : "  + o.toString());
-//            System.out.println("valueClass : " + map.get(o).getClass());
-//            System.out.println("valueContent : " + map.get(o).toString());
-//
-//            System.out.println("lol " + ((BeanEventBean) map.get(o)).getUnderlying());
-//        }
+        akkaMessage.setSensorValues(typedSensorValues);
 
-        System.out.println("Send message to Akka actor : ");
-// TODO       SensorValue sensorValueToSend = new SensorValue(message.getName(), Long.parseLong(message.getTimeStamp()),message.getValue());
-// TODO      this.actorRef.tell(sensorValueToSend, ActorRef.noSender());
+        System.out.println("Send message to Akka actor : " + akkaMessage);
+        this.actorRef.tell(akkaMessage, ActorRef.noSender());
     }
 }

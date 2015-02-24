@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import sensor.SensorValueType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class SensorParams {
 
     public static final String NAME_COLUMN="name";
     public static final String KIND_COLUMN="kind";
+    public static final String VALUETYPE_COLUMN="valueType";
     public static final String FREQUENCY_COLUMN="frequency";
     public static final String SENSORTYPE_COLUMN="sensorType";
     public static final String SCRIPT_COLUMN="script";
@@ -24,6 +26,7 @@ public class SensorParams {
 
     private String name, kind, script;
     private SensorType sensorType;
+    private SensorValueType valueType;
     private double frequency;
     private List<String> parentSensors;
 
@@ -35,12 +38,13 @@ public class SensorParams {
         this.kind= (String) o.get(KIND_COLUMN);
         this.frequency=(Double) o.get(FREQUENCY_COLUMN);
         this.sensorType =SensorType.valueOf(((String)o.get(SENSORTYPE_COLUMN)).toUpperCase());
+        this.valueType =SensorValueType.valueOf(((String) o.get(VALUETYPE_COLUMN)).toUpperCase());
         this.script=(String) o.get(SCRIPT_COLUMN);
         BasicDBList list=(BasicDBList) o.get(PARENTS_COLUMN);
         this.parentSensors=new ArrayList<String>();
         if(list!=null){
             for(Object obj:list){
-                parentSensors.add((String)obj);
+                parentSensors.add(obj.toString());
             }
         }
 
@@ -97,17 +101,26 @@ public class SensorParams {
         return frequency;
     }
 
-    public void setFrequency(int frequency) {
+    public void setFrequency(double frequency) {
         this.frequency = frequency;
     }
 
-    @JsonProperty
+    @JsonProperty("parents")
     public List<String> getParentSensors() {
         return parentSensors;
     }
 
     public void setParentSensors(List<String> parentSensors) {
         this.parentSensors = parentSensors;
+    }
+
+    @JsonProperty
+    public SensorValueType getValueType() {
+        return valueType;
+    }
+
+    public void setValueType(SensorValueType valueType) {
+        this.valueType = valueType;
     }
 
     @Override
@@ -126,7 +139,7 @@ public class SensorParams {
         BasicDBList parents=new BasicDBList();
         if(parentSensors!=null){
             for(String sensor: parentSensors){
-                parents.add(new BasicDBObject("name",sensor));
+                parents.add(sensor);
             }
         }
         BasicDBObject doc = new BasicDBObject(SensorParams.NAME_COLUMN,name)
@@ -134,6 +147,7 @@ public class SensorParams {
                 .append(SensorParams.FREQUENCY_COLUMN, frequency)
                 .append(SensorParams.SCRIPT_COLUMN, script)
                 .append(SensorParams.SENSORTYPE_COLUMN, sensorType.name().toLowerCase())
+                .append(SensorParams.VALUETYPE_COLUMN, valueType.name().toLowerCase())
                 .append(SensorParams.PARENTS_COLUMN, parents);
         return doc;
     }

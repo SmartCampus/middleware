@@ -15,7 +15,6 @@ public class SensorsDataOutputDataAccess {
 
 	private Connection connection;
 
-
 	/**
 	 * Create a new connection to the database
 	 */

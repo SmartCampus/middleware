@@ -2,9 +2,9 @@ package fr.unice.smart_campus.middleware.akka.actor;
 
 import akka.actor.UntypedActor;
 
-public class Actor extends UntypedActor {
+public class ScriptEvaluatorActor extends UntypedActor {
 
-    public Actor() {
+    public ScriptEvaluatorActor() {
     }
 
     @Override

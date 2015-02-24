@@ -51,11 +51,12 @@ public class SensorParams {
 
 
     }
-    public SensorParams(String name, String kind, String script, SensorType sensorType, int frequency, List<String> parentSensors) {
+    public SensorParams(String name, String kind, String script, SensorType sensorType, SensorValueType valueType, double frequency, List<String> parentSensors) {
         this.name = name;
         this.kind = kind;
         this.script = script;
         this.sensorType = sensorType;
+        this.valueType = valueType;
         this.frequency = frequency;
         this.parentSensors = parentSensors;
     }

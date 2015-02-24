@@ -7,12 +7,15 @@ import akka.routing.FromConfig;
 import com.espertech.esper.client.*;
 import com.typesafe.config.ConfigFactory;
 import config.SensorParams;
+import config.SensorType;
 import fr.unice.smart_campus.middleware.akka.actor.ScriptEvaluatorActor;
 import fr.unice.smart_campus.middleware.config.SensorsConfigInputDataAccess;
+import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import sensor.SensorValueType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +34,19 @@ public class CEPEngine {
         List<SensorParams> physicalSensors = sensorsConfigInputDataAccess.getAllPhysicalSensors();
         List<SensorParams> virtualSensors = sensorsConfigInputDataAccess.getAllVirtualSensors();
 
+        // TODO To delete
+//        List<SensorParams> physicalSensors = new ArrayList<SensorParams>();
+//        physicalSensors.add(new SensorParams("TMP_333", "", "", SensorType.PHYSICAL, SensorValueType.DOUBLE, 2, null));
+//        physicalSensors.add(new SensorParams("TMP_334", "", "", SensorType.PHYSICAL, SensorValueType.DOUBLE, 2, null));
+//
+//        List<String> parents = new ArrayList<String>();
+//        parents.add("TMP_333");
+//        parents.add("TMP_334");
+//
+//        List<SensorParams> virtualSensors = new ArrayList<SensorParams>();
+//        virtualSensors.add(new SensorParams("CV1", "", "", SensorType.VIRTUAL_FILTER, SensorValueType.DOUBLE, 2, parents));
+
+
         // create Akka ActorSystem and actors
         ActorSystem system = ActorSystem.create("Simulation", ConfigFactory.load());
         ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(ScriptEvaluatorActor.class)), "remotePool");
@@ -40,6 +56,7 @@ public class CEPEngine {
         Configuration cepConfig = new Configuration();
         // Create events class and register them in CEPEngine
         ClassPool pool = ClassPool.getDefault();
+        pool.insertClassPath(new ClassClassPath(CEPEvent.class));
 
         for (SensorParams sensorParams : physicalSensors) {
             String name = sensorParams.getName();
@@ -101,8 +118,7 @@ public class CEPEngine {
             statement.append(selectString.toString());
             statement.append(fromString.toString());
 
-            // TODO get real SensorValueType from SensorParam
-            CEPListener listener = cepListenerMap.get(SensorValueType.DOUBLE);
+            CEPListener listener = cepListenerMap.get(virtualSensorParam.getValueType());
 
             System.out.println(statement.toString());
 

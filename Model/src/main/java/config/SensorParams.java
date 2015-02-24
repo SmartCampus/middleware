@@ -153,4 +153,15 @@ public class SensorParams {
         return doc;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SensorParams that = (SensorParams) o;
+
+        if (!name.equals(that.name)) return false;
+
+        return true;
+    }
 }

@@ -117,7 +117,23 @@ public class CEPEngine {
             statement.append(selectString.toString());
             statement.append(fromString.toString());
 
-            CEPListener listener = cepListenerMap.get(virtualSensorParam.getValueType());
+            SensorParams s = new SensorParams();
+            s.setName(parentSensors.get(0));
+
+            int index = physicalSensors.indexOf(s);
+            SensorValueType type;
+            if(index==-1){
+                index = virtualSensors.indexOf(s);
+                if(index==-1){
+                    System.out.println("Error!!! Parent Sensor("+ parentSensors.get(0) +") not found for vitualSensor : " + virtualSensorParam.getName());
+                    continue;
+                }
+                type = virtualSensors.get(index).getValueType();
+            }else {
+                type = physicalSensors.get(index).getValueType();
+            }
+
+            CEPListener listener = cepListenerMap.get(type);
 
             System.out.println(statement.toString());
 

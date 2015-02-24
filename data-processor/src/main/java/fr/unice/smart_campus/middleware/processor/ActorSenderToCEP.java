@@ -4,6 +4,7 @@ import akka.actor.*;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import com.typesafe.config.ConfigFactory;
+import sensor.SensorValue;
 
 import javax.jms.TextMessage;
 
@@ -16,8 +17,8 @@ public class ActorSenderToCEP extends UntypedActor{
 
     @Override
     public void onReceive(Object message) throws Exception {
-        if (message instanceof String) {
-            this.sendEventToCEPEngine((String)message);
+        if (message instanceof SensorValue) {
+            this.sendEventToCEPEngine((SensorValue)message);
         }
     }
 
@@ -26,12 +27,13 @@ public class ActorSenderToCEP extends UntypedActor{
      * to the CEP Engine to allowed the process the data.
      * @param messageToSend
      */
-    private void sendEventToCEPEngine(String messageToSend){
+    private void sendEventToCEPEngine(SensorValue messageToSend){
         this.loggingAdapter.info("Send event to CEP Interface Actor : " + messageToSend);
         ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
         actorSelection.tell(messageToSend, this.sender());
     }
-//
+
+// TODO To delete
 //    public static void main(String[] args) {
 //        ActorSystem actorSystem = ActorSystem.create("ActorSystemFactoryMessageProcessing", ConfigFactory.load());
 //        ActorRef actorRef = actorSystem.actorOf(Props.create(ActorSenderToCEP.class), "ActorSenderToCEP");

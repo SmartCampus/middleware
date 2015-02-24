@@ -1,5 +1,7 @@
 package sensor;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 /**
@@ -26,14 +28,17 @@ public class SensorValue implements Serializable{
         return serialVersionUID;
     }
 
+    @JsonProperty("n")
     public String getName() {
         return name;
     }
 
+    @JsonProperty("t")
     public long getTimestamp() {
         return timestamp;
     }
 
+    @JsonProperty("v")
     public String getValue() {
         return value;
     }

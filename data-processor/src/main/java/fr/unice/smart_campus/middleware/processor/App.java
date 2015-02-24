@@ -1,6 +1,9 @@
 package fr.unice.smart_campus.middleware.processor;
 
 import akka.actor.*;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.typesafe.config.ConfigFactory;
 
 import fr.unice.smart_campus.middleware.database.SensorsDataOutputDataAccess;
@@ -10,11 +13,13 @@ import akka.actor.ActorRef;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import sensor.SensorValue;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
+import java.io.IOException;
 
 
 /**
@@ -58,13 +63,23 @@ public class App implements MessageListener {
                 String time = jsonObject.getString("t");
                 String value = jsonObject.getString("v");
 
+                ObjectMapper mapper = new ObjectMapper();
+
+                SensorValue sensorValue = mapper.readValue(jsonString, SensorValue.class);
+
                 // creation of the actor that has to send an event to the CEP Engine to allowed the process the data.
-                this.actorRef.tell(jsonObject.toString(),ActorRef.noSender());
+                this.actorRef.tell(sensorValue,ActorRef.noSender());
 
                 // Save sensor data into the database
                 sensorsDataOutputDataAccess.saveSensorData(name, time, value);
 
             } catch (JMSException e) {
+                e.printStackTrace();
+            } catch (JsonMappingException e) {
+                e.printStackTrace();
+            } catch (JsonParseException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

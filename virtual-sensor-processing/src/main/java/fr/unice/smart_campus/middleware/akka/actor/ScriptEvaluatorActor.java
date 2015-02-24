@@ -58,11 +58,15 @@ public class ScriptEvaluatorActor extends UntypedActor {
 
         String script = sensor.getScript();
 
+        loggingAdapter.error(script);
+
         GroovyShell shell = new GroovyShell();
         //Set variable for each sensor
         for (TypedSensorValue s : sensors) {
             shell.setVariable(s.getName(), getValue(s.getValue(), s.getType()));
         }
+
+        loggingAdapter.error("Evaluate !");
 
         //evaluate script
         String resScript = shell.evaluate(script).toString();

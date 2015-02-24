@@ -19,6 +19,7 @@ public class ConfigSensorService {
 
     @PUT
     @Produces("text/plain")
+    @Consumes("application/json")
     @Path("/sensors_params")
     public boolean addSensor(SensorParams sensorParams){
         return sensorsConfigOutputDataAccess.saveSensorParams(sensorParams);
@@ -40,6 +41,13 @@ public class ConfigSensorService {
     @Produces("application/json")
     @Path("/sensors_params/virtuals")
     public List<SensorParams> getVirtualSensors(){
-        return sensorsConfigInputDataAccess.getAllPhysicalSensors();
+        return sensorsConfigInputDataAccess.getAllVirtualSensors();
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("/sensors_params/virtual")
+    public SensorParams getSensorFormParentsSensors(@QueryParam("parents") final List<String> sensors){
+        return sensorsConfigInputDataAccess.getSensorFormParentsSensors(sensors);
     }
 }

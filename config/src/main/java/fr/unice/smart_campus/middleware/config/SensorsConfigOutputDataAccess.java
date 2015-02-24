@@ -52,12 +52,10 @@ public class SensorsConfigOutputDataAccess {
      * @return true if it's ok
      */
     public boolean check(SensorParams sensorParams){
-
         boolean isPhysical= (SensorType.PHYSICAL.equals(sensorParams.getSensorType()) && (sensorParams.getParentSensors()==null || sensorParams.getParentSensors().size()==0));
         boolean isFilter=(SensorType.VIRTUAL_FILTER.equals(sensorParams.getSensorType()) && sensorParams.getParentSensors().size()==1);
         boolean isComposite = (SensorType.VIRTUAL_COMPOSITE.equals(sensorParams.getSensorType()) && sensorParams.getParentSensors().size()>=2);
         if(!isComposite && !isFilter && !isPhysical){
-            System.out.println("LAL");
             return false;
         }
         if(isPhysical){

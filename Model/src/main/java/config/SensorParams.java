@@ -40,7 +40,7 @@ public class SensorParams {
         this.parentSensors=new ArrayList<String>();
         if(list!=null){
             for(Object obj:list){
-                parentSensors.add((String)obj);
+                parentSensors.add(obj.toString());
             }
         }
 
@@ -101,7 +101,7 @@ public class SensorParams {
         this.frequency = frequency;
     }
 
-    @JsonProperty
+    @JsonProperty("parents")
     public List<String> getParentSensors() {
         return parentSensors;
     }
@@ -126,7 +126,7 @@ public class SensorParams {
         BasicDBList parents=new BasicDBList();
         if(parentSensors!=null){
             for(String sensor: parentSensors){
-                parents.add(new BasicDBObject("name",sensor));
+                parents.add(sensor);
             }
         }
         BasicDBObject doc = new BasicDBObject(SensorParams.NAME_COLUMN,name)

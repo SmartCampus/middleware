@@ -40,27 +40,15 @@ public class SensorsConfigInputDataAccess {
         }
     }
 
-    public SensorParams getSensorFormParentsSensors(List<String> sensorParams){
-        /**List<String> parentsSensors=new ArrayList<String>();
-        parentsSensors.add("TEMP_443");
-        parentsSensors.add("TEMP_444");
-        SensorParams sensorParams1=new SensorParams("CV1","temp","int B=3975; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;", SensorType.VIRTUAL_COMPOSITE,20,parentsSensors);
-        SensorParams sensorParams2=new SensorParams("CV2","temp","int B=124; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;", SensorType.VIRTUAL_COMPOSITE,20,parentsSensors);
-        List<SensorParams> sensorParamses=new ArrayList<SensorParams>();
-        sensorParamses.add(sensorParams1);
-        //sensorParamses.add(sensorParams2);
-        return sensorParams1;*/
-        BasicDBList parents=new BasicDBList();
-        if(parents!=null){
-            for(String sensor: sensorParams){
-                parents.add(new BasicDBObject("name",sensor));
-            }
-        }
-        BasicDBObject query = new BasicDBObject(SensorParams.PARENTS_COLUMN,parents);
-        Cursor cursor = coll.find(query);
+    public SensorParams getSensorFormParentsSensors(List<String> sensorParamsList){
+        Cursor cursor = coll.find();
         try {
             while(cursor.hasNext()) {
-                return new SensorParams(cursor.next());
+                SensorParams sensorParams=new SensorParams(cursor.next());
+                if(sensorParams.getParentSensors().containsAll(sensorParamsList) && sensorParamsList.containsAll(sensorParams.getParentSensors())){
+                    return sensorParams;
+                }
+
             }
         } finally {
             cursor.close();
@@ -69,13 +57,7 @@ public class SensorsConfigInputDataAccess {
     }
 
     public List<SensorParams> getAllPhysicalSensors(){
-        /**List<String> parentsSensors=new ArrayList<String>();
-        SensorParams sensorParams1=new SensorParams("TEMP_443","temp","", SensorType.PHYSICAL,20,parentsSensors);
-        SensorParams sensorParams2=new SensorParams("TEMP_444","temp","", SensorType.PHYSICAL,20,parentsSensors);
-        List<SensorParams> sensorParamses=new ArrayList<SensorParams>();
-        sensorParamses.add(sensorParams1);
-        sensorParamses.add(sensorParams2);
-        return sensorParamses;*/
+
         List<SensorParams> sensorParamsList=new ArrayList<SensorParams>();
         BasicDBObject query = new BasicDBObject(SensorParams.SENSORTYPE_COLUMN,SensorType.PHYSICAL.name().toLowerCase());
         Cursor cursor = coll.find(query);
@@ -90,15 +72,6 @@ public class SensorsConfigInputDataAccess {
         return sensorParamsList;
     }
     public List<SensorParams> getAllVirtualSensors(){
-        /**List<String> parentsSensors=new ArrayList<String>();
-        parentsSensors.add("TEMP_443");
-        parentsSensors.add("TEMP_444");
-        SensorParams sensorParams1=new SensorParams("CV1","temp","int B=3975; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;", SensorType.VIRTUAL_COMPOSITE,20,parentsSensors);
-        SensorParams sensorParams2=new SensorParams("CV2","temp","int B=124; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;", SensorType.VIRTUAL_COMPOSITE,20,parentsSensors);
-        List<SensorParams> sensorParamses=new ArrayList<SensorParams>();
-        sensorParamses.add(sensorParams1);
-        sensorParamses.add(sensorParams2);
-        return sensorParamses;*/
 
         List<SensorParams> sensorParamsList=new ArrayList<SensorParams>();
         BasicDBObject query = new BasicDBObject(SensorParams.SENSORTYPE_COLUMN,SensorType.VIRTUAL_COMPOSITE.name().toLowerCase());
@@ -130,16 +103,8 @@ public class SensorsConfigInputDataAccess {
     public SensorParams getSensor(String idSensor) {
         BasicDBObject query = new BasicDBObject(SensorParams.NAME_COLUMN,idSensor);
 
-        Cursor cursor = coll.find(query);
-
-        try {
-            while(cursor.hasNext()) {
-                return new SensorParams(cursor.next());
-            }
-        } finally {
-            cursor.close();
-        }
-        return null;
+        DBObject obj = coll.findOne(query);
+        return new SensorParams(obj);
 
     }
 }

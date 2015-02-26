@@ -6,16 +6,14 @@ import akka.actor.Props;
 import akka.routing.FromConfig;
 import com.espertech.esper.client.*;
 import com.typesafe.config.ConfigFactory;
-import config.SensorParams;
-import config.SensorType;
+import fr.unice.smart_campus.middleware.model.config.SensorParams;
 import fr.unice.smart_campus.middleware.akka.actor.ScriptEvaluatorActor;
 import fr.unice.smart_campus.middleware.config.SensorsConfigInputDataAccess;
 import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
-import sensor.SensorValueType;
+import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

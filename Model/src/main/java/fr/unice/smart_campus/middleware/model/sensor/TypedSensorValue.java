@@ -1,4 +1,4 @@
-package sensor;
+package fr.unice.smart_campus.middleware.model.sensor;
 
 public class TypedSensorValue extends SensorValue {
 

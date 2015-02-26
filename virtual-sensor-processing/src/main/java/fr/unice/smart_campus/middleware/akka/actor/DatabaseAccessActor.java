@@ -1,11 +1,10 @@
 package fr.unice.smart_campus.middleware.akka.actor;
 
-import sensor.SensorValue;
+import fr.unice.smart_campus.middleware.model.sensor.SensorValue;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import fr.unice.smart_campus.middleware.database.SensorsDataOutputDataAccess;
-import org.json.JSONObject;
 
 /**
  * DatabaseAccessActor is an Akka Actor.

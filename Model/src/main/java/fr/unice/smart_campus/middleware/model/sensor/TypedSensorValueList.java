@@ -1,4 +1,4 @@
-package sensor;
+package fr.unice.smart_campus.middleware.model.sensor;
 
 import java.io.Serializable;
 import java.util.ArrayList;

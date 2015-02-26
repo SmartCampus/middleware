@@ -1,10 +1,10 @@
-package config;
+package fr.unice.smart_campus.middleware.model.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import sensor.SensorValueType;
+import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
 
 import java.util.ArrayList;
 import java.util.List;

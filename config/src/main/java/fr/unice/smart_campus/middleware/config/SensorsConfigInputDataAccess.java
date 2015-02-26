@@ -1,22 +1,11 @@
 package fr.unice.smart_campus.middleware.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.*;
-import config.SensorParams;
-import config.SensorType;
+import fr.unice.smart_campus.middleware.model.config.SensorParams;
+import fr.unice.smart_campus.middleware.model.config.SensorType;
 
 
-import javax.net.ssl.*;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.UnknownHostException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 

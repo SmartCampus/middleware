@@ -1,7 +1,7 @@
 package fr.unice.smart_campus.middleware.config.config;
 
-import config.SensorParams;
-import config.SensorType;
+import fr.unice.smart_campus.middleware.model.config.SensorParams;
+import fr.unice.smart_campus.middleware.model.config.SensorType;
 import fr.unice.smart_campus.middleware.config.SensorsConfigOutputDataAccess;
 
 import junit.framework.TestCase;

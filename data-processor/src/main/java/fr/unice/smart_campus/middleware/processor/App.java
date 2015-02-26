@@ -13,7 +13,7 @@ import akka.actor.ActorRef;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import sensor.SensorValue;
+import fr.unice.smart_campus.middleware.model.sensor.SensorValue;
 
 import javax.jms.JMSException;
 import javax.jms.Message;

@@ -1,4 +1,4 @@
-package sensor;
+package fr.unice.smart_campus.middleware.model.sensor;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

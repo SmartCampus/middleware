@@ -3,10 +3,7 @@ package fr.unice.smart_campus.middleware.processor;
 import akka.actor.*;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import com.typesafe.config.ConfigFactory;
-import sensor.SensorValue;
-
-import javax.jms.TextMessage;
+import fr.unice.smart_campus.middleware.model.sensor.SensorValue;
 
 public class ActorSenderToCEP extends UntypedActor{
     private LoggingAdapter loggingAdapter;

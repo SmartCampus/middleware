@@ -1,21 +1,8 @@
 package fr.unice.smart_campus.middleware.virtual_sensor_processing;
 
 import akka.actor.*;
-import akka.dispatch.Dispatchers;
-import akka.dispatch.Mailboxes;
-import akka.event.EventStream;
-import akka.event.LoggingAdapter;
 import com.typesafe.config.ConfigFactory;
 import fr.unice.smart_campus.middleware.akka.actor.DatabaseAccessActor;
-import fr.unice.smart_campus.middleware.akka.actor.ScriptEvaluatorActor;
-import groovy.lang.GroovyShell;
-import scala.Function0;
-import scala.collection.*;
-import scala.concurrent.ExecutionContextExecutor;
-import scala.concurrent.duration.Duration;
-import sensor.SensorValueType;
-import sensor.TypedSensorValue;
-import sensor.TypedSensorValueList;
 
 public class Main {
     public static void main(String[] args) {

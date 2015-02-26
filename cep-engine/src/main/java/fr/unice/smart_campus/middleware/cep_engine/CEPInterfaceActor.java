@@ -3,7 +3,7 @@ package fr.unice.smart_campus.middleware.cep_engine;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import sensor.SensorValue;
+import fr.unice.smart_campus.middleware.model.sensor.SensorValue;
 
 public class CEPInterfaceActor extends UntypedActor {
     private LoggingAdapter loggingAdapter;

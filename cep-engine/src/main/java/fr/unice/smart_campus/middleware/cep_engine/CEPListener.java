@@ -44,6 +44,6 @@ public abstract class CEPListener implements UpdateListener {
         akkaMessage.setSensorValues(typedSensorValues);
 
         System.out.println("Send message to Akka actor : " + akkaMessage);
-        //this.actorRef.tell(akkaMessage, ActorRef.noSender());
+        this.actorRef.tell(akkaMessage, ActorRef.noSender());
     }
 }

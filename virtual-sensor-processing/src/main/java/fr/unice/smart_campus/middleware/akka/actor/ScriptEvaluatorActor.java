@@ -32,6 +32,8 @@ public class ScriptEvaluatorActor extends UntypedActor {
         if (message instanceof TypedSensorValueList) {
             TypedSensorValueList sensors = (TypedSensorValueList) message;
 
+            this.loggingAdapter.info(message.toString());
+
             SensorValue response = evaluateScript(sensors.getSensorValues());
 
             ActorSelection databaseAccess = this.getContext().actorSelection("akka://ActorSystemFactory/user/DatabaseAccessActor");
@@ -56,11 +58,18 @@ public class ScriptEvaluatorActor extends UntypedActor {
 
         String script = sensor.getScript();
 
+        loggingAdapter.error(script);
+
         GroovyShell shell = new GroovyShell();
         //Set variable for each sensor
         for (TypedSensorValue s : sensors) {
+            Object o = getValue(s.getValue(), s.getType());
+            loggingAdapter.error("ClassType : " + o.getClass());
+            loggingAdapter.error("getValue result " + o);
             shell.setVariable(s.getName(), getValue(s.getValue(), s.getType()));
         }
+
+        loggingAdapter.error("Evaluate !");
 
         //evaluate script
         String resScript = shell.evaluate(script).toString();

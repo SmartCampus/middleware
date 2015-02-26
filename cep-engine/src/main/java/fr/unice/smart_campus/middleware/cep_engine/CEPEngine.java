@@ -48,7 +48,6 @@ public class CEPEngine {
         // create Akka ActorSystem and actors
         ActorSystem system = ActorSystem.create("Simulation", ConfigFactory.load());
         ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(ScriptEvaluatorActor.class)), "remotePool");
-        system.actorOf(Props.create(CEPInterfaceActor.class, this), "CEPInterfaceActor");
 
         // Create the configuration of our CEPEngine
         Configuration cepConfig = new Configuration();
@@ -116,13 +115,31 @@ public class CEPEngine {
             statement.append(selectString.toString());
             statement.append(fromString.toString());
 
-            CEPListener listener = cepListenerMap.get(virtualSensorParam.getValueType());
+            SensorParams s = new SensorParams();
+            s.setName(parentSensors.get(0));
+
+            int index = physicalSensors.indexOf(s);
+            SensorValueType type;
+            if(index==-1){
+                index = virtualSensors.indexOf(s);
+                if(index==-1){
+                    System.out.println("Error!!! Parent Sensor("+ parentSensors.get(0) +") not found for vitualSensor : " + virtualSensorParam.getName());
+                    continue;
+                }
+                type = virtualSensors.get(index).getValueType();
+            }else {
+                type = physicalSensors.get(index).getValueType();
+            }
+
+            CEPListener listener = cepListenerMap.get(type);
 
             System.out.println(statement.toString());
 
             EPStatement cepStatement = cepAdm.createEPL(statement.toString());
             cepStatement.addListener(listener);
         }
+
+        system.actorOf(Props.create(CEPInterfaceActor.class, this), "CEPInterfaceActor");
     }
 
     private Class<? extends CEPEvent> generateCepEvent(ClassPool pool, String className) throws Exception {

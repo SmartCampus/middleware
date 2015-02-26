@@ -16,4 +16,12 @@ public class TypedSensorValue extends SensorValue {
     public void setType(SensorValueType type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "TypedSensorValue{" +
+                super.toString() +
+                "type=" + type +
+                '}';
+    }
 }

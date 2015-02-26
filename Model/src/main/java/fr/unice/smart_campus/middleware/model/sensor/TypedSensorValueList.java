@@ -24,4 +24,15 @@ public class TypedSensorValueList implements Serializable {
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
+
+    @Override
+    public String toString() {
+        String res = "";
+        for (TypedSensorValue t : sensorValues) {
+            res += "{\n" + t.toString() + "\n}\n";
+        }
+        return "TypedSensorValueList{" +
+                res +
+                '}';
+    }
 }

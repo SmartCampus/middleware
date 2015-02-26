@@ -12,6 +12,12 @@ sleep 3
 screen -S MessageQueue -d -m ./message-queue-script.sh
 echo 'Starting Message Queue ...'
 sleep 10
+screen -S virtualSensorProcessing -d -m ./virtual-sensor-processing-script.sh
+echo 'Starting virtual Sensor Processing  ...'
+sleep 5
+screen -S cepEngine -d -m ./cep-engine-script.sh
+echo 'Starting CEP Engine ...'
+sleep 20
 screen -S Collector -d -m ./collector-script.sh
 echo 'Starting Collector ...'
 screen -S DataProcessor -d -m ./data-processor-script.sh
@@ -21,8 +27,4 @@ echo 'Starting Data API ...'
 screen -S ConfigAPI -d -m ./configAPI-script.sh
 screen -S ConfigJavaAPI -d -m ./config-script.sh
 echo 'Starting Config API ...'
-screen -S cepEngine -d -m ./cep-engine-script.sh
-echo 'Starting CEP Engine ...'
-screen -S virtualSensorProcessing -d -m ./virtual-sensor-processing-script.sh
-echo 'Starting virtual Sensor Processing  ...'
 sleep 5

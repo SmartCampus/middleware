@@ -1,4 +1,4 @@
-package sensor;
+package fr.unice.smart_campus.middleware.model.sensor;
 
 public enum SensorValueType {
     FLOAT(Float.class), SHORT(Short.class), LONG(Long.class),

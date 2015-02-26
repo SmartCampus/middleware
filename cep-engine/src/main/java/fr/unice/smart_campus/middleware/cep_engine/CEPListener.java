@@ -3,9 +3,9 @@ package fr.unice.smart_campus.middleware.cep_engine;
 import akka.actor.ActorRef;
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
-import sensor.SensorValueType;
-import sensor.TypedSensorValue;
-import sensor.TypedSensorValueList;
+import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
+import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValue;
+import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValueList;
 
 import java.util.ArrayList;
 import java.util.List;

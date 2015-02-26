@@ -4,13 +4,13 @@ import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import config.SensorParams;
+import fr.unice.smart_campus.middleware.model.config.SensorParams;
 import fr.unice.smart_campus.middleware.config.SensorsConfigInputDataAccess;
 import groovy.lang.GroovyShell;
-import sensor.SensorValue;
-import sensor.SensorValueType;
-import sensor.TypedSensorValue;
-import sensor.TypedSensorValueList;
+import fr.unice.smart_campus.middleware.model.sensor.SensorValue;
+import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
+import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValue;
+import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValueList;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

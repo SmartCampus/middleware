@@ -1,8 +1,8 @@
 package fr.unice.smart_campus.middleware.config;
 
 import com.mongodb.*;
-import config.SensorParams;
-import config.SensorType;
+import fr.unice.smart_campus.middleware.model.config.SensorParams;
+import fr.unice.smart_campus.middleware.model.config.SensorType;
 
 
 import java.net.UnknownHostException;

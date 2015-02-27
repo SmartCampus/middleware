@@ -20,11 +20,10 @@ import java.util.List;
 public class ScriptEvaluatorActor extends UntypedActor {
 
     private LoggingAdapter loggingAdapter;
-    private SensorsConfigInputDataAccess sensorConfigAdapter;
+//    private SensorsConfigInputDataAccess sensorConfigAdapter;
 
     public ScriptEvaluatorActor() {
         this.loggingAdapter = Logging.getLogger(this.context().system(), this);
-        this.sensorConfigAdapter = new SensorsConfigInputDataAccess();
     }
 
     @Override
@@ -34,7 +33,7 @@ public class ScriptEvaluatorActor extends UntypedActor {
 
             this.loggingAdapter.info(message.toString());
 
-            SensorValue response = evaluateScript(sensors.getSensorValues());
+            SensorValue response = evaluateScript(sensors);
 
             ActorSelection databaseAccess = this.getContext().actorSelection("akka://ActorSystemFactory/user/DatabaseAccessActor");
             databaseAccess.tell(response, this.self());
@@ -44,19 +43,14 @@ public class ScriptEvaluatorActor extends UntypedActor {
         }
     }
 
-    protected SensorValue evaluateScript(List<TypedSensorValue> sensors) throws Exception {
+    protected SensorValue evaluateScript(TypedSensorValueList typedSensorValueList) throws Exception {
         SensorValue res = new SensorValue();
+        List<TypedSensorValue> sensors = typedSensorValueList.getSensorValues();
 
-        //get sensors names
-        List<String> sensorNames = new LinkedList<String>();
-        for (SensorValue s : sensors)
-            sensorNames.add(s.getName());
-
-        SensorParams sensor = sensorConfigAdapter.getSensorFormParentsSensors(sensorNames);
-        res.name = sensor.getName();
+        res.name = typedSensorValueList.getVirtualSensorName();
         res.timestamp = getMaxTimestamp(sensors);
 
-        String script = sensor.getScript();
+        String script = typedSensorValueList.getScript();
 
         loggingAdapter.error(script);
 

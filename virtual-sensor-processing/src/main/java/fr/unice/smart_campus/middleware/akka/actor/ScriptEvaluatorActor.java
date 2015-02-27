@@ -20,11 +20,11 @@ import java.util.List;
 public class ScriptEvaluatorActor extends UntypedActor {
 
     private LoggingAdapter loggingAdapter;
-//    private SensorsConfigInputDataAccess sensorConfigAdapter;
+    private SensorsConfigInputDataAccess sensorConfigAdapter;
 
     public ScriptEvaluatorActor() {
         this.loggingAdapter = Logging.getLogger(this.context().system(), this);
-//        this.sensorConfigAdapter = new SensorsConfigInputDataAccess();
+        this.sensorConfigAdapter = new SensorsConfigInputDataAccess();
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ScriptEvaluatorActor extends UntypedActor {
         for (SensorValue s : sensors)
             sensorNames.add(s.getName());
 
-//        SensorParams sensor = sensorConfigAdapter.getSensorFormParentsSensors(sensorNames);
+        SensorParams sensor = sensorConfigAdapter.getSensorFormParentsSensors(sensorNames);
         res.name = sensor.getName();
         res.timestamp = getMaxTimestamp(sensors);
 

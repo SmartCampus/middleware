@@ -5,15 +5,22 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.FromConfig;
 import com.espertech.esper.client.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.typesafe.config.ConfigFactory;
 import fr.unice.smart_campus.middleware.model.config.SensorParams;
 import fr.unice.smart_campus.middleware.akka.actor.ScriptEvaluatorActor;
-import fr.unice.smart_campus.middleware.config.SensorsConfigInputDataAccess;
 import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,16 +28,35 @@ import java.util.Map;
 public class CEPEngine {
 
     private EPRuntime cepRT;
+    private List<SensorParams> physicalSensors;
+    private List<SensorParams> virtualSensors;
+
+    private static String ALL_PHYSICAL = "http://52.16.33.142:8082/config/sensors_params/physicals/names";
+    private static String ALL_VIRTUAL = "http://52.16.33.142:8082/config/sensors_params/virtuals";
 
     public CEPEngine() throws Exception {
+        this.physicalSensors = new ArrayList<SensorParams>();
+        this.virtualSensors = new ArrayList<SensorParams>();
+
         this.init();
     }
 
+    private void getAllSensorsDefinition() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        // Get all physical
+        String allPhysicalJson = this.getHttpResult(ALL_PHYSICAL);
+        this.physicalSensors = mapper.readValue(allPhysicalJson, new TypeReference<List<SensorParams>>(){});
+
+        // Get all virtual
+        String allvirtualJson = this.getHttpResult(ALL_VIRTUAL);
+        this.virtualSensors = mapper.readValue(allvirtualJson, new TypeReference<List<SensorParams>>(){});
+    }
+
+
     private void init() throws Exception {
         // Retrieve sensors Param from ConfigDatabase
-        SensorsConfigInputDataAccess sensorsConfigInputDataAccess = new SensorsConfigInputDataAccess();
-        List<SensorParams> physicalSensors = sensorsConfigInputDataAccess.getAllPhysicalSensors();
-        List<SensorParams> virtualSensors = sensorsConfigInputDataAccess.getAllVirtualSensors();
+        this.getAllSensorsDefinition();
 
         // TODO To delete
 //        List<SensorParams> physicalSensors = new ArrayList<SensorParams>();
@@ -161,5 +187,29 @@ public class CEPEngine {
     public void sendEvent(CEPEvent event) {
         System.out.println("Sending event to CEP : " + event.toString());
         cepRT.sendEvent(event);
+    }
+
+    private String getHttpResult(String urlToRead){
+        URL url;
+        HttpURLConnection conn;
+        BufferedReader rd;
+        String line;
+        String result = "";
+        try {
+            url = new URL(urlToRead);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.getResponseMessage();
+            rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            while ((line = rd.readLine()) != null) {
+                result += line;
+            }
+            rd.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

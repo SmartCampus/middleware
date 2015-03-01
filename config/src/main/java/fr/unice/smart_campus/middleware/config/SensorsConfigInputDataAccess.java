@@ -93,6 +93,9 @@ public class SensorsConfigInputDataAccess {
         BasicDBObject query = new BasicDBObject(SensorParams.NAME_COLUMN,idSensor);
 
         DBObject obj = coll.findOne(query);
+        if(obj==null){
+            return null;
+        }
         return new SensorParams(obj);
 
     }

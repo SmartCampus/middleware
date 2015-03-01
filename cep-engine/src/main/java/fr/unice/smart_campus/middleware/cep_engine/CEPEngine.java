@@ -6,6 +6,7 @@ import akka.actor.Props;
 import akka.routing.FromConfig;
 import com.espertech.esper.client.*;
 import com.typesafe.config.ConfigFactory;
+import fr.unice.smart_campus.middleware.model.config.ParentSensor;
 import fr.unice.smart_campus.middleware.model.config.SensorParams;
 import fr.unice.smart_campus.middleware.akka.actor.ScriptEvaluatorActor;
 import fr.unice.smart_campus.middleware.config.SensorsConfigInputDataAccess;
@@ -89,7 +90,7 @@ public class CEPEngine {
         for (SensorParams virtualSensorParam : virtualSensors) {
             StringBuilder statement = new StringBuilder();
 
-            List<String> parentSensors = virtualSensorParam.getParentSensors();
+            List<ParentSensor> parentSensors = virtualSensorParam.getParentSensors();
 
             String timeParams = ".win:time(30 minutes)";
 
@@ -99,7 +100,7 @@ public class CEPEngine {
 
             StringBuilder fromString = new StringBuilder();
             fromString.append(" from ");
-            fromString.append(parentSensors.get(0));
+            fromString.append(parentSensors.get(0).getName());
             fromString.append(timeParams);
             fromString.append(" a0 ");
 
@@ -107,7 +108,7 @@ public class CEPEngine {
                 selectString.append(" , a" + i + " ");
 
                 fromString.append(" , ");
-                fromString.append(parentSensors.get(i));
+                fromString.append(parentSensors.get(i).getName());
                 fromString.append(timeParams);
                 fromString.append(" a" + i + " ");
             }
@@ -116,7 +117,7 @@ public class CEPEngine {
             statement.append(fromString.toString());
 
             SensorParams s = new SensorParams();
-            s.setName(parentSensors.get(0));
+            s.setName(parentSensors.get(0).getName());
 
             int index = physicalSensors.indexOf(s);
             SensorValueType type;

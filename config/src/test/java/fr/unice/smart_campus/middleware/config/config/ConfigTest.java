@@ -1,9 +1,11 @@
 package fr.unice.smart_campus.middleware.config.config;
 
+import fr.unice.smart_campus.middleware.model.config.ParentSensor;
 import fr.unice.smart_campus.middleware.model.config.SensorParams;
 import fr.unice.smart_campus.middleware.model.config.SensorType;
 import fr.unice.smart_campus.middleware.config.SensorsConfigOutputDataAccess;
 
+import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
 import junit.framework.TestCase;
 import org.junit.Test;
 
@@ -19,7 +21,7 @@ public class ConfigTest extends TestCase {
     public void testCheckGoodPhysical() throws Exception {
         SensorsConfigOutputDataAccess sensorsConfigOutputDataAccess =new SensorsConfigOutputDataAccess();
         SensorParams sensorParams=new SensorParams();
-        List<String> parentsSensors=new ArrayList<String>();
+        List<ParentSensor> parentsSensors=new ArrayList<ParentSensor>();
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.PHYSICAL);
        assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), true);
@@ -28,7 +30,7 @@ public class ConfigTest extends TestCase {
     public void testCheckPhysicalWithScript() throws Exception {
         SensorsConfigOutputDataAccess sensorsConfigOutputDataAccess =new SensorsConfigOutputDataAccess();
         SensorParams sensorParams=new SensorParams();
-        List<String> parentsSensors=new ArrayList<String>();
+        List<ParentSensor> parentsSensors=new ArrayList<ParentSensor>();
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.PHYSICAL);
         sensorParams.setScript("int B=3975; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
@@ -38,8 +40,8 @@ public class ConfigTest extends TestCase {
     public void testCheckPhysicalWithTooManySensors() throws Exception {
         SensorsConfigOutputDataAccess sensorsConfigOutputDataAccess =new SensorsConfigOutputDataAccess();
         SensorParams sensorParams=new SensorParams();
-        List<String> parentsSensors=new ArrayList<String>();
-        parentsSensors.add("TEMP_443");
+        List<ParentSensor> parentsSensors=new ArrayList<ParentSensor>();
+        parentsSensors.add(new ParentSensor("TEMP_443", SensorValueType.INTEGER));
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.PHYSICAL);
         assertEquals(sensorsConfigOutputDataAccess.check(sensorParams), false);
@@ -49,8 +51,8 @@ public class ConfigTest extends TestCase {
     public void testCheckGoodFilter() throws Exception {
         SensorsConfigOutputDataAccess sensorsConfigOutputDataAccess =new SensorsConfigOutputDataAccess();
         SensorParams sensorParams=new SensorParams();
-        List<String> parentsSensors=new ArrayList<String>();
-        parentsSensors.add("TEMP_443");
+        List<ParentSensor> parentsSensors=new ArrayList<ParentSensor>();
+        parentsSensors.add(new ParentSensor("TEMP_443", SensorValueType.INTEGER));
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.VIRTUAL_FILTER);
         sensorParams.setScript("int B=3975; a=$(TEMP_443); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
@@ -60,8 +62,8 @@ public class ConfigTest extends TestCase {
     public void testCheckFilterWithWrongScript() throws Exception {
         SensorsConfigOutputDataAccess sensorsConfigOutputDataAccess =new SensorsConfigOutputDataAccess();
         SensorParams sensorParams=new SensorParams();
-        List<String> parentsSensors=new ArrayList<String>();
-        parentsSensors.add("TEMP_443");
+        List<ParentSensor> parentsSensors=new ArrayList<ParentSensor>();
+        parentsSensors.add(new ParentSensor("TEMP_443", SensorValueType.INTEGER));
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.VIRTUAL_FILTER);
         sensorParams.setScript("int B=3975; a=$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
@@ -71,9 +73,9 @@ public class ConfigTest extends TestCase {
     public void testCheckFilterWithNotGoodParentSensors() throws Exception {
         SensorsConfigOutputDataAccess sensorsConfigOutputDataAccess =new SensorsConfigOutputDataAccess();
         SensorParams sensorParams=new SensorParams();
-        List<String> parentsSensors=new ArrayList<String>();
-        parentsSensors.add("TEMP_443");
-        parentsSensors.add("TEMP_444");
+        List<ParentSensor> parentsSensors=new ArrayList<ParentSensor>();
+        parentsSensors.add(new ParentSensor("TEMP_443", SensorValueType.INTEGER));
+        parentsSensors.add(new ParentSensor("TEMP_444", SensorValueType.INTEGER));
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.VIRTUAL_FILTER);
         sensorParams.setScript("int B=3975; a=$(TEMP_443); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
@@ -83,9 +85,9 @@ public class ConfigTest extends TestCase {
     public void testCheckGoodComposite() throws Exception {
         SensorsConfigOutputDataAccess sensorsConfigOutputDataAccess =new SensorsConfigOutputDataAccess();
         SensorParams sensorParams=new SensorParams();
-        List<String> parentsSensors=new ArrayList<String>();
-        parentsSensors.add("TEMP_443");
-        parentsSensors.add("TEMP_444");
+        List<ParentSensor> parentsSensors=new ArrayList<ParentSensor>();
+        parentsSensors.add(new ParentSensor("TEMP_443", SensorValueType.INTEGER));
+        parentsSensors.add(new ParentSensor("TEMP_444", SensorValueType.INTEGER));
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.VIRTUAL_COMPOSITE);
         sensorParams.setScript("int B=3975; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
@@ -96,9 +98,9 @@ public class ConfigTest extends TestCase {
     public void testCheckGoodCompositeWithWrongScript() throws Exception {
         SensorsConfigOutputDataAccess sensorsConfigOutputDataAccess =new SensorsConfigOutputDataAccess();
         SensorParams sensorParams=new SensorParams();
-        List<String> parentsSensors=new ArrayList<String>();
-        parentsSensors.add("TEMP_443");
-        parentsSensors.add("TEMP_444");
+        List<ParentSensor> parentsSensors=new ArrayList<ParentSensor>();
+        parentsSensors.add(new ParentSensor("TEMP_443", SensorValueType.INTEGER));
+        parentsSensors.add(new ParentSensor("TEMP_444", SensorValueType.INTEGER));
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.VIRTUAL_COMPOSITE);
         sensorParams.setScript("int B=3975; a=$(TEMP_443)*$(TEMP_445); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");
@@ -111,8 +113,8 @@ public class ConfigTest extends TestCase {
     public void testCheckGoodCompositeNotGoodParentSensors() throws Exception {
         SensorsConfigOutputDataAccess sensorsConfigOutputDataAccess =new SensorsConfigOutputDataAccess();
         SensorParams sensorParams=new SensorParams();
-        List<String> parentsSensors=new ArrayList<String>();
-        parentsSensors.add("TEMP_443");
+        List<ParentSensor> parentsSensors=new ArrayList<ParentSensor>();
+        parentsSensors.add(new ParentSensor("TEMP_443", SensorValueType.INTEGER));
         sensorParams.setParentSensors(parentsSensors);
         sensorParams.setSensorType(SensorType.VIRTUAL_COMPOSITE);
         sensorParams.setScript("int B=3975; a=$(TEMP_443)*$(TEMP_444); resistance=(float)(1023-a)*10000/a; temperature=1/(log(resistance/10000)/B+1/298.15)-273.15;");

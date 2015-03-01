@@ -1,6 +1,7 @@
 package fr.unice.smart_campus.middleware.config;
 
 import com.mongodb.*;
+import fr.unice.smart_campus.middleware.model.config.ParentSensor;
 import fr.unice.smart_campus.middleware.model.config.SensorParams;
 import fr.unice.smart_campus.middleware.model.config.SensorType;
 
@@ -36,11 +37,9 @@ public class SensorsConfigOutputDataAccess {
      * @param sensorParams a sensor param to store
      */
     public boolean saveSensorParams (SensorParams sensorParams) {
-
         if(!check(sensorParams)){
             return false;
         }
-
         coll.insert(sensorParams.toDoc());
         return true;
     }
@@ -86,7 +85,9 @@ public class SensorsConfigOutputDataAccess {
             return false;
         }
         for(String sensor : sensorsFromScript){
-            if(!sensorParams.getParentSensors().contains(sensor)){
+            ParentSensor parentSensor=new ParentSensor();
+            parentSensor.setName(sensor);
+            if(!sensorParams.getParentSensors().contains(parentSensor)){
                 return false;
             }
         }

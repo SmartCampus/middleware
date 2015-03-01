@@ -11,6 +11,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+        <module>Model</module>
         <module>database</module>
 		<module>collector</module>
 		<module>message-queue</module>
@@ -19,7 +20,7 @@
 		<module>virtual-sensor-processing</module>
 		<module>cep-engine</module>
         <module>config</module>
-        <module>Model</module>
+
     </modules>
 
 	<properties>

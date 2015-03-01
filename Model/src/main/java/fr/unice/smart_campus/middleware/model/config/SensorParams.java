@@ -1,6 +1,7 @@
 package fr.unice.smart_campus.middleware.model.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -28,7 +29,7 @@ public class SensorParams {
     private SensorType sensorType;
     private SensorValueType valueType;
     private double frequency;
-    private List<String> parentSensors;
+    private List<ParentSensor> parentSensors;
 
     public SensorParams() {
     }
@@ -41,17 +42,17 @@ public class SensorParams {
         this.valueType =SensorValueType.valueOf(((String) o.get(VALUETYPE_COLUMN)).toUpperCase());
         this.script=(String) o.get(SCRIPT_COLUMN);
         BasicDBList list=(BasicDBList) o.get(PARENTS_COLUMN);
-        this.parentSensors=new ArrayList<String>();
+        this.parentSensors=new ArrayList<ParentSensor>();
         if(list!=null){
             for(Object obj:list){
-                parentSensors.add(obj.toString());
+                parentSensors.add(new ParentSensor((DBObject)obj));
             }
         }
 
 
 
     }
-    public SensorParams(String name, String kind, String script, SensorType sensorType, SensorValueType valueType, double frequency, List<String> parentSensors) {
+    public SensorParams(String name, String kind, String script, SensorType sensorType, SensorValueType valueType, double frequency, List<ParentSensor> parentSensors) {
         this.name = name;
         this.kind = kind;
         this.script = script;
@@ -107,11 +108,12 @@ public class SensorParams {
     }
 
     @JsonProperty("parents")
-    public List<String> getParentSensors() {
+    @JsonDeserialize(as=List.class, contentAs=ParentSensor.class)
+    public List<ParentSensor> getParentSensors() {
         return parentSensors;
     }
 
-    public void setParentSensors(List<String> parentSensors) {
+    public void setParentSensors(List<ParentSensor> parentSensors) {
         this.parentSensors = parentSensors;
     }
 
@@ -139,8 +141,8 @@ public class SensorParams {
     public BasicDBObject toDoc(){
         BasicDBList parents=new BasicDBList();
         if(parentSensors!=null){
-            for(String sensor: parentSensors){
-                parents.add(sensor);
+            for(ParentSensor sensor: parentSensors){
+                parents.add(sensor.toDoc());
             }
         }
         BasicDBObject doc = new BasicDBObject(SensorParams.NAME_COLUMN,name)

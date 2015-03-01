@@ -28,7 +28,7 @@ public class SensorParams {
     private SensorType sensorType;
     private SensorValueType valueType;
     private double frequency;
-    private List<String> parentSensors;
+    private List<ParentSensorDescription> parentSensors;
 
     public SensorParams() {
     }
@@ -41,17 +41,18 @@ public class SensorParams {
         this.valueType =SensorValueType.valueOf(((String) o.get(VALUETYPE_COLUMN)).toUpperCase());
         this.script=(String) o.get(SCRIPT_COLUMN);
         BasicDBList list=(BasicDBList) o.get(PARENTS_COLUMN);
-        this.parentSensors=new ArrayList<String>();
-        if(list!=null){
-            for(Object obj:list){
-                parentSensors.add(obj.toString());
-            }
-        }
+        this.parentSensors=new ArrayList<ParentSensorDescription>();
 
-
-
+        // TODO s'occuper de ça
+//        if(list!=null){
+//            for(Object obj:list){
+//                parentSensors.add(obj.toString());
+//            }
+//        }
     }
-    public SensorParams(String name, String kind, String script, SensorType sensorType, SensorValueType valueType, double frequency, List<String> parentSensors) {
+
+    // TODO J'ai changé ici le type dans les params du constructeur
+    public SensorParams(String name, String kind, String script, SensorType sensorType, SensorValueType valueType, double frequency, List<ParentSensorDescription> parentSensors) {
         this.name = name;
         this.kind = kind;
         this.script = script;
@@ -106,12 +107,13 @@ public class SensorParams {
         this.frequency = frequency;
     }
 
+    // TODO j'ai changé ici les getter/setter
     @JsonProperty("parents")
-    public List<String> getParentSensors() {
+    public List<ParentSensorDescription> getParentSensors() {
         return parentSensors;
     }
 
-    public void setParentSensors(List<String> parentSensors) {
+    public void setParentSensors(List<ParentSensorDescription> parentSensors) {
         this.parentSensors = parentSensors;
     }
 
@@ -139,7 +141,8 @@ public class SensorParams {
     public BasicDBObject toDoc(){
         BasicDBList parents=new BasicDBList();
         if(parentSensors!=null){
-            for(String sensor: parentSensors){
+            // TODO J'ai changé ici le String en ParentSensorDescription
+            for(ParentSensorDescription sensor: parentSensors){
                 parents.add(sensor);
             }
         }

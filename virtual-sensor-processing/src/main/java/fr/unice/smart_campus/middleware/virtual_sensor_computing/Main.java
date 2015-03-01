@@ -1,4 +1,4 @@
-package fr.unice.smart_campus.middleware.virtual_sensor_processing;
+package fr.unice.smart_campus.middleware.virtual_sensor_computing;
 
 import akka.actor.*;
 import com.typesafe.config.ConfigFactory;

@@ -31,6 +31,7 @@ public class SensorParams {
     private double frequency;
     private List<ParentSensor> parentSensors;
 
+
     public SensorParams() {
     }
 
@@ -43,16 +44,18 @@ public class SensorParams {
         this.script=(String) o.get(SCRIPT_COLUMN);
         BasicDBList list=(BasicDBList) o.get(PARENTS_COLUMN);
         this.parentSensors=new ArrayList<ParentSensor>();
-        if(list!=null){
-            for(Object obj:list){
-                parentSensors.add(new ParentSensor((DBObject)obj));
+        if(list!=null) {
+            for (Object obj : list) {
+                parentSensors.add(new ParentSensor((DBObject) obj));
             }
+
         }
-
-
-
     }
+
+
+
     public SensorParams(String name, String kind, String script, SensorType sensorType, SensorValueType valueType, double frequency, List<ParentSensor> parentSensors) {
+
         this.name = name;
         this.kind = kind;
         this.script = script;
@@ -107,6 +110,7 @@ public class SensorParams {
         this.frequency = frequency;
     }
 
+
     @JsonProperty("parents")
     @JsonDeserialize(as=List.class, contentAs=ParentSensor.class)
     public List<ParentSensor> getParentSensors() {
@@ -141,8 +145,10 @@ public class SensorParams {
     public BasicDBObject toDoc(){
         BasicDBList parents=new BasicDBList();
         if(parentSensors!=null){
+
             for(ParentSensor sensor: parentSensors){
                 parents.add(sensor.toDoc());
+
             }
         }
         BasicDBObject doc = new BasicDBObject(SensorParams.NAME_COLUMN,name)

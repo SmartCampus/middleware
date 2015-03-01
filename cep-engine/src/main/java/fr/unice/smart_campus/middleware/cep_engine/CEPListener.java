@@ -3,7 +3,7 @@ package fr.unice.smart_campus.middleware.cep_engine;
 import akka.actor.ActorRef;
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
-import fr.unice.smart_campus.middleware.model.config.ParentSensorDescription;
+import fr.unice.smart_campus.middleware.model.config.ParentSensor;
 import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValue;
 import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValueList;
 
@@ -17,14 +17,14 @@ import java.util.Map;
  */
 public abstract class CEPListener implements UpdateListener {
     private ActorRef actorRef;
-    protected List<ParentSensorDescription> parentSensorDescriptionList;
+    protected List<ParentSensor> parentSensorDescriptionList;
     protected String script;
 
     public CEPListener(ActorRef actorRef) {
         this.actorRef = actorRef;
     }
 
-    public void setType(List<ParentSensorDescription> type) {
+    public void setType(List<ParentSensor> type) {
         this.parentSensorDescriptionList = type;
     }
 

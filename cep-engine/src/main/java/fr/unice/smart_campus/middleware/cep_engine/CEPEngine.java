@@ -100,7 +100,8 @@ public class CEPEngine {
             Class<? extends CEPListener> listenerClass = this.generateCepListener(pool, type.name() + "Listener");
 
             CEPListener listener = listenerClass.getConstructor(ActorRef.class).newInstance(actorRef);
-            listener.setType(type);
+            // TODO : handle that
+            //listener.setType(type);
 
             cepListenerMap.put(type, listener);
         }

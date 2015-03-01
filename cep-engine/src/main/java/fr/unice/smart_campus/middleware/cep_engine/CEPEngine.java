@@ -29,14 +29,14 @@ import java.util.Map;
 public class CEPEngine {
 
     private EPRuntime cepRT;
-    private List<SensorParams> physicalSensors;
+    private List<String> physicalSensors;
     private List<SensorParams> virtualSensors;
 
     private static String ALL_PHYSICAL = "http://52.16.33.142:8082/config/sensors_params/physicals/names";
     private static String ALL_VIRTUAL = "http://52.16.33.142:8082/config/sensors_params/virtuals";
 
     public CEPEngine() throws Exception {
-        this.physicalSensors = new ArrayList<SensorParams>();
+        this.physicalSensors = new ArrayList<String>();
         this.virtualSensors = new ArrayList<SensorParams>();
 
         this.init();
@@ -47,7 +47,7 @@ public class CEPEngine {
 
         // Get all physical
         String allPhysicalJson = this.getHttpResult(ALL_PHYSICAL);
-        this.physicalSensors = mapper.readValue(allPhysicalJson, new TypeReference<List<SensorParams>>() {
+        this.physicalSensors = mapper.readValue(allPhysicalJson, new TypeReference<List<String>>() {
         });
 
         // Get all virtual
@@ -70,10 +70,9 @@ public class CEPEngine {
         ClassPool pool = ClassPool.getDefault();
         pool.insertClassPath(new ClassClassPath(CEPEvent.class));
 
-        for (SensorParams sensorParams : physicalSensors) {
-            String name = sensorParams.getName();
-            generateCepEvent(pool, name);
-            cepConfig.addEventType(name, name);
+        for (String sensorParamsName : physicalSensors) {
+            generateCepEvent(pool, sensorParamsName);
+            cepConfig.addEventType(sensorParamsName, sensorParamsName);
         }
 
         for (SensorParams sensorParams : virtualSensors) {

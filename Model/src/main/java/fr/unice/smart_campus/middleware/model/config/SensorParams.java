@@ -48,7 +48,6 @@ public class SensorParams {
             for (Object obj : list) {
                 parentSensors.add(new ParentSensor((DBObject) obj));
             }
-
         }
     }
 

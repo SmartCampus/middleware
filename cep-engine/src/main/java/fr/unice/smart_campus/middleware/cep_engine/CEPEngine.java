@@ -8,9 +8,9 @@ import com.espertech.esper.client.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.typesafe.config.ConfigFactory;
-import fr.unice.smart_campus.middleware.akka.actor.ScriptEvaluatorActor;
-import fr.unice.smart_campus.middleware.model.config.ParentSensorDescription;
+import fr.unice.smart_campus.middleware.model.config.ParentSensor;
 import fr.unice.smart_campus.middleware.model.config.SensorParams;
+import fr.unice.smart_campus.middleware.akka.actor.ScriptEvaluatorActor;
 import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
 import javassist.ClassClassPath;
 import javassist.ClassPool;
@@ -96,8 +96,8 @@ public class CEPEngine {
 
             String virtualSensorName = virtualSensorParam.getName();
             String virtualSensorScript = virtualSensorParam.getScript();
-            List<ParentSensorDescription> parentSensorsList = virtualSensorParam.getParentSensors();
-            ParentSensorDescription parentSensor;
+            List<ParentSensor> parentSensorsList = virtualSensorParam.getParentSensors();
+            ParentSensor parentSensor;
             String parentSensorName;
             SensorValueType parentSensorValueType;
 
@@ -163,8 +163,8 @@ public class CEPEngine {
     }
 
     private Class<? extends CEPListener> generateCepListener(ClassPool pool, String className) throws Exception {
-        CtClass cepµListenerSuperClass = pool.get(CEPListener.class.getName());
-        CtClass cc = pool.makeClass(className, cepµListenerSuperClass);
+        CtClass cepListenerSuperClass = pool.get(CEPListener.class.getName());
+        CtClass cc = pool.makeClass(className, cepListenerSuperClass);
 
         // Generate class
         return cc.toClass();

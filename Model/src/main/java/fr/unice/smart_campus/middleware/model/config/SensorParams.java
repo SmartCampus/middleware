@@ -1,6 +1,7 @@
 package fr.unice.smart_campus.middleware.model.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -28,7 +29,8 @@ public class SensorParams {
     private SensorType sensorType;
     private SensorValueType valueType;
     private double frequency;
-    private List<ParentSensorDescription> parentSensors;
+    private List<ParentSensor> parentSensors;
+
 
     public SensorParams() {
     }
@@ -41,18 +43,19 @@ public class SensorParams {
         this.valueType =SensorValueType.valueOf(((String) o.get(VALUETYPE_COLUMN)).toUpperCase());
         this.script=(String) o.get(SCRIPT_COLUMN);
         BasicDBList list=(BasicDBList) o.get(PARENTS_COLUMN);
-        this.parentSensors=new ArrayList<ParentSensorDescription>();
+        this.parentSensors=new ArrayList<ParentSensor>();
+        if(list!=null) {
+            for (Object obj : list) {
+                parentSensors.add(new ParentSensor((DBObject) obj));
+            }
 
-        // TODO s'occuper de ça
-//        if(list!=null){
-//            for(Object obj:list){
-//                parentSensors.add(obj.toString());
-//            }
-//        }
+        }
     }
 
-    // TODO J'ai changé ici le type dans les params du constructeur
-    public SensorParams(String name, String kind, String script, SensorType sensorType, SensorValueType valueType, double frequency, List<ParentSensorDescription> parentSensors) {
+
+
+    public SensorParams(String name, String kind, String script, SensorType sensorType, SensorValueType valueType, double frequency, List<ParentSensor> parentSensors) {
+
         this.name = name;
         this.kind = kind;
         this.script = script;
@@ -107,13 +110,14 @@ public class SensorParams {
         this.frequency = frequency;
     }
 
-    // TODO j'ai changé ici les getter/setter
+
     @JsonProperty("parents")
-    public List<ParentSensorDescription> getParentSensors() {
+    @JsonDeserialize(as=List.class, contentAs=ParentSensor.class)
+    public List<ParentSensor> getParentSensors() {
         return parentSensors;
     }
 
-    public void setParentSensors(List<ParentSensorDescription> parentSensors) {
+    public void setParentSensors(List<ParentSensor> parentSensors) {
         this.parentSensors = parentSensors;
     }
 
@@ -141,9 +145,10 @@ public class SensorParams {
     public BasicDBObject toDoc(){
         BasicDBList parents=new BasicDBList();
         if(parentSensors!=null){
-            // TODO J'ai changé ici le String en ParentSensorDescription
-            for(ParentSensorDescription sensor: parentSensors){
-                parents.add(sensor);
+
+            for(ParentSensor sensor: parentSensors){
+                parents.add(sensor.toDoc());
+
             }
         }
         BasicDBObject doc = new BasicDBObject(SensorParams.NAME_COLUMN,name)

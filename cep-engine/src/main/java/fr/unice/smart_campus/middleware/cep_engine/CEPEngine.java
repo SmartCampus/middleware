@@ -1,6 +1,7 @@
 package fr.unice.smart_campus.middleware.cep_engine;
 
 import akka.actor.ActorRef;
+import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.FromConfig;
@@ -62,7 +63,8 @@ public class CEPEngine {
 
         // create Akka ActorSystem and actors
         ActorSystem system = ActorSystem.create("Simulation", ConfigFactory.load());
-        ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(ScriptEvaluatorActor.class)), "remotePool");
+        ActorSelection actorSelection = system.actorSelection("akka.tcp://ActorSystemFactory@localhost:2552/user/ScriptEvaluatorActor");
+        //ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(ScriptEvaluatorActor.class)), "remotePool");
 
         // Create the configuration of our CEPEngine
         Configuration cepConfig = new Configuration();
@@ -139,7 +141,7 @@ public class CEPEngine {
 
             // Create CEPListener. One CEPListener is created for every Virtual Sensor
             Class<? extends CEPListener> listenerClass = this.generateCepListener(pool, virtualSensorName + "Listener");
-            CEPListener listener = listenerClass.getConstructor(ActorRef.class).newInstance(actorRef);
+            CEPListener listener = listenerClass.getConstructor(ActorSelection.class).newInstance(actorSelection);
             listener.setVirtualSensorName(virtualSensorName);
             listener.setParentValueTypeMap(parentValueTypeMap);
             listener.setScript(virtualSensorScript);

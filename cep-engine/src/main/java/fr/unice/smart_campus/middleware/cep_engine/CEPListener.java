@@ -20,13 +20,13 @@ import java.util.Map;
  * When it receive a message from the CEP engine, it transfers the message to a remote Akka actor
  */
 public abstract class CEPListener implements UpdateListener {
-    private ActorSelection actorRef;
+    private ActorRef actorRef;
 
     protected Map<String, SensorValueType> parentValueTypeMap;
     protected String script;
     protected String virtualSensorName;
 
-    public CEPListener(ActorSelection actorRef) {
+    public CEPListener(ActorRef actorRef) {
         this.actorRef = actorRef;
     }
 

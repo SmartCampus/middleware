@@ -63,8 +63,8 @@ public class CEPEngine {
 
         // create Akka ActorSystem and actors
         ActorSystem system = ActorSystem.create("Simulation", ConfigFactory.load());
-        ActorSelection actorSelection = system.actorSelection("akka.tcp://ActorSystemFactory@localhost:2552/user/ScriptEvaluatorActor");
-        //ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(ScriptEvaluatorActor.class)), "remotePool");
+        //ActorSelection actorSelection = system.actorSelection("akka.tcp://ActorSystemFactory@localhost:2552/user/ScriptEvaluatorActor");
+        ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(ScriptEvaluatorActor.class)), "remotePool");
 
         // Create the configuration of our CEPEngine
         Configuration cepConfig = new Configuration();
@@ -141,7 +141,7 @@ public class CEPEngine {
 
             // Create CEPListener. One CEPListener is created for every Virtual Sensor
             Class<? extends CEPListener> listenerClass = this.generateCepListener(pool, virtualSensorName + "Listener");
-            CEPListener listener = listenerClass.getConstructor(ActorSelection.class).newInstance(actorSelection);
+            CEPListener listener = listenerClass.getConstructor(ActorRef.class).newInstance(actorRef);
             listener.setVirtualSensorName(virtualSensorName);
             listener.setParentValueTypeMap(parentValueTypeMap);
             listener.setScript(virtualSensorScript);

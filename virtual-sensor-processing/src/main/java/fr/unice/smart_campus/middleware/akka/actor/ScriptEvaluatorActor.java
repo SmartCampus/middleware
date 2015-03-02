@@ -60,7 +60,7 @@ public class ScriptEvaluatorActor extends UntypedActor {
             Object o = getValue(s.getValue(), s.getType());
             loggingAdapter.error("ClassType : " + o.getClass());
             loggingAdapter.error("getValue result " + o);
-            shell.setVariable(s.getName(), getValue(s.getValue(), s.getType()));
+            shell.setVariable(s.getName(), o);
         }
 
         loggingAdapter.error("Evaluate !");

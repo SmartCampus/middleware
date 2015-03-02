@@ -1,8 +1,11 @@
 package fr.unice.smart_campus.middleware.cep_engine;
 
 import akka.actor.ActorRef;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
+import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
 import fr.unice.smart_campus.middleware.model.config.ParentSensor;
 import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValue;
 import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValueList;
@@ -17,38 +20,47 @@ import java.util.Map;
  */
 public abstract class CEPListener implements UpdateListener {
     private ActorRef actorRef;
-    protected List<ParentSensor> parentSensorDescriptionList;
+
+    protected Map<String, SensorValueType> parentValueTypeMap;
     protected String script;
+    protected String virtualSensorName;
 
     public CEPListener(ActorRef actorRef) {
         this.actorRef = actorRef;
     }
 
-    public void setType(List<ParentSensor> type) {
-        this.parentSensorDescriptionList = type;
+    public void setParentValueTypeMap(Map<String, SensorValueType> parentValueTypeMap) {
+        this.parentValueTypeMap = parentValueTypeMap;
     }
 
     public void setScript(String script) {
         this.script = script;
     }
 
+    public void setVirtualSensorName(String virtualSensorName) {
+        this.virtualSensorName = virtualSensorName;
+    }
+
     public void update(final EventBean[] newData, EventBean[] oldData) {
         TypedSensorValueList akkaMessage = new TypedSensorValueList();
 
         List<TypedSensorValue> typedSensorValues = new ArrayList<TypedSensorValue>();
+        Map map = (Map) newData[0].getUnderlying();
+        for (int i = 0; i < map.size(); i++) {
+            CEPEvent event = (CEPEvent) ((EventBean) map.get("a" + i)).getUnderlying();
+            System.out.println(event);
+            String name = event.getName();
+            SensorValueType type = parentValueTypeMap.get(name);
+            TypedSensorValue typedSensorValue = new TypedSensorValue(name, event.getTimeStamp(), event.getValue(), type);
 
-//        Map map = (Map) newData[0].getUnderlying();
-//        for (int i = 0; i < map.size(); i++) {
-//            CEPEvent event = (CEPEvent) ((EventBean) map.get("a" + i)).getUnderlying();
-//            System.out.println(event);
-//            TypedSensorValue typedSensorValue = new TypedSensorValue(event.getName(), event.getTimeStamp(), event.getValue(), this.type);
-//
-//            typedSensorValues.add(typedSensorValue);
-//        }
-//
-//        akkaMessage.setSensorValues(typedSensorValues);
-//
-//        System.out.println("Send message to Akka actor : " + akkaMessage);
-//        this.actorRef.tell(akkaMessage, ActorRef.noSender());
+            typedSensorValues.add(typedSensorValue);
+        }
+
+        akkaMessage.setVirtualSensorName(virtualSensorName);
+        akkaMessage.setSensorValues(typedSensorValues);
+        akkaMessage.setScript(script);
+
+        System.out.println("Send message to Akka actor : " + akkaMessage);
+        this.actorRef.tell(akkaMessage, ActorRef.noSender());
     }
 }

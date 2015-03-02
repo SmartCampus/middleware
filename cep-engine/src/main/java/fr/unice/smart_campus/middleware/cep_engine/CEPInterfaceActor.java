@@ -21,7 +21,7 @@ public class CEPInterfaceActor extends UntypedActor {
     @Override
     public void onReceive(Object message) throws Exception {
         if (message instanceof SensorValue) {
-            this.loggingAdapter.info("................." + message.toString());
+            this.loggingAdapter.info(message.toString());
             SensorValue sensorValue = (SensorValue) message;
 
             String name = sensorValue.getName();

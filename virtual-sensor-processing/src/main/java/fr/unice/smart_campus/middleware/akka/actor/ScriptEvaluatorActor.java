@@ -20,7 +20,6 @@ import java.util.List;
 public class ScriptEvaluatorActor extends UntypedActor {
 
     private LoggingAdapter loggingAdapter;
-//    private SensorsConfigInputDataAccess sensorConfigAdapter;
 
     public ScriptEvaluatorActor() {
         this.loggingAdapter = Logging.getLogger(this.context().system(), this);
@@ -35,10 +34,7 @@ public class ScriptEvaluatorActor extends UntypedActor {
 
             SensorValue response = evaluateScript(sensors);
 
-            ActorSelection databaseAccess = this.getContext().actorSelection("akka://ActorSystemFactory/user/DatabaseAccessActor");
-            databaseAccess.tell(response, this.self());
-
-            ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
+            ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://MessageProcessingActorSystem@localhost:2554/user/ActorReceiverFromCollector");
             actorSelection.tell(response, this.sender());
         }
     }

@@ -14,7 +14,6 @@
         <module>Model</module>
         <module>database</module>
 		<module>collector</module>
-		<module>message-queue</module>
 		<module>data-processor</module>
 		<module>data-api</module>
 		<module>virtual-sensor-processing</module>
@@ -110,7 +109,4 @@
             <url>http://www.soapui.org/repository/maven2/</url>
         </pluginRepository>
     </pluginRepositories>
-
-
-
 </project>

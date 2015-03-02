@@ -1,9 +1,13 @@
 package fr.unice.smart_campus.middleware.collector;
 
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.json.JSONObject;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.typesafe.config.ConfigFactory;
+import fr.unice.smart_campus.middleware.model.sensor.SensorValue;
 
-import javax.jms.*;
+import java.io.IOException;
 
 
 /**
@@ -11,49 +15,39 @@ import javax.jms.*;
  * Interface to post sensor values into the message queue
  */
 public class DataAccess {
+    private static DataAccess instance;
+    private ActorRef senderToMessageProcessing;
 
-	private final static String DESTINATION_URL = "tcp://localhost:61616";
-	private final static String QUEUE_NAME      = "sensor-values-queue";
+    /**
+     * Get the class instance
+     */
+    public static synchronized DataAccess getInstance() {
+        if (instance == null) {
+            instance = new DataAccess();
+        }
+        return instance;
+    }
 
-	private static DataAccess instance;
-	private Connection connection;
-
-
-	/**
-	 * Get the class instance
-	 */
-	public static synchronized DataAccess getInstance () throws JMSException {
-		if (instance == null) {
-			instance = new DataAccess();
-		}
-		return instance;
-	}
-
-
-	/**
-	 * Private constructor
-	 */
-	private DataAccess () throws JMSException {
-
-		ConnectionFactory factory = new ActiveMQConnectionFactory(DESTINATION_URL);
-		connection = factory.createConnection();
-		connection.start();
-	}
+    /**
+     * Private constructor
+     */
+    private DataAccess() {
+        ActorSystem actorSystem = ActorSystem.create("CollectorActorSystem", ConfigFactory.load());
+        this.senderToMessageProcessing = actorSystem.actorOf(Props.create(ActorSenderToMessageProcessing.class), "ActorSenderToMessageProcessing");
+    }
 
 
-	/**
-	 * Post a sensor message into the message queue
-	 *
-	 * @param json The JSON object that contains sensor data
-	 * @return true if data insert is successful, false otherwise
-	 */
-	public void postMessage (JSONObject json) throws JMSException {
+    /**
+     * Post a sensor message to MessageProcessing
+     *
+     * @param jsonString The JSON string that contains sensor data
+     */
+    public void postMessage(String jsonString) throws IOException {
+        // Extract sensor information
+        ObjectMapper mapper = new ObjectMapper();
 
-		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		Destination destination = session.createQueue(QUEUE_NAME);
-		MessageProducer producer = session.createProducer(destination);
+        SensorValue sensorValue = mapper.readValue(jsonString, SensorValue.class);
 
-		Message message = session.createTextMessage(json.toString());
-		producer.send(message);
-	}
+        this.senderToMessageProcessing.tell(sensorValue, ActorRef.noSender());
+    }
 }

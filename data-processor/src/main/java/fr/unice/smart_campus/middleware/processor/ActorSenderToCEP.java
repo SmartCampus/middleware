@@ -29,11 +29,4 @@ public class ActorSenderToCEP extends UntypedActor{
         ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@localhost:2553/user/CEPInterfaceActor");
         actorSelection.tell(messageToSend, this.sender());
     }
-
-// TODO To delete
-//    public static void main(String[] args) {
-//        ActorSystem actorSystem = ActorSystem.create("ActorSystemFactoryMessageProcessing", ConfigFactory.load());
-//        ActorRef actorRef = actorSystem.actorOf(Props.create(ActorSenderToCEP.class), "ActorSenderToCEP");
-//        actorRef.tell("{\"n\":\"testAkkaActor\", \"v\":\"12\", \"t\":\"12343\"}", ActorRef.noSender());
-//    }
 }

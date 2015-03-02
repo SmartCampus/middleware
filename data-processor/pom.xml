@@ -16,10 +16,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-client</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 		</dependency>
@@ -51,7 +47,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>fr.unice.smart_campus.middleware.processor.App</mainClass>
+					<mainClass>fr.unice.smart_campus.middleware.processor.Main</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

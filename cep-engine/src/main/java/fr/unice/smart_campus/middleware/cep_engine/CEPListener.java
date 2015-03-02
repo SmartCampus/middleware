@@ -1,6 +1,8 @@
 package fr.unice.smart_campus.middleware.cep_engine;
 
 import akka.actor.ActorRef;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 import com.espertech.esper.client.EventBean;
 import com.espertech.esper.client.UpdateListener;
 import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
@@ -18,6 +20,7 @@ import java.util.Map;
  */
 public abstract class CEPListener implements UpdateListener {
     private ActorRef actorRef;
+
     protected Map<String, SensorValueType> parentValueTypeMap;
     protected String script;
     protected String virtualSensorName;

@@ -15,6 +15,21 @@
 	</parent>
 
 	<dependencies>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-actor_2.10</artifactId>
+            <version>2.3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-remote_2.10</artifactId>
+            <version>2.3.9</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.unice.smart_campus.middleware</groupId>
+            <artifactId>model</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet-core</artifactId>
@@ -24,13 +39,14 @@
             <artifactId>jetty-server</artifactId>
         </dependency>
 		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-client</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>2.2.3</version>
+        </dependency>
 	</dependencies>
 
 	<build>

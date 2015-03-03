@@ -34,7 +34,7 @@ public class ScriptEvaluatorActor extends UntypedActor {
 
             SensorValue response = evaluateScript(sensors);
 
-            ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://MessageProcessingActorSystem@52.16.33.142:2554/user/ActorReceiverFromCollector");
+            ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://MessageProcessingActorSystem@172.31.39.206:2554/user/ActorReceiverFromCollector");
             actorSelection.tell(response, this.sender());
         }
     }

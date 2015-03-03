@@ -26,7 +26,7 @@ public class ActorSenderToCEP extends UntypedActor{
      */
     private void sendEventToCEPEngine(SensorValue messageToSend){
         this.loggingAdapter.info("Send event to CEP Interface Actor : " + messageToSend);
-        ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@52.16.120.70:2553/user/CEPInterfaceActor");
+        ActorSelection actorSelection = this.getContext().actorSelection("akka.tcp://Simulation@172.31.32.136:2553/user/CEPInterfaceActor");
         actorSelection.tell(messageToSend, this.sender());
     }
 }

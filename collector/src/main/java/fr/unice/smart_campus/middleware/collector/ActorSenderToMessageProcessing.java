@@ -12,7 +12,7 @@ public class ActorSenderToMessageProcessing extends UntypedActor {
 
     public ActorSenderToMessageProcessing() {
         this.loggingAdapter = Logging.getLogger(this.context().system(), this);
-        messageProcessingReceiver = this.getContext().actorSelection("akka.tcp://MessageProcessingActorSystem@52.16.33.142:2554/user/ActorReceiverFromCollector");
+        messageProcessingReceiver = this.getContext().actorSelection("akka.tcp://MessageProcessingActorSystem@172.31.39.206:2554/user/ActorReceiverFromCollector");
     }
 
     @Override

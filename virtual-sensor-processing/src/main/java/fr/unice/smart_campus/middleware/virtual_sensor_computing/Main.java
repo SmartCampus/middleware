@@ -1,9 +1,7 @@
 package fr.unice.smart_campus.middleware.virtual_sensor_computing;
 
 import akka.actor.ActorSystem;
-import akka.actor.Props;
 import com.typesafe.config.ConfigFactory;
-import fr.unice.smart_campus.middleware.akka.actor.ScriptEvaluatorActor;
 
 public class Main {
     public static void main(String[] args) {

@@ -9,6 +9,7 @@ import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
 import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValue;
 import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValueList;
 import groovy.lang.GroovyShell;
+import groovy.lang.Script;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,13 +19,13 @@ import java.util.Map;
 
 public class ScriptEvaluatorActor extends UntypedActor {
 
-    private static Map<String, GroovyShell> groovyShellMap;
+    private static Map<String, Script> groovyScriptMap;
 
     private LoggingAdapter loggingAdapter;
 
     public ScriptEvaluatorActor() {
         this.loggingAdapter = Logging.getLogger(this.context().system(), this);
-        this.groovyShellMap = new HashMap<String, GroovyShell>();
+        this.groovyScriptMap = new HashMap<String, Script>();
     }
 
     @Override
@@ -52,11 +53,13 @@ public class ScriptEvaluatorActor extends UntypedActor {
 
         loggingAdapter.error(script);
 
-        GroovyShell shell = this.groovyShellMap.get(script);
-        if(shell == null){
-            shell = new GroovyShell();
-            this.groovyShellMap.put(script, shell);
-        }
+//        Script groovyScript = this.groovyScriptMap.get(script);
+        GroovyShell shell = new GroovyShell();
+
+//        if(groovyScript == null){
+//            groovyScript = shell.parse(script);
+//            this.groovyScriptMap.put(script, groovyScript);
+//        }
 
         //Set variable for each sensor
         for (TypedSensorValue s : sensors) {

@@ -4,25 +4,27 @@ import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import fr.unice.smart_campus.middleware.model.config.SensorParams;
-import fr.unice.smart_campus.middleware.config.SensorsConfigInputDataAccess;
-import groovy.lang.GroovyShell;
 import fr.unice.smart_campus.middleware.model.sensor.SensorValue;
 import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
 import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValue;
 import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValueList;
+import groovy.lang.GroovyShell;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ScriptEvaluatorActor extends UntypedActor {
+
+    private static Map<String, GroovyShell> groovyShellMap;
 
     private LoggingAdapter loggingAdapter;
 
     public ScriptEvaluatorActor() {
         this.loggingAdapter = Logging.getLogger(this.context().system(), this);
+        this.groovyShellMap = new HashMap<String, GroovyShell>();
     }
 
     @Override
@@ -50,7 +52,12 @@ public class ScriptEvaluatorActor extends UntypedActor {
 
         loggingAdapter.error(script);
 
-        GroovyShell shell = new GroovyShell();
+        GroovyShell shell = this.groovyShellMap.get(script);
+        if(shell == null){
+            shell = new GroovyShell();
+            this.groovyShellMap.put(script, shell);
+        }
+
         //Set variable for each sensor
         for (TypedSensorValue s : sensors) {
             Object o = getValue(s.getValue(), s.getType());
@@ -68,7 +75,7 @@ public class ScriptEvaluatorActor extends UntypedActor {
         return res;
     }
 
-    protected Object getValue(String value, SensorValueType type) throws Exception{
+    protected Object getValue(String value, SensorValueType type) throws Exception {
         try {
             Method m = type.getClassType().getDeclaredMethod("valueOf", String.class);
 

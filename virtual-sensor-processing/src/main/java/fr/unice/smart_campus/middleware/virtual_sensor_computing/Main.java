@@ -9,9 +9,9 @@ public class Main {
     public static void main(String[] args) {
         // creation of the actor system (Actor factory)
         ActorSystem actorSystem = ActorSystem.create("ActorSystemFactory", ConfigFactory.load());
-        actorSystem.actorOf(Props.create(ScriptEvaluatorActor.class), "ScriptEvaluatorActor");
+        //actorSystem.actorOf(Props.create(ScriptEvaluatorActor.class), "ScriptEvaluatorActor");
 
-        //TODO virer nemo
+        //TODO remove nemo
 //        ActorRef nemo = actorSystem.actorOf(Props.create(ScriptEvaluatorActor.class), "PouitPouitActor");
 //        TypedSensorValueList sensors = new TypedSensorValueList();
 //        sensors.getSensorValues().add(new TypedSensorValue("TEMP_443",123456789l,"12", SensorValueType.DOUBLE));

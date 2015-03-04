@@ -8,25 +8,21 @@ import fr.unice.smart_campus.middleware.model.sensor.SensorValue;
 import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
 import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValue;
 import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValueList;
-import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
-import groovy.lang.Script;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ScriptEvaluatorActor extends UntypedActor {
 
-    private static Map<String, Script> groovyScriptMap;
+    //private static Map<String, Script> groovyScriptMap;
 
     private LoggingAdapter loggingAdapter;
 
     public ScriptEvaluatorActor() {
         this.loggingAdapter = Logging.getLogger(this.context().system(), this);
-        this.groovyScriptMap = new HashMap<String, Script>();
+        //this.groovyScriptMap = new HashMap<String, Script>();
     }
 
     @Override
@@ -54,28 +50,32 @@ public class ScriptEvaluatorActor extends UntypedActor {
 
         loggingAdapter.error(script);
 
-        Script groovyScript = this.groovyScriptMap.get(script);
-        Binding binding = new Binding();
+//        Script groovyScript = this.groovyScriptMap.get(script);
+//        Binding binding = new Binding();
+//
+//        if(groovyScript == null){
+//            GroovyShell shell = new GroovyShell();
+//            groovyScript = shell.parse(script);
+//            this.groovyScriptMap.put(script, groovyScript);
+//        }
 
-        if(groovyScript == null){
-            GroovyShell shell = new GroovyShell();
-            groovyScript = shell.parse(script);
-            this.groovyScriptMap.put(script, groovyScript);
-        }
+        GroovyShell shell = new GroovyShell();
 
         //Set variable for each sensor
         for (TypedSensorValue s : sensors) {
             Object o = getValue(s.getValue(), s.getType());
             loggingAdapter.error("ClassType : " + o.getClass());
             loggingAdapter.error("getValue result " + o);
-            binding.setVariable(s.getName(), o);
+//            binding.setVariable(s.getName(), o);
+            shell.setVariable(s.getName(), o);
         }
 
         loggingAdapter.error("Evaluate !");
 
         //evaluate script
-        groovyScript.setBinding(binding);
-        String resScript = groovyScript.run().toString();
+//        groovyScript.setBinding(binding);
+//        String resScript = groovyScript.run().toString();
+        String resScript = shell.evaluate(script).toString();
         res.value = "" + resScript;
         loggingAdapter.error(res.toString());
         return res;

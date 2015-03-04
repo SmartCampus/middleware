@@ -63,7 +63,7 @@ public class CEPEngine {
 
         // create Akka ActorSystem and actors
         ActorSystem system = ActorSystem.create("Simulation", ConfigFactory.load());
-        ActorSelection actorSelection = system.actorSelection("akka.tcp://ActorSystemFactory@localhost:2552/user/ScriptEvaluatorActor");
+        ActorSelection actorSelection = system.actorSelection("akka.tcp://ActorSystemFactory@52.16.33.142:2552/user/ScriptEvaluatorActor");
 //        ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(ScriptEvaluatorActor.class)), "remotePool");
 
         // Create the configuration of our CEPEngine

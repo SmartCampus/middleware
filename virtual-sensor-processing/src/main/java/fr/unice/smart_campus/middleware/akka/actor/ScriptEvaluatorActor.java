@@ -8,6 +8,7 @@ import fr.unice.smart_campus.middleware.model.sensor.SensorValue;
 import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
 import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValue;
 import fr.unice.smart_campus.middleware.model.sensor.TypedSensorValueList;
+import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 
@@ -53,26 +54,28 @@ public class ScriptEvaluatorActor extends UntypedActor {
 
         loggingAdapter.error(script);
 
-//        Script groovyScript = this.groovyScriptMap.get(script);
-        GroovyShell shell = new GroovyShell();
+        Script groovyScript = this.groovyScriptMap.get(script);
+        Binding binding = new Binding();
 
-//        if(groovyScript == null){
-//            groovyScript = shell.parse(script);
-//            this.groovyScriptMap.put(script, groovyScript);
-//        }
+        if(groovyScript == null){
+            GroovyShell shell = new GroovyShell();
+            groovyScript = shell.parse(script);
+            this.groovyScriptMap.put(script, groovyScript);
+        }
 
         //Set variable for each sensor
         for (TypedSensorValue s : sensors) {
             Object o = getValue(s.getValue(), s.getType());
             loggingAdapter.error("ClassType : " + o.getClass());
             loggingAdapter.error("getValue result " + o);
-            shell.setVariable(s.getName(), o);
+            binding.setVariable(s.getName(), o);
         }
 
         loggingAdapter.error("Evaluate !");
 
         //evaluate script
-        String resScript = shell.evaluate(script).toString();
+        groovyScript.setBinding(binding);
+        String resScript = groovyScript.run().toString();
         res.value = "" + resScript;
         loggingAdapter.error(res.toString());
         return res;

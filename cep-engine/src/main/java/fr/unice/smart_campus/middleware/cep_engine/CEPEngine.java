@@ -62,7 +62,7 @@ public class CEPEngine {
         this.getAllSensorsDefinition();
 
         // create Akka ActorSystem and actors
-        ActorSystem system = ActorSystem.create("Simulation", ConfigFactory.load());
+        ActorSystem system = ActorSystem.create("CEPEngineActorSystem", ConfigFactory.load());
         ActorSelection actorSelection = system.actorSelection("akka.tcp://ActorSystemFactory@172.31.39.206:2552/user/ScriptEvaluatorActor");
 //       ActorRef actorRef = system.actorOf(FromConfig.getInstance().props(Props.create(ScriptEvaluatorActor.class)), "remotePool");
 
@@ -146,8 +146,6 @@ public class CEPEngine {
             listener.setParentValueTypeMap(parentValueTypeMap);
             listener.setScript(virtualSensorScript);
 
-            System.out.println(statement.toString());
-
             EPStatement cepStatement = cepAdm.createEPL(statement.toString());
             cepStatement.addListener(listener);
         }
@@ -172,7 +170,6 @@ public class CEPEngine {
     }
 
     public void sendEvent(CEPEvent event) {
-        //System.out.println("Sending event to CEP : " + event.toString());
         cepRT.sendEvent(event);
     }
 

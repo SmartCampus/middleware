@@ -56,7 +56,6 @@ public class ValueResource {
                 String value = message.getString("v");
                 String time = message.getString("t");
 
-                // TODO: Temporarily display values
                 Date date = new Date(Long.parseLong(time) * 1000);
                 System.out.println(
                         "Received: name = " + name + ", value = " + value + ", time = " + time + " (" + date + ");");

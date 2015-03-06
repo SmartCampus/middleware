@@ -49,7 +49,6 @@ public abstract class CEPListener implements UpdateListener {
         Map map = (Map) newData[0].getUnderlying();
         for (int i = 0; i < map.size(); i++) {
             CEPEvent event = (CEPEvent) ((EventBean) map.get("a" + i)).getUnderlying();
-            System.out.println(event);
             String name = event.getName();
             SensorValueType type = parentValueTypeMap.get(name);
             TypedSensorValue typedSensorValue = new TypedSensorValue(name, event.getTimeStamp(), event.getValue(), type);

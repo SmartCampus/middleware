@@ -14,18 +14,21 @@ The middleware is the core system of the SmartCampus architecture. It is compose
 
 Before running the modules, you have to install the middleware by running the Maven command `mvn install` in this directory. Then, to make the middleware working, start the modules in the following order:
 
-1. Database
-2. Message Queue
-3. Collector
-4. Data Processor
-5. Data API
-6. Sensors API
+
+1. Collector
+2. Data Processor
+3. Database
+4. CEP Engine
+5. Virtual Sensor Computing
+6. Data API
 7. Config
+8. Sensors API
+
+
+# Testing
+
+An integration test on `integration.xml` is wrote with SoapUI. You can import it to launch on your SmartCampus deployment or launch it with maven : `mvn com.smartbear.soapui:soapui-maven-plugin:4.6.1:test`
 
 *NB: See the README of each module for documentation.*
 
 You can also use the scripts located in ./scripts
-
-## Notes
-
-In this release, the collector is implemented, the message queue server works, the data processor stores messages into the database and the data API allows users to browse sensors data in the database.

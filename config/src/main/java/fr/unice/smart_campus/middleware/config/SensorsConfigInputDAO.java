@@ -11,15 +11,18 @@ import java.util.List;
 
 /**
  * Created by clement0210 on 15-02-18.
+ * This class is the input DAO for the sensors params database
  */
-public class SensorsConfigInputDataAccess {
+public class SensorsConfigInputDAO {
 
     private MongoClient mongoClient;
     private DB db;
     private DBCollection coll;
 
-
-    public SensorsConfigInputDataAccess(){
+    /**
+     * Default constructor
+     */
+    public SensorsConfigInputDAO(){
         try {
             mongoClient= new MongoClient();
             db = mongoClient.getDB( "ConfigDatabase" );
@@ -29,7 +32,11 @@ public class SensorsConfigInputDataAccess {
         }
     }
 
-
+    /**
+     * Method to get virtual sensor from parents sensors
+     * @param sensorParamsList
+     * @return
+     */
     public SensorParams getSensorFormParentsSensors(List<String> sensorParamsList){
         Cursor cursor = coll.find();
         try {
@@ -46,6 +53,10 @@ public class SensorsConfigInputDataAccess {
         return null;
     }
 
+    /**
+     * Method to get all physical sensors
+     * @return
+     */
     public List<SensorParams> getAllPhysicalSensors(){
         List<SensorParams> sensorParamsList=new ArrayList<SensorParams>();
         BasicDBObject query = new BasicDBObject(SensorParams.SENSORTYPE_COLUMN,SensorType.PHYSICAL.name().toLowerCase());
@@ -61,6 +72,10 @@ public class SensorsConfigInputDataAccess {
         return sensorParamsList;
     }
 
+    /**
+     * Method to get all virtual sensors
+     * @return
+     */
     public List<SensorParams> getAllVirtualSensors(){
         List<SensorParams> sensorParamsList=new ArrayList<SensorParams>();
         BasicDBObject query = new BasicDBObject(SensorParams.SENSORTYPE_COLUMN,SensorType.VIRTUAL_COMPOSITE.name().toLowerCase());

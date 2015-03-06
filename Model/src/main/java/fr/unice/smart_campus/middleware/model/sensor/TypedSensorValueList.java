@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the model of object between CEP and Virtual Message Computing
+ */
 public class TypedSensorValueList implements Serializable {
     private static final long serialVersionUID = 7526479295622776148L;
     private String script;
@@ -51,9 +54,6 @@ public class TypedSensorValueList implements Serializable {
         this.sensorValues = sensorValues;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
 
     public String getScript() {
         return script;

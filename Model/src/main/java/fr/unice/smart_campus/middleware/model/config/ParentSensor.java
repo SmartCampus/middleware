@@ -7,7 +7,9 @@ import com.mongodb.DBObject;
 import fr.unice.smart_campus.middleware.model.sensor.SensorValueType;
 
 /**
+ *
  * Created by clement0210 on 28/02/15.
+ * This class represents a model to properly defined the sensors hierarchy
  */
 public class ParentSensor {
 
@@ -16,18 +18,35 @@ public class ParentSensor {
     private SensorValueType valueType;
     private String name;
 
+    /**
+     * Default constructor
+     */
     public ParentSensor() {
     }
 
+    /**
+     *
+     * @param name parent sensor name
+     * @param valueType parent sensor value type
+     */
     public ParentSensor(String name, SensorValueType valueType) {
         this.valueType = valueType;
         this.name = name;
     }
+
+    /**
+     * Constructor for deserialize from MongoDb document
+     * @param o a MongoDB object
+     */
     public ParentSensor(DBObject o){
         this.name= (String) o.get(NAME_COLUMN);
         this.valueType =SensorValueType.valueOf(((String) o.get(VALUETYPE_COLUMN)).toUpperCase());
     }
 
+    /**
+     *
+     * @return parent sensor value type
+     */
     @JsonProperty
     public SensorValueType getValueType() {
         return valueType;
@@ -37,6 +56,10 @@ public class ParentSensor {
         this.valueType = valueType;
     }
 
+    /**
+     *
+     * @return parent sensor name
+     */
     @JsonProperty
     public String getName() {
         return name;
@@ -54,6 +77,10 @@ public class ParentSensor {
                 '}';
     }
 
+    /**
+     *
+     * @return the MongoDB object to serialize into document
+     */
     public DBObject toDoc(){
         BasicDBObject doc = new BasicDBObject(NAME_COLUMN,name)
                 .append(VALUETYPE_COLUMN,valueType.name().toLowerCase());

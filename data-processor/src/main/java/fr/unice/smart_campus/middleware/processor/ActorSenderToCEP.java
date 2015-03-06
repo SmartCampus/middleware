@@ -5,6 +5,9 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import fr.unice.smart_campus.middleware.model.sensor.SensorValue;
 
+/**
+ * Actor to send sensor value to CEP engine
+ */
 public class ActorSenderToCEP extends UntypedActor{
     private LoggingAdapter loggingAdapter;
 

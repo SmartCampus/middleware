@@ -6,6 +6,9 @@ import akka.event.LoggingAdapter;
 import fr.unice.smart_campus.middleware.database.SensorsDataOutputDataAccess;
 import fr.unice.smart_campus.middleware.model.sensor.SensorValue;
 
+/**
+ * Actor to send sensor value to database
+ */
 public class ActorSenderToDatabase extends UntypedActor {
     private LoggingAdapter loggingAdapter;
     private SensorsDataOutputDataAccess sensorsDataOutputDataAccess;

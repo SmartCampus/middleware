@@ -18,17 +18,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Akka actor to compute the virtual sensor value
+ */
 public class ScriptEvaluatorActor extends UntypedActor {
 
     private static Map<String, Script> groovyScriptMap;
 
     private LoggingAdapter loggingAdapter;
 
+    /**
+     * Default Constructor
+     */
     public ScriptEvaluatorActor() {
         this.loggingAdapter = Logging.getLogger(this.context().system(), this);
         this.groovyScriptMap = new HashMap<String, Script>();
     }
 
+    /**
+     * Method to handle new message
+     * @param message a message
+     * @throws Exception
+     */
     @Override
     public void onReceive(Object message) throws Exception {
         if (message instanceof TypedSensorValueList) {
@@ -43,6 +54,12 @@ public class ScriptEvaluatorActor extends UntypedActor {
         }
     }
 
+    /**
+     * Method to evaluate a virtual sensor value
+     * @param typedSensorValueList
+     * @return a sensor value
+     * @throws Exception
+     */
     protected SensorValue evaluateScript(TypedSensorValueList typedSensorValueList) throws Exception {
         SensorValue res = new SensorValue();
         List<TypedSensorValue> sensors = typedSensorValueList.getSensorValues();
@@ -85,6 +102,13 @@ public class ScriptEvaluatorActor extends UntypedActor {
         return res;
     }
 
+    /**
+     * Method to get the right instance Java class form a SensorValueType
+     * @param value a string value to put in the good class
+     * @param type a sensor value type
+     * @return an object with the good instance of class and the value
+     * @throws Exception
+     */
     protected Object getValue(String value, SensorValueType type) throws Exception {
         try {
             Method m = type.getClassType().getDeclaredMethod("valueOf", String.class);
@@ -105,6 +129,11 @@ public class ScriptEvaluatorActor extends UntypedActor {
         }
     }
 
+    /**
+     * Method to get the max frequency of a typed sensor value list
+     * @param sensors
+     * @return
+     */
     protected long getMaxTimestamp(List<TypedSensorValue> sensors) {
         long max = 0;
         for (TypedSensorValue v : sensors) {

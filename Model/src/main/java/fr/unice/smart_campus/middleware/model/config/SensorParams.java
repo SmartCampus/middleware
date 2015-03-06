@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by clement0210 on 15-02-18.
+ * This class represents a model to properly defined a sensor parameters
  */
 
 public class SensorParams {
@@ -32,9 +33,16 @@ public class SensorParams {
     private List<ParentSensor> parentSensors;
 
 
+    /**
+     * Default constructor
+     */
     public SensorParams() {
     }
 
+    /**
+     * Constructor for deserialize from MongoDb document
+     * @param o a MongoDB object
+     */
     public SensorParams(DBObject o){
         this.name= (String) o.get(NAME_COLUMN);
         this.kind= (String) o.get(KIND_COLUMN);
@@ -52,7 +60,16 @@ public class SensorParams {
     }
 
 
-
+    /**
+     *
+     * @param name a sensor name
+     * @param kind a sensor kind (temperature, humidity, ...)
+     * @param script a sensor script to compute the value from parents
+     * @param sensorType a sensor type
+     * @param valueType a sensor value type
+     * @param frequency a frequency
+     * @param parentSensors the parents sensors
+     */
     public SensorParams(String name, String kind, String script, SensorType sensorType, SensorValueType valueType, double frequency, List<ParentSensor> parentSensors) {
 
         this.name = name;
@@ -64,6 +81,10 @@ public class SensorParams {
         this.parentSensors = parentSensors;
     }
 
+    /**
+     *
+     * @return the sensor name
+     */
     @JsonProperty
     public String getName() {
         return name;
@@ -73,6 +94,10 @@ public class SensorParams {
         this.name = name;
     }
 
+    /**
+     *
+     * @return the sensor kind
+     */
     @JsonProperty
     public String getKind() {
         return kind;
@@ -82,6 +107,10 @@ public class SensorParams {
         this.kind = kind;
     }
 
+    /**
+     *
+     * @return the sensor script
+     */
     @JsonProperty
     public String getScript() {
         return script;
@@ -91,6 +120,10 @@ public class SensorParams {
         this.script = script;
     }
 
+    /**
+     *
+     * @return the sensor type
+     */
     @JsonProperty
     public SensorType getSensorType() {
         return sensorType;
@@ -100,6 +133,10 @@ public class SensorParams {
         this.sensorType = sensorType;
     }
 
+    /**
+     *
+     * @return the sensor frequency
+     */
     @JsonProperty
     public double getFrequency() {
         return frequency;
@@ -109,7 +146,10 @@ public class SensorParams {
         this.frequency = frequency;
     }
 
-
+    /**
+     *
+     * @return the parents sensors
+     */
     @JsonProperty("parents")
     @JsonDeserialize(as=List.class, contentAs=ParentSensor.class)
     public List<ParentSensor> getParentSensors() {
@@ -120,6 +160,10 @@ public class SensorParams {
         this.parentSensors = parentSensors;
     }
 
+    /**
+     *
+     * @return the sensor value type
+     */
     @JsonProperty
     public SensorValueType getValueType() {
         return valueType;
@@ -141,6 +185,10 @@ public class SensorParams {
                 '}';
     }
 
+    /**
+     *
+     * @return the MongoDB object to serialize into document
+     */
     public BasicDBObject toDoc(){
         BasicDBList parents=new BasicDBList();
         if(parentSensors!=null){

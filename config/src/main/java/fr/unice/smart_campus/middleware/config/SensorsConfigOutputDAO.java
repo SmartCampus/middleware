@@ -12,15 +12,19 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-public class SensorsConfigOutputDataAccess {
+/**
+ * This class is the output DAO for the sensors params database
+ */
+public class SensorsConfigOutputDAO {
 
     private MongoClient mongoClient;
     private DB db;
     private DBCollection coll;
 
-
-    public SensorsConfigOutputDataAccess(){
+    /**
+     * Default constructor
+     */
+    public SensorsConfigOutputDAO(){
         try {
             mongoClient= new MongoClient();
             db = mongoClient.getDB( "ConfigDatabase" );

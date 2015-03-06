@@ -15,29 +15,46 @@ public class SensorValue implements Serializable{
     public long timestamp;
     public String value;
 
+    /**
+     * Default constructor
+     */
     public SensorValue() {
     }
 
+    /**
+     *
+     * @param name a sensor name
+     * @param timestamp a sensor value timestamp
+     * @param value a sensor value
+     */
     public SensorValue(String name, long timestamp, String value) {
         this.name = name;
         this.timestamp = timestamp;
         this.value = value;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
+    /**
+     *
+     * @return the sensor name
+     */
     @JsonProperty("n")
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @return the sensor value timestamp
+     */
     @JsonProperty("t")
     public long getTimestamp() {
         return timestamp;
     }
 
+    /**
+     *
+     * @return the sensor value
+     */
     @JsonProperty("v")
     public String getValue() {
         return value;

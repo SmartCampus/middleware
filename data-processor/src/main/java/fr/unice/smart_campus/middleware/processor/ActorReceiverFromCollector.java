@@ -6,6 +6,9 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import fr.unice.smart_campus.middleware.model.sensor.SensorValue;
 
+/**
+ * Actor to receive sensor value from collector
+ */
 public class ActorReceiverFromCollector extends UntypedActor {
     private LoggingAdapter loggingAdapter;
     private ActorSelection cepSender;
@@ -17,6 +20,11 @@ public class ActorReceiverFromCollector extends UntypedActor {
         databaseSender = this.getContext().actorSelection("akka://MessageProcessingActorSystem/user/ActorSenderToDatabase");
     }
 
+    /**
+     * Method to handle new message
+     * @param message a message
+     * @throws Exception
+     */
     @Override
     public void onReceive(Object message) throws Exception {
         if (message instanceof SensorValue) {

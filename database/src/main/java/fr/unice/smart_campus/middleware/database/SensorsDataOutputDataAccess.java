@@ -39,7 +39,6 @@ public class SensorsDataOutputDataAccess {
 	 * @param time The data date
 	 * @param value The data value
 	 */
-	//TODO: Handle database errors and restore the message in the message queue to avoid loosing messages
 	public boolean saveSensorData (String name, String time, String value) {
 
 		String sql = "INSERT INTO \"public\".\"SensorsData\" (sensor_id, sensor_date, sensor_value) VALUES (?,?,?)";

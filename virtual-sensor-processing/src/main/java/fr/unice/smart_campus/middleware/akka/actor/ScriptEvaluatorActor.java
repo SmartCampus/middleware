@@ -69,7 +69,7 @@ public class ScriptEvaluatorActor extends UntypedActor {
 
         String script = typedSensorValueList.getScript();
 
-        loggingAdapter.error(script);
+        loggingAdapter.debug(script);
 
         Script groovyScript = this.groovyScriptMap.get(script);
         Binding binding = new Binding();
@@ -85,20 +85,20 @@ public class ScriptEvaluatorActor extends UntypedActor {
         //Set variable for each sensor
         for (TypedSensorValue s : sensors) {
             Object o = getValue(s.getValue(), s.getType());
-            loggingAdapter.error("ClassType : " + o.getClass());
-            loggingAdapter.error("getValue result " + o);
+            loggingAdapter.debug("ClassType : " + o.getClass());
+            loggingAdapter.debug("getValue result " + o);
             binding.setVariable(s.getName(), o);
 //            shell.setVariable(s.getName(), o);
         }
 
-        loggingAdapter.error("Evaluate !");
+        loggingAdapter.debug("Evaluate !");
 
 //        evaluate script
         groovyScript.setBinding(binding);
         String resScript = groovyScript.run().toString();
 //        String resScript = shell.evaluate(script).toString();
         res.value = "" + resScript;
-        loggingAdapter.error(res.toString());
+        loggingAdapter.debug(res.toString());
         return res;
     }
 

@@ -9,8 +9,8 @@ screen -X -S virtualSensorProcessing kill
 
 echo 'Killing previous instances ...'
 sleep 3
-screen -S MessageQueue -d -m ./message-queue-script.sh
-echo 'Starting Message Queue ...'
+./install.sh
+echo 'Installing ...'
 sleep 10
 screen -S virtualSensorProcessing -d -m ./virtual-sensor-processing-script.sh
 echo 'Starting virtual Sensor Processing  ...'

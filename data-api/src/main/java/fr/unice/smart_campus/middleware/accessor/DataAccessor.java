@@ -4,6 +4,8 @@ import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndFeedImpl;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.SyndFeedOutput;
 import fr.unice.smart_campus.middleware.Helper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -233,8 +235,14 @@ public class DataAccessor {
             entries.add(entry);
         }
         feed.setEntries(entries);
-
-        return feed.toString();
+        SyndFeedOutput out = new SyndFeedOutput();
+        String result;
+        try {
+            result = out.outputString(feed);
+        } catch (FeedException e) {
+            result = e.getMessage();
+        }
+        return result;
     }
 
     private String buildJSONResult(ResultSet rs, String idSensor, boolean convert) throws SQLException {

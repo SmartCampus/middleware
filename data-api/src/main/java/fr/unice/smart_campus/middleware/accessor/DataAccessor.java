@@ -227,6 +227,7 @@ public class DataAccessor {
     private String buildXMLResult(ResultSet rs, String idSensor, boolean convert) throws SQLException{
         SyndFeed feed = new SyndFeedImpl();
         feed.setTitle(idSensor);
+        feed.setDescription("RSS Field for " + idSensor);
         feed.setFeedType("rss_2.0");
         List entries = new ArrayList();
         while (rs.next()) {

@@ -229,6 +229,7 @@ public class DataAccessor {
         feed.setTitle(idSensor);
         feed.setDescription("RSS Field for " + idSensor);
         feed.setFeedType("rss_2.0");
+        feed.setLink("foo");
         List entries = new ArrayList();
         while (rs.next()) {
             SyndEntry entry = new SyndEntryImpl();

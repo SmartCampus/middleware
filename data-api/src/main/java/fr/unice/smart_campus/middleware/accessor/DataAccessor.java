@@ -1,5 +1,9 @@
 package fr.unice.smart_campus.middleware.accessor;
 
+import com.sun.syndication.feed.synd.SyndEntry;
+import com.sun.syndication.feed.synd.SyndEntryImpl;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.feed.synd.SyndFeedImpl;
 import fr.unice.smart_campus.middleware.Helper;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +27,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * DataAccessor class
@@ -150,10 +156,11 @@ public class DataAccessor {
      * @param beg      timestamp of beginning date
      * @param end      timestamp of ending date
      * @param convert  convert timestamp to date
+     * @param format   Output format (XML or JSON)
      * @return a JSON Object with the values of the sensor, depending on time.
      * @throws SQLException if there is a problem with the database connection.
      */
-    public String getDataFromSensor(String idSensor, long beg, long end, boolean convert) throws Exception {
+    public String getDataFromSensor(String idSensor, long beg, long end, boolean convert, String format) throws Exception {
 
 
         String type = "";
@@ -176,12 +183,11 @@ public class DataAccessor {
                 selectSQL += "                      WHERE sensor_id = ? AND sensor_date <= ?)";
             }
         }
-
         PreparedStatement ps = null;
         ResultSet rs = null;
+        String data;
 
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
+
 
         try {
             ps = connection.prepareStatement(selectSQL);
@@ -200,18 +206,12 @@ public class DataAccessor {
 
             rs = ps.executeQuery();
 
-			/* Retrieving results in JSON Array */
-            while (rs.next()) {
-                JSONObject obj = new JSONObject();
-                String date;
-                if (convert)
-                    date = Helper.getDateFromTimestamp(Long.parseLong(rs.getString("sensor_date"))).toString();
-                else
-                    date = rs.getString("sensor_date");
-                obj.put("date", date);
-                obj.put("value", rs.getString("sensor_value"));
-                jsonArray.put(obj);
-            }
+            if (format == "json")
+                data = buildJSONResult(rs, idSensor, convert);
+            else if (format == "xml")
+                data = buildXMLResult(rs, idSensor, convert);
+            else throw new Exception("Unknown result format");
+
             ps.close();
 
         } catch (SQLException e) {
@@ -219,14 +219,45 @@ public class DataAccessor {
             throw new SQLException(e);
         }
 
-		/* Returned JSON Object */
-        jsonObject.put("id", idSensor);
-        jsonObject.put("values", jsonArray);
-        String data = jsonObject.toString();
-
         return data;
     }
 
+    private String buildXMLResult(ResultSet rs, String idSensor, boolean convert) throws SQLException{
+        SyndFeed feed = new SyndFeedImpl();
+        feed.setTitle(idSensor);
+        List entries = new ArrayList();
+        while (rs.next()) {
+            SyndEntry entry = new SyndEntryImpl();
+            entry.setTitle(rs.getString("sensor_value"));
+            entry.setPublishedDate(Helper.getDateFromTimestamp(Long.parseLong(rs.getString("sensor_date"))));
+            entries.add(entry);
+        }
+        feed.setEntries(entries);
+
+        return feed.toString();
+    }
+
+    private String buildJSONResult(ResultSet rs, String idSensor, boolean convert) throws SQLException {
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        while (rs.next()) {
+            JSONObject obj = new JSONObject();
+            String date;
+            if (convert)
+                date = Helper.getDateFromTimestamp(Long.parseLong(rs.getString("sensor_date"))).toString();
+            else
+                date = rs.getString("sensor_date");
+            obj.put("date", date);
+            obj.put("value", rs.getString("sensor_value"));
+            jsonArray.put(obj);
+        }
+
+        	/* Returned JSON Object */
+        jsonObject.put("id", idSensor);
+        jsonObject.put("values", jsonArray);
+
+        return jsonObject.toString();
+    }
 
 
     /**

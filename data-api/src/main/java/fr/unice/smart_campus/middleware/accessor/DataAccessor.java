@@ -229,7 +229,7 @@ public class DataAccessor {
         feed.setTitle(idSensor);
         feed.setDescription("RSS Field for " + idSensor);
         feed.setFeedType("rss_2.0");
-        feed.setLink("foo");
+        feed.setLink("http://smartcampus.github.io");
         List entries = new ArrayList();
         while (rs.next()) {
             SyndEntry entry = new SyndEntryImpl();

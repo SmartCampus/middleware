@@ -160,7 +160,7 @@ public class DataAccessor {
      * @return a JSON Object with the values of the sensor, depending on time.
      * @throws SQLException if there is a problem with the database connection.
      */
-    public String getDataFromSensor(String idSensor, long beg, long end, boolean convert, String format) throws Exception {
+    public String getDataFromSensor(String idSensor, long beg, long end, boolean convert, int format) throws Exception {
 
 
         String type = "";
@@ -206,9 +206,9 @@ public class DataAccessor {
 
             rs = ps.executeQuery();
 
-            if (format == "json")
+            if (format == 0)
                 data = buildJSONResult(rs, idSensor, convert);
-            else if (format == "xml")
+            else if (format == 1)
                 data = buildXMLResult(rs, idSensor, convert);
             else throw new Exception("Unknown result format");
 

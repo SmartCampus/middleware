@@ -54,10 +54,9 @@ public class SensorResource {
      */
     @GET
     @Path("{idSensor}/data/last")
-    @Produces("application/json")
     public Response getLastDataFromSensor(@PathParam("idSensor") String idSensor,
                                           @QueryParam("convert") boolean convert,
-                                          @QueryParam("format") String format)
+                                          @QueryParam("format") int format)
     {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date now = new Date();
@@ -83,11 +82,10 @@ public class SensorResource {
 	 */
 	@GET
 	@Path("{idSensor}/data")
-	@Produces("application/json")
 	public Response getDataFromSensor (@PathParam("idSensor") String idSensor,
 	                                   @QueryParam("date") String date,
                                        @QueryParam("convert") boolean convert,
-                                       @QueryParam("format") String format) {
+                                       @QueryParam("format") int format) {
 
 		// URL Dates parsing
 		TimeRange time = new TimeRange(0L, 0L);

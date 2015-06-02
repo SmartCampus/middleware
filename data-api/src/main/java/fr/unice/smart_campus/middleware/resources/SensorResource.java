@@ -56,13 +56,14 @@ public class SensorResource {
     @Path("{idSensor}/data/last")
     @Produces("application/json")
     public Response getLastDataFromSensor(@PathParam("idSensor") String idSensor,
-                                          @QueryParam("convert") boolean convert)
+                                          @QueryParam("convert") boolean convert,
+                                          @QueryParam("format") String format)
     {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date now = new Date();
         String strDate = sdfDate.format(now);
 
-        return getDataFromSensor(idSensor, strDate, convert);
+        return getDataFromSensor(idSensor, strDate, convert, format);
     }
 
 	/**
@@ -85,7 +86,8 @@ public class SensorResource {
 	@Produces("application/json")
 	public Response getDataFromSensor (@PathParam("idSensor") String idSensor,
 	                                   @QueryParam("date") String date,
-                                       @QueryParam("convert") boolean convert) {
+                                       @QueryParam("convert") boolean convert,
+                                       @QueryParam("format") String format) {
 
 		// URL Dates parsing
 		TimeRange time = new TimeRange(0L, 0L);
@@ -106,7 +108,7 @@ public class SensorResource {
 		try {
 			// Try to get access to the database
 			access = new DataAccessor();
-			data = access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond(), convert);
+			data = access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond(), convert, format);
 			access.close();
 		} catch (Exception e) {
 			access.close();

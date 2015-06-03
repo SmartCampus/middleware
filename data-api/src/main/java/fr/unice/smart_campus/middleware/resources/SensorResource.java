@@ -54,6 +54,8 @@ public class SensorResource {
      */
     @GET
     @Path("{idSensor}/data/last")
+    @Produces("application/json")
+
     public Response getLastDataFromSensor(@PathParam("idSensor") String idSensor,
                                           @QueryParam("convert") boolean convert,
                                           @QueryParam("format") int format)
@@ -127,23 +129,12 @@ public class SensorResource {
 
     @GET
     @Produces("application/rss+xml")
-    @Path("{idSensor}/dataxml")
-    public Response getDataFromSensorRSS (@PathParam("idSensor") String idSensor,
-                                       @QueryParam("date") String date,
-                                       @QueryParam("convert") boolean convert) {
+    @Path("{idSensor}/dataxml.xml")
+    public Response getDataFromSensorRSS (@PathParam("idSensor") String idSensor) {
 
         // URL Dates parsing
         TimeRange time = new TimeRange(0L, 0L);
-        if (date != null) {
-            try {
-                time = Helper.getTimestamps(date);
-            } catch (ParseException exc) {
-                return Response
-                        .status(Status.BAD_REQUEST)
-                        .entity(exc.getMessage())
-                        .build();
-            }
-        }
+
 
         DataAccessor access = null;
         String data = "";
@@ -151,7 +142,7 @@ public class SensorResource {
         try {
             // Try to get access to the database
             access = new DataAccessor();
-            data = access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond(), convert, "rss");
+            data = access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond(), true, "rss");
             access.close();
         } catch (Exception e) {
             access.close();

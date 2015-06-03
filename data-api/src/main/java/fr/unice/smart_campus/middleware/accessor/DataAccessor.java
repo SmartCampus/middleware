@@ -236,7 +236,7 @@ public class DataAccessor {
             SyndEntry entry = new SyndEntryImpl();
             entry.setTitle(rs.getString("sensor_value"));
             entry.setPublishedDate(Helper.getDateFromTimestamp(Long.parseLong(rs.getString("sensor_date"))));
-            entry.setLink("http://smartcampus.github.io/#" + (new Random()).nextInt(10000000));
+            entry.setLink("http://smartcampus.github.io/#" + Integer.parseInt(rs.getString("sensor_date")));
             entries.add(entry);
         }
         feed.setEntries(entries);

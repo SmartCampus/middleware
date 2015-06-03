@@ -62,7 +62,7 @@ public class SensorResource {
         Date now = new Date();
         String strDate = sdfDate.format(now);
 
-        return getDataFromSensor(idSensor, strDate, convert, format);
+        return getDataFromSensorJSON(idSensor, strDate, convert);
     }
 
 	/**
@@ -81,11 +81,11 @@ public class SensorResource {
 	 *          or 400 HTTP error if the url is not correct)
 	 */
 	@GET
-	@Path("{idSensor}/data")
-	public Response getDataFromSensor (@PathParam("idSensor") String idSensor,
+    @Produces("application/json")
+    @Path("{idSensor}/data")
+	public Response getDataFromSensorJSON (@PathParam("idSensor") String idSensor,
 	                                   @QueryParam("date") String date,
-                                       @QueryParam("convert") boolean convert,
-                                       @QueryParam("format") int format) {
+                                       @QueryParam("convert") boolean convert) {
 
 		// URL Dates parsing
 		TimeRange time = new TimeRange(0L, 0L);
@@ -106,7 +106,7 @@ public class SensorResource {
 		try {
 			// Try to get access to the database
 			access = new DataAccessor();
-			data = access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond(), convert, format);
+			data = access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond(), convert, "json");
 			access.close();
 		} catch (Exception e) {
 			access.close();
@@ -124,6 +124,51 @@ public class SensorResource {
 				.entity(data)
 				.build();
 	}
+
+    @GET
+    @Produces("application/rss+xml")
+    @Path("{idSensor}/dataxml")
+    public Response getDataFromSensorRSS (@PathParam("idSensor") String idSensor,
+                                       @QueryParam("date") String date,
+                                       @QueryParam("convert") boolean convert) {
+
+        // URL Dates parsing
+        TimeRange time = new TimeRange(0L, 0L);
+        if (date != null) {
+            try {
+                time = Helper.getTimestamps(date);
+            } catch (ParseException exc) {
+                return Response
+                        .status(Status.BAD_REQUEST)
+                        .entity(exc.getMessage())
+                        .build();
+            }
+        }
+
+        DataAccessor access = null;
+        String data = "";
+        String error = null;
+        try {
+            // Try to get access to the database
+            access = new DataAccessor();
+            data = access.getDataFromSensor(idSensor, time.getFirst(), time.getSecond(), convert, "rss");
+            access.close();
+        } catch (Exception e) {
+            access.close();
+            error = e.getMessage();
+        }
+
+        if (error != null)
+            return Response
+                    .status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Error: " + error)
+                    .build();
+
+        return Response
+                .status(Status.ACCEPTED)
+                .entity(data)
+                .build();
+    }
 
 	@POST
 	@Produces("text/plain")

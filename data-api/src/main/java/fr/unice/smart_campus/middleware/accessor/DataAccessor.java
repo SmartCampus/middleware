@@ -193,7 +193,7 @@ public class DataAccessor {
 
 
         try {
-            ps = connection.prepareStatement(selectSQL);
+            ps = connection.prepareStatement(selectSQL, ResultSet.TYPE_SCROLL_INSENSITIVE);
 
 			/* Parameters for SQL Statement */
             ps.setString(1, idSensor);

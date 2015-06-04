@@ -212,7 +212,7 @@ public class DataAccessor {
             if (format == "json")
                 data = buildJSONResult(rs, idSensor, convert);
             else if (format == "rss")
-                data = buildXMLResult(rs, idSensor, convert);
+                data = buildXMLResult(rs, idSensor);
             else throw new Exception("Unknown result format");
 
             ps.close();
@@ -225,14 +225,16 @@ public class DataAccessor {
         return data;
     }
 
-    private String buildXMLResult(ResultSet rs, String idSensor, boolean convert) throws SQLException{
+    private String buildXMLResult(ResultSet rs, String idSensor) throws SQLException{
+
         SyndFeed feed = new SyndFeedImpl();
         feed.setTitle(idSensor);
         feed.setDescription("RSS Field for " + idSensor);
         feed.setFeedType("rss_2.0");
         feed.setLink("http://smartcampus.github.io");
         List entries = new ArrayList();
-        while (rs.next()) {
+        rs.afterLast();
+        while (rs.previous()) {
             SyndEntry entry = new SyndEntryImpl();
             entry.setTitle(rs.getString("sensor_value"));
             entry.setPublishedDate(Helper.getDateFromTimestamp(Long.parseLong(rs.getString("sensor_date"))));

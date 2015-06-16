@@ -77,7 +77,7 @@ In settings.py, you need to change the name of the server (Use IP or public DNS 
 Scripts
 =======
 
-Message Queue
+Install
 -------------
 ```
 cd ..
@@ -90,8 +90,6 @@ git checkout server
 #! cp ../savedFiles/settings.py config/ConfigAPI/settings.py
 #! cp ../savedFiles/pom.xml data/-api/pom.xml
 mvn clean install
-cd message-queue
-mvn activemq:run
 ```
 
 Collector
@@ -105,6 +103,20 @@ Data processor
 --------------
 ```
 cd ../data-processor
+mvn exec:java
+```
+
+CEP Engine
+--------------
+```
+cd ../cep-engine
+mvn exec:java
+```
+
+Virtual Sensor Computing
+--------------
+```
+cd ../virtual-sensor-computing
 mvn exec:java
 ```
 
@@ -122,6 +134,10 @@ cd ../config/ConfigAPI
 sudo service mongod restart
 python run.py
 ```
+```
+cd ../config
+mvn jetty:run
+```
 
 
 Restart the server
@@ -132,7 +148,7 @@ There are several ways to connect to a Linux instance and restart your services.
 
 Then you have to run the script SmartCampus-Start.sh
 
-Connect from Linux Using an SSH Client
+Connect from Linux Using an SSH Client (with Amazon Web Services)
 -------------------
 ```
 gnome-terminal --title "SmartCampus : VM" -x bash -c "ssh -t -i </path/key_pair.pem> <ec2-user@public_dns_name> './SmartCampus/scripts/SmartCampus-Start.sh; bash'"

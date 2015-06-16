@@ -18,3 +18,19 @@ This script :
 5. **Grant users** depending on theirs privileges.
 
 The *SensorsData* table is composed by three columns : *sensor_id*, *sensor_date* and *sensor_value*, to store values of sensors depending on time. The primary key is the pair *id-date*, and the *sensor_value* can not be null.
+
+## Database access command
+
+'''
+sudo -u postgres psql postgres
+//On se connecte pas à la base par défaut
+\connect SensorsData
+//Pour voir si la table SensorsData existe bien
+\dt
+//On affiche la table
+select * from "SensorsData";
+'''
+
+## Database Project
+
+DAO to read/write on the database

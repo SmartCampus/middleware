@@ -11,11 +11,16 @@
 	<packaging>pom</packaging>
 
 	<modules>
+        <module>model</module>
+        <module>database</module>
 		<module>collector</module>
-		<module>message-queue</module>
 		<module>data-processor</module>
 		<module>data-api</module>
-	</modules>
+		<module>virtual-sensor-computing</module>
+		<module>cep-engine</module>
+        <module>config</module>
+
+    </modules>
 
 	<properties>
 		<java.version>1.6</java.version>
@@ -104,7 +109,4 @@
             <url>http://www.soapui.org/repository/maven2/</url>
         </pluginRepository>
     </pluginRepositories>
-
-
-
 </project>

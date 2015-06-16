@@ -9,9 +9,6 @@ screen -X -S virtualSensorProcessing kill
 
 echo 'Killing previous instances ...'
 sleep 3
-./install.sh
-echo 'Installing ...'
-sleep 10
 screen -S virtualSensorProcessing -d -m ./virtual-sensor-processing-script.sh
 echo 'Starting virtual Sensor Processing  ...'
 screen -S ConfigAPI -d -m ./configAPI-script.sh

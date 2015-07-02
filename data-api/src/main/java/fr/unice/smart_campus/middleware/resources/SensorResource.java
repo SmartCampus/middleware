@@ -39,7 +39,7 @@ public class SensorResource {
 		}
 
 		return Response
-				.status(Status.ACCEPTED)
+				.status(Status.OK)
 				.entity(data)
 				.build();
 	}
@@ -122,7 +122,7 @@ public class SensorResource {
 				.build();
 
 		return Response
-				.status(Status.ACCEPTED)
+				.status(Status.OK)
 				.entity(data)
 				.build();
 	}
@@ -156,7 +156,7 @@ public class SensorResource {
                     .build();
 
         return Response
-                .status(Status.ACCEPTED)
+                .status(Status.OK)
                 .entity(data)
                 .build();
     }

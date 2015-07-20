@@ -186,6 +186,7 @@ public class DataAccessor {
                 selectSQL += "                      WHERE sensor_id = ? AND sensor_date <= ?)";
             }
         }
+        selectSQL += "ORDER BY sensor_date ASC";
         PreparedStatement ps = null;
         ResultSet rs = null;
         String data;

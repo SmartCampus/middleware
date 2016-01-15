@@ -4,7 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<name>middleware</name>
-
+	<organization>
+		<name>Université de Nice Sophia-Antipolis (UNS) - Centre National de la Recherche Scientifique (CNRS)</name>
+	</organization>
+	<inceptionYear>2015</inceptionYear>
 	<groupId>fr.unice.smart_campus.middleware</groupId>
 	<artifactId>middleware</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
@@ -91,6 +94,24 @@
                         <projectFile>integration.xml</projectFile>
                     </configuration>
                 </plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>1.8</version>
+					<configuration>
+						<licenseName>custom_lgpl</licenseName>
+						<licenseResolver>file:///Users/cyrilcecchinel/git/middleware/license</licenseResolver>
+					</configuration>
+					<executions>
+						<execution>
+							<id>first</id>
+							<goals>
+								<goal>update-file-header</goal>
+							</goals>
+							<phase>process-sources</phase>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
